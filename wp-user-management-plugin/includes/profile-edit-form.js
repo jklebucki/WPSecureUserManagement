@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('sum-delete-account-button');
     const span = document.getElementsByClassName('sum-close')[0];
     const cancelBtn = document.querySelector('.sum-cancel');
+    const logoutBtn = document.getElementById('sum-logout-button');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
@@ -32,5 +33,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target == modal) {
             modal.style.display = 'none';
         }
+    }
+
+    logoutBtn.onclick = function() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '';
+        const nonce = document.createElement('input');
+        nonce.type = 'hidden';
+        nonce.name = 'sum_logout_nonce';
+        nonce.value = sum_logout_nonce;
+        form.appendChild(nonce);
+        document.body.appendChild(form);
+        form.submit();
     }
 });

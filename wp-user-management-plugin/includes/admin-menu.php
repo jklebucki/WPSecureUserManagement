@@ -142,24 +142,34 @@ function wp_user_management_configuration() {
         <form method="post">
             <?php wp_nonce_field('wp_user_management_configuration'); ?>
             <h2><?php _e('User List Columns', 'wp-user-management-plugin'); ?></h2>
-            <?php foreach ($user_fields as $field_key => $field_label): ?>
-                <label>
-                    <input type="checkbox" name="columns[]" value="<?php echo esc_attr($field_key); ?>" <?php checked(in_array($field_key, $columns)); ?>>
-                    <?php echo esc_html($field_label); ?>
-                </label>
-            <?php endforeach; ?>
+            <div class="scrollable-container">
+                <?php foreach ($user_fields as $field_key => $field_label): ?>
+                    <label>
+                        <input type="checkbox" name="columns[]" value="<?php echo esc_attr($field_key); ?>" <?php checked(in_array($field_key, $columns)); ?>>
+                        <?php echo esc_html($field_label); ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
 
             <h2><?php _e('User Profile Metadata', 'wp-user-management-plugin'); ?></h2>
-            <?php foreach ($user_metadata as $meta_key => $meta_label): ?>
-                <label>
-                    <input type="checkbox" name="metadata[]" value="<?php echo esc_attr($meta_key); ?>" <?php checked(in_array($meta_key, $metadata)); ?>>
-                    <?php echo esc_html($meta_label); ?>
-                </label>
-            <?php endforeach; ?>
+            <div class="scrollable-container">
+                <?php foreach ($user_metadata as $meta_key => $meta_label): ?>
+                    <label>
+                        <input type="checkbox" name="metadata[]" value="<?php echo esc_attr($meta_key); ?>" <?php checked(in_array($meta_key, $metadata)); ?>>
+                        <?php echo esc_html($meta_label); ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
 
             <button type="submit"><?php _e('Save Settings', 'wp-user-management-plugin'); ?></button>
         </form>
     </div>
     <?php
 }
+
+// Enqueue the styles
+function wp_user_management_enqueue_styles() {
+    wp_enqueue_style('wp-user-management-admin', plugin_dir_url(__FILE__) . 'admin-menu.css');
+}
+add_action('admin_enqueue_scripts', 'wp_user_management_enqueue_styles');
 ?>

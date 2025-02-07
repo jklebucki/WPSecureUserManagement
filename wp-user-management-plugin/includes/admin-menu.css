@@ -1,0 +1,11 @@
+.scrollable-container {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+}
+.scrollable-container label {
+    display: block;
+    margin-bottom: 5px;
+}

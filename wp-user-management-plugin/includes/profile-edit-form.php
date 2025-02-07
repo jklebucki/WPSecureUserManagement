@@ -16,9 +16,10 @@ function sum_display_profile_edit_form() {
             <button type="button" data-tab="user-data"><?php _e('User Data', 'secure-user-management'); ?></button>
             <button type="button" data-tab="change-password"><?php _e('Change Password', 'secure-user-management'); ?></button>
             <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'secure-user-management'); ?></button>
+            <button type="button" data-tab="logout"><?php _e('Logout', 'secure-user-management'); ?></button>
         </div>
-        <form id="sum-profile-edit-form" method="post">
-            <div id="profile" class="sum-tab-content active">
+        <div id="profile" class="sum-tab-content active">
+            <form id="sum-profile-edit-form" method="post">
                 <label for="sum-username"><?php _e('Username', 'secure-user-management'); ?> *</label>
                 <input type="text" name="sum_username" id="sum-username" value="<?php echo esc_attr($current_user->user_login); ?>" required>
 
@@ -31,26 +32,35 @@ function sum_display_profile_edit_form() {
                 <label for="sum-lastname"><?php _e('Last Name', 'secure-user-management'); ?> *</label>
                 <input type="text" name="sum_lastname" id="sum-lastname" value="<?php echo esc_attr(get_user_meta($current_user->ID, 'last_name', true)); ?>" required>
 
+                <input type="hidden" name="sum_profile_edit_nonce" value="<?php echo wp_create_nonce('sum_profile_edit_nonce'); ?>">
                 <button type="submit"><?php _e('Update Profile', 'secure-user-management'); ?></button>
-            </div>
-            <div id="user-data" class="sum-tab-content">
-                <?php foreach ($metadata as $meta_key): ?>
-                    <label for="sum-<?php echo esc_attr($meta_key); ?>"><?php echo esc_html(ucfirst(str_replace('_', ' ', $meta_key))); ?></label>
-                    <input type="text" name="sum_<?php echo esc_attr($meta_key); ?>" id="sum-<?php echo esc_attr($meta_key); ?>" value="<?php echo esc_attr(get_user_meta($current_user->ID, $meta_key, true)); ?>" readonly>
-                <?php endforeach; ?>
-            </div>
-            <div id="change-password" class="sum-tab-content">
+            </form>
+        </div>
+        <div id="user-data" class="sum-tab-content">
+            <?php foreach ($metadata as $meta_key): ?>
+                <label for="sum-<?php echo esc_attr($meta_key); ?>"><?php echo esc_html(ucfirst(str_replace('_', ' ', $meta_key))); ?></label>
+                <input type="text" name="sum_<?php echo esc_attr($meta_key); ?>" id="sum-<?php echo esc_attr($meta_key); ?>" value="<?php echo esc_attr(get_user_meta($current_user->ID, $meta_key, true)); ?>" readonly>
+            <?php endforeach; ?>
+        </div>
+        <div id="change-password" class="sum-tab-content">
+            <form id="sum-change-password-form" method="post">
                 <label for="sum-password"><?php _e('New Password', 'secure-user-management'); ?></label>
                 <input type="password" name="sum_password" id="sum-password">
 
                 <label for="sum-confirm-password"><?php _e('Confirm New Password', 'secure-user-management'); ?></label>
                 <input type="password" name="sum_confirm_password" id="sum-confirm-password">
-            </div>
-            <input type="hidden" name="sum_profile_edit_nonce" value="<?php echo wp_create_nonce('sum_profile_edit_nonce'); ?>">
-        </form>
+
+                <input type="hidden" name="sum_profile_edit_nonce" value="<?php echo wp_create_nonce('sum_profile_edit_nonce'); ?>">
+                <button type="submit"><?php _e('Change Password', 'secure-user-management'); ?></button>
+            </form>
+        </div>
         <div id="delete-account" class="sum-tab-content">
             <h3><?php _e('Delete Account', 'secure-user-management'); ?></h3>
             <button type="button" id="sum-delete-account-button"><?php _e('Delete Account', 'secure-user-management'); ?></button>
+        </div>
+        <div id="logout" class="sum-tab-content">
+            <h3><?php _e('Logout', 'secure-user-management'); ?></h3>
+            <button type="button" id="sum-logout-button"><?php _e('Logout', 'secure-user-management'); ?></button>
         </div>
     </div>
 
@@ -125,6 +135,20 @@ function sum_process_account_deletion() {
     }
 }
 add_action('init', 'sum_process_account_deletion');
+
+// Handle logout
+function sum_process_logout() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_logout_nonce'])) {
+        if (!wp_verify_nonce($_POST['sum_logout_nonce'], 'sum_logout_nonce')) {
+            wp_die(__('Security check failed!', 'secure-user-management'));
+        }
+
+        wp_logout();
+        wp_redirect(home_url());
+        exit;
+    }
+}
+add_action('init', 'sum_process_logout');
 
 // Register shortcode
 function sum_register_profile_edit_shortcode() {

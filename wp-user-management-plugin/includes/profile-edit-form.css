@@ -21,6 +21,8 @@
     cursor: pointer;
     margin-bottom: 5px;
     width: 100%;
+    text-align: center; /* Ensure text is centered */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .sum-tabs button.active {
@@ -38,12 +40,43 @@
     display: flex;
 }
 
+#logout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#sum-logout-button {
+    padding: 10px 20px;
+    background: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#sum-logout-button:hover {
+    background: #c9302c;
+}
+
 .sum-tab-content label {
-    margin-top: 10px;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .sum-tab-content input {
     margin-bottom: 10px;
+}
+
+.sum-tab-content input[type="text"],
+.sum-tab-content input[type="email"],
+.sum-tab-content input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .sum-modal {
