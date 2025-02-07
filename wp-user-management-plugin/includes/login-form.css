@@ -21,7 +21,7 @@
 
 .sum-login-container input[type="text"],
 .sum-login-container input[type="password"] {
-    width: 96%; /* Adjust width to ensure it fits within the parent container */
+    width: 100%; /* Adjust width to ensure it fits within the parent container */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;

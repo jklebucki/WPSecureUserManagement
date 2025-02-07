@@ -73,7 +73,7 @@
 .sum-tab-content input[type="text"],
 .sum-tab-content input[type="email"],
 .sum-tab-content input[type="password"] {
-    width: 96%; /* Adjust width to ensure it fits within the parent container */
+    width: 100%; /* Adjust width to ensure it fits within the parent container */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
