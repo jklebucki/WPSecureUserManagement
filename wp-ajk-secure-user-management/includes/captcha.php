@@ -26,7 +26,7 @@ for ($i = 0; $i < 10; $i++) {
 }
 
 // Dodajemy tekst CAPTCHA
-imagestring($image, 5, 30, 10, $captcha_code, $text_color);
+imagestring($image, 5, 30, 10, $_SESSION['sum_captcha'], $text_color);
 
 imagepng($image);
 imagedestroy($image);
