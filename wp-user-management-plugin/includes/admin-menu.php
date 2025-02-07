@@ -18,8 +18,8 @@ function wp_user_management_add_admin_menu() {
 
     add_submenu_page(
         'wp_user_management',
-        __('Configurable User List', 'wp-user-management-plugin'),
-        __('Configurable User List', 'wp-user-management-plugin'),
+        __('User List', 'wp-user-management-plugin'),
+        __('User List', 'wp-user-management-plugin'),
         'manage_options',
         'wp_user_management',
         'wp_user_management_user_list'
@@ -55,10 +55,15 @@ function wp_user_management_user_list() {
 
     // Get configurable columns
     $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
+    $columns[] = 'roles'; // Add roles column
+    $columns[] = 'actions'; // Add actions column
+
+    // Get all roles
+    $roles = get_editable_roles();
 
     ?>
     <div class="wrap">
-        <h1><?php _e('Configurable User List', 'wp-user-management-plugin'); ?></h1>
+        <h1><?php _e('User List', 'wp-user-management-plugin'); ?></h1>
         <form method="get">
             <input type="hidden" name="page" value="wp_user_management">
             <input type="text" name="search" value="<?php echo esc_attr($search); ?>" placeholder="<?php _e('Search...', 'wp-user-management-plugin'); ?>">
@@ -82,6 +87,21 @@ function wp_user_management_user_list() {
                                     echo esc_html($user->user_login);
                                 } elseif ($column === 'user_email') { 
                                     echo esc_html($user->user_email);
+                                } elseif ($column === 'roles') {
+                                    echo esc_html(implode(', ', $user->roles));
+                                } elseif ($column === 'actions') {
+                                    ?>
+                                    <form method="post" class="inline-form">
+                                        <?php wp_nonce_field('wp_user_management_add_role'); ?>
+                                        <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
+                                        <select name="role" class="styled-dropdown">
+                                            <?php foreach ($roles as $role_key => $role): ?>
+                                                <option value="<?php echo esc_attr($role_key); ?>"><?php echo esc_html($role['name']); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <button type="submit" class="styled-button"><?php _e('Add role', 'wp-user-management-plugin'); ?></button>
+                                    </form>
+                                    <?php
                                 } else {
                                     echo esc_html($user->$column);
                                 }
@@ -95,6 +115,22 @@ function wp_user_management_user_list() {
     </div>
     <?php
 }
+
+// Handle adding roles
+function wp_user_management_handle_add_role() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['role'])) {
+        check_admin_referer('wp_user_management_add_role');
+
+        $user_id = intval($_POST['user_id']);
+        $role = sanitize_text_field($_POST['role']);
+
+        $user = get_userdata($user_id);
+        if ($user && in_array($role, array_keys(get_editable_roles()))) {
+            $user->add_role($role);
+        }
+    }
+}
+add_action('admin_init', 'wp_user_management_handle_add_role');
 
 // Display configuration page
 function wp_user_management_configuration() {
@@ -161,7 +197,7 @@ function wp_user_management_configuration() {
                 <?php endforeach; ?>
             </div>
 
-            <button type="submit"><?php _e('Save Settings', 'wp-user-management-plugin'); ?></button>
+            <button type="submit" class="button button-primary"><?php _e('Save Settings', 'wp-user-management-plugin'); ?></button>
         </form>
     </div>
     <?php
