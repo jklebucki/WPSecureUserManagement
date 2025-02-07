@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 
 // Display password reset form
 function sum_display_password_reset_form() {
+    // Enqueue the CSS file
+    wp_enqueue_style('sum-password-reset-form', plugins_url('password-reset-form.css', __FILE__));
     ob_start(); ?>
     <div class="sum-password-reset-container">
         <form id="sum-password-reset-form" method="post">
