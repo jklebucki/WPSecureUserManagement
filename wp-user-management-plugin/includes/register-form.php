@@ -85,7 +85,7 @@ function wpum_display_registration_form() {
             <!-- CAPTCHA -->
             <label for="wpum-captcha"><?php _e('Enter the code', 'wp-user-management-plugin'); ?> *</label>
             <div class="wpum-captcha-container">
-                <img src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'captcha-image.php'); ?>" alt="CAPTCHA">
+                <?php sum_generate_captcha(); ?>
                 <input type="text" name="wpum_captcha" id="wpum-captcha" required>
             </div>
 

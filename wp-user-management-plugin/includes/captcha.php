@@ -29,10 +29,13 @@ function sum_generate_captcha() {
     } else {
         imagestring($image, 5, 10, 10, $captcha_code, $text_color);
     }
-    
-    header('Content-Type: image/png');
+
+    ob_start();
     imagepng($image);
+    $image_data = ob_get_clean();
     imagedestroy($image);
+
+    echo '<img src="data:image/png;base64,' . base64_encode($image_data) . '" alt="CAPTCHA">';
 }
 
 function sum_check_captcha($input) {
