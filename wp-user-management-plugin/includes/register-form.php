@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Include CAPTCHA logic
+// Include CAPTCHA functions
 require_once plugin_dir_path(__FILE__) . 'captcha.php';
 
 // Display registration form

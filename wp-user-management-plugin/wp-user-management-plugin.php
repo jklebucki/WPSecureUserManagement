@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('MY_PLUGIN_DIR', plugin_dir_path(__FILE__));
+
 // Include necessary files
 require_once plugin_dir_path(__FILE__) . 'includes/captcha.php';
 require_once plugin_dir_path(__FILE__) . 'includes/register-form.php';

@@ -6,6 +6,11 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Ensure WordPress environment is loaded
+if (!function_exists('plugin_dir_path')) {
+    exit('WordPress environment not loaded.');
+}
+
 function sum_generate_captcha() {
     $captcha_code = '';
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -18,7 +23,7 @@ function sum_generate_captcha() {
     $background_color = imagecolorallocate($image, 255, 255, 255);
     $text_color = imagecolorallocate($image, 0, 0, 0);
     imagefilledrectangle($image, 0, 0, 120, 40, $background_color);
-    $font_path = plugin_dir_path(__FILE__) . 'fonts/NotoSans-Italic.ttf';
+    $font_path = MY_PLUGIN_DIR . 'fonts/NotoSans-Italic.ttf';
     if (file_exists($font_path)) {
         imagettftext($image, 20, 0, 10, 30, $text_color, $font_path, $captcha_code);
     } else {
