@@ -85,7 +85,7 @@ function wpum_process_registration()
         }
 
         // Check CAPTCHA
-        if (!wpum_check_captcha($captcha)) {
+        if (!sum_check_captcha($captcha)) {
             wp_die(__('Invalid CAPTCHA.', 'wp-user-management-plugin'));
         }
 
