@@ -69,8 +69,8 @@ button.button-primary {
     border: none;
     margin-left: 5px;
     cursor: pointer;
-    padding: 0 5px; /* Adjust padding to make the button smaller */
-    font-size: 12px; /* Adjust font size to make the button smaller */
+    padding: 0 2px; /* Adjust padding to make the button smaller */
+    font-size: 10px; /* Adjust font size to make the button smaller */
 }
 
 .role-badge .styled-button.remove-role:hover {
