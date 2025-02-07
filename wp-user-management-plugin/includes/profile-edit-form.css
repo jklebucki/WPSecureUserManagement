@@ -97,20 +97,19 @@
 .sum-modal {
     display: none !important;
     position: fixed !important;
-    z-index: 1 !important;
+    z-index: 1000 !important;
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
     height: 100% !important;
     overflow: auto !important;
-    background-color: rgb(0,0,0) !important;
-    background-color: rgba(0,0,0,0.4) !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .sum-modal-content {
-    background-color: #fefefe !important;
+    background-color: #fff !important;
     margin: auto !important; /* Center the modal horizontally */
-    position: absolute !important; /* Position the modal absolutely */
+    position: fixed !important; /* Position the modal absolutely */
     top: 50% !important; /* Position the modal vertically at 50% */
     left: 50% !important; /* Position the modal horizontally at 50% */
     transform: translate(-50%, -50%) !important; /* Offset the modal by 50% of its own width and height */
@@ -119,35 +118,36 @@
     width: 80% !important;
     max-width: 500px !important;
     text-align: center !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
 }
 
 .sum-modal-content button[type="submit"] {
-    padding: 10px 20px;
-    background: #d9534f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    padding: 10px 20px !important;
+    background: #d9534f !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
 }
 
 .sum-modal-content button[type="submit"]:hover {
-    background: #c9302c;
+    background: #c9302c !important;
 }
 
 .sum-close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    color: #aaa !important;
+    float: right !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
 }
 
 .sum-close:hover,
 .sum-close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    color: black !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
 }
 
 .sum-cancel {
-    margin-left: 10px;
+    margin-left: 10px !important;
 }
