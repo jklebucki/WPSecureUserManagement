@@ -60,6 +60,19 @@
     background: #c9302c;
 }
 
+#sum-delete-account-button {
+    padding: 10px 20px;
+    background: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#sum-delete-account-button:hover {
+    background: #c9302c;
+}
+
 .sum-tab-content label {
     display: block;
     margin-bottom: 5px;
@@ -82,26 +95,43 @@
 }
 
 .sum-modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+    display: none !important;
+    position: fixed !important;
+    z-index: 1 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: auto !important;
+    background-color: rgb(0,0,0) !important;
+    background-color: rgba(0,0,0,0.4) !important;
 }
 
 .sum-modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
+    background-color: #fefefe !important;
+    margin: auto !important; /* Center the modal horizontally */
+    position: absolute !important; /* Position the modal absolutely */
+    top: 50% !important; /* Position the modal vertically at 50% */
+    left: 50% !important; /* Position the modal horizontally at 50% */
+    transform: translate(-50%, -50%) !important; /* Offset the modal by 50% of its own width and height */
+    padding: 20px !important;
+    border: 1px solid #888 !important;
+    width: 80% !important;
+    max-width: 500px !important;
+    text-align: center !important;
+}
+
+.sum-modal-content button[type="submit"] {
+    padding: 10px 20px;
+    background: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sum-modal-content button[type="submit"]:hover {
+    background: #c9302c;
 }
 
 .sum-close {
