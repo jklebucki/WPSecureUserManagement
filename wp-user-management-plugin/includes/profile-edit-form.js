@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     btn.onclick = function() {
         modal.style.display = 'block';
+        modal.setAttribute('tabindex', '-1'); // Ensure modal can gain focus
+        modal.focus(); // Focus on the modal when displayed
+        modal.classList.remove('hidden'); // Remove any hidden class that might be applied
     }
 
     span.onclick = function() {
@@ -66,4 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
         group.style.display = 'flex';
         group.style.flexDirection = 'column';
     });
+
+    // Ensure modal is appended to the body to avoid conflicts with other styles
+    if (modal && !document.body.contains(modal)) {
+        document.body.appendChild(modal);
+    }
 });

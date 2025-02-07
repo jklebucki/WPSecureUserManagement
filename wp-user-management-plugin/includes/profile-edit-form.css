@@ -95,7 +95,6 @@
 }
 
 .sum-modal {
-    display: none !important;
     position: fixed !important;
     z-index: 1000 !important;
     left: 0 !important;
@@ -104,6 +103,10 @@
     height: 100% !important;
     overflow: auto !important;
     background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.sum-modal.hidden {
+    display: none !important;
 }
 
 .sum-modal-content {

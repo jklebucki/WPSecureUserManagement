@@ -75,7 +75,7 @@ function sum_display_profile_edit_form() {
     </div>
 
     <!-- Modal -->
-    <div id="sum-delete-account-modal" class="sum-modal">
+    <div id="sum-delete-account-modal" class="sum-modal hidden">
         <div class="sum-modal-content">
             <span class="sum-close">&times;</span>
             <p><?php _e('Are you sure you want to delete your account?', 'secure-user-management'); ?></p>
