@@ -54,7 +54,7 @@ function wp_user_management_user_list() {
     $users = get_users($args);
 
     // Get configurable columns
-    $columns = get_option('wp_user_management_columns', ['ID', 'username', 'email']);
+    $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
 
     ?>
     <div class="wrap">
@@ -76,7 +76,17 @@ function wp_user_management_user_list() {
                 <?php foreach ($users as $user): ?>
                     <tr>
                         <?php foreach ($columns as $column): ?>
-                            <td><?php echo esc_html($user->$column); ?></td>
+                            <td>
+                                <?php 
+                                if ($column === 'user_login') { 
+                                    echo esc_html($user->user_login);
+                                } elseif ($column === 'user_email') { 
+                                    echo esc_html($user->user_email);
+                                } else {
+                                    echo esc_html($user->$column);
+                                }
+                                ?>
+                            </td>
                         <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
@@ -104,8 +114,27 @@ function wp_user_management_configuration() {
         echo '<div class="updated"><p>' . __('Settings saved.', 'wp-user-management-plugin') . '</p></div>';
     }
 
-    $columns = get_option('wp_user_management_columns', ['ID', 'username', 'email']);
+    $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
     $metadata = get_option('wp_user_management_metadata', []);
+
+    // Get all user fields dynamically
+    $user_fields = [
+        'ID' => __('ID', 'wp-user-management-plugin'),
+        'user_login' => __('Username', 'wp-user-management-plugin'),
+        'user_email' => __('Email', 'wp-user-management-plugin'),
+        'first_name' => __('First Name', 'wp-user-management-plugin'),
+        'last_name' => __('Last Name', 'wp-user-management-plugin'),
+        'user_registered' => __('Registered', 'wp-user-management-plugin'),
+        // Add more fields dynamically if needed
+    ];
+
+    // Get all user metadata dynamically
+    global $wpdb;
+    $meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM $wpdb->usermeta");
+    $user_metadata = [];
+    foreach ($meta_keys as $meta_key) {
+        $user_metadata[$meta_key] = ucfirst(str_replace('_', ' ', $meta_key));
+    }
 
     ?>
     <div class="wrap">
@@ -113,30 +142,20 @@ function wp_user_management_configuration() {
         <form method="post">
             <?php wp_nonce_field('wp_user_management_configuration'); ?>
             <h2><?php _e('User List Columns', 'wp-user-management-plugin'); ?></h2>
-            <label>
-                <input type="checkbox" name="columns[]" value="ID" <?php checked(in_array('ID', $columns)); ?>>
-                <?php _e('ID', 'wp-user-management-plugin'); ?>
-            </label>
-            <label>
-                <input type="checkbox" name="columns[]" value="username" <?php checked(in_array('username', $columns)); ?>>
-                <?php _e('Username', 'wp-user-management-plugin'); ?>
-            </label>
-            <label>
-                <input type="checkbox" name="columns[]" value="email" <?php checked(in_array('email', $columns)); ?>>
-                <?php _e('Email', 'wp-user-management-plugin'); ?>
-            </label>
-            <!-- Add more columns as needed -->
+            <?php foreach ($user_fields as $field_key => $field_label): ?>
+                <label>
+                    <input type="checkbox" name="columns[]" value="<?php echo esc_attr($field_key); ?>" <?php checked(in_array($field_key, $columns)); ?>>
+                    <?php echo esc_html($field_label); ?>
+                </label>
+            <?php endforeach; ?>
 
             <h2><?php _e('User Profile Metadata', 'wp-user-management-plugin'); ?></h2>
-            <label>
-                <input type="checkbox" name="metadata[]" value="phone" <?php checked(in_array('phone', $metadata)); ?>>
-                <?php _e('Phone', 'wp-user-management-plugin'); ?>
-            </label>
-            <label>
-                <input type="checkbox" name="metadata[]" value="address" <?php checked(in_array('address', $metadata)); ?>>
-                <?php _e('Address', 'wp-user-management-plugin'); ?>
-            </label>
-            <!-- Add more metadata as needed -->
+            <?php foreach ($user_metadata as $meta_key => $meta_label): ?>
+                <label>
+                    <input type="checkbox" name="metadata[]" value="<?php echo esc_attr($meta_key); ?>" <?php checked(in_array($meta_key, $metadata)); ?>>
+                    <?php echo esc_html($meta_label); ?>
+                </label>
+            <?php endforeach; ?>
 
             <button type="submit"><?php _e('Save Settings', 'wp-user-management-plugin'); ?></button>
         </form>

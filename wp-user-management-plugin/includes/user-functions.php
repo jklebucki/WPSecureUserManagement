@@ -9,8 +9,8 @@ function sum_get_user_data($user_id) {
     }
     return [
         'ID' => $user->ID,
-        'username' => $user->user_login,
-        'email' => $user->user_email,
+        'user_login' => $user->user_login, // native field
+        'user_email' => $user->user_email, // native field
         'first_name' => $user->first_name,
         'last_name' => $user->last_name,
     ];
