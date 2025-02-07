@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const span = document.getElementsByClassName('sum-close')[0];
     const cancelBtn = document.querySelector('.sum-cancel');
     const logoutBtn = document.getElementById('sum-logout-button');
+    const sum_logout_nonce = document.getElementById('sum-logout-nonce').value; // Ensure nonce is retrieved correctly
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
@@ -36,15 +37,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     logoutBtn.onclick = function() {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '';
-        const nonce = document.createElement('input');
-        nonce.type = 'hidden';
-        nonce.name = 'sum_logout_nonce';
-        nonce.value = sum_logout_nonce;
-        form.appendChild(nonce);
-        document.body.appendChild(form);
-        form.submit();
-    }
+        if (confirm('Are you sure you want to log out?')) {
+            fetch('/wp-json/wp/v2/users/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': sum_logout_nonce // Use the nonce in the request
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    };
 });

@@ -4,67 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Enqueue styles
+function sum_enqueue_styles() {
+    wp_enqueue_style('sum-login-form', plugin_dir_url(__FILE__) . 'login-form.css');
+}
+add_action('wp_enqueue_scripts', 'sum_enqueue_styles');
+
 // Display login form
 function sum_display_login_form()
 {
     ob_start(); ?>
-    <style>
-        .sum-login-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .sum-login-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sum-login-container label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .sum-login-container input[type="text"],
-        .sum-login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .sum-login-container button {
-            width: 100%;
-            padding: 10px;
-            background: #0073aa;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .sum-login-container button:hover {
-            background: #005177;
-        }
-
-        .sum-login-container p {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .sum-login-container a {
-            color: #0073aa;
-        }
-
-        .sum-login-container a:hover {
-            color: #005177;
-        }
-    </style>
     <div class="sum-login-container">
         <form id="sum-login-form" method="post">
             <h2><?php _e('User Login', 'secure-user-management'); ?></h2>

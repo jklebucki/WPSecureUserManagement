@@ -7,67 +7,16 @@ if (!defined('ABSPATH')) {
 // Include CAPTCHA functions
 require_once plugin_dir_path(__FILE__) . 'captcha.php';
 
+// Enqueue styles
+function wpum_enqueue_styles() {
+    wp_enqueue_style('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.css');
+}
+add_action('wp_enqueue_scripts', 'wpum_enqueue_styles');
+
 // Display registration form
 function wpum_display_registration_form()
 {
     ob_start(); ?>
-    <style>
-        .wpum-registration-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .wpum-registration-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .wpum-registration-container label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .wpum-registration-container input[type="text"],
-        .wpum-registration-container input[type="email"],
-        .wpum-registration-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .wpum-registration-container .wpum-captcha-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .wpum-registration-container .wpum-captcha-container img {
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .wpum-registration-container button {
-            width: 100%;
-            padding: 10px;
-            background: #0073aa;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .wpum-registration-container button:hover {
-            background: #005177;
-        }
-    </style>
     <div class="wpum-registration-container">
         <form id="wpum-registration-form" method="post">
             <h2><?php _e('User Registration', 'wp-user-management-plugin'); ?></h2>
@@ -122,22 +71,6 @@ function wpum_display_registration_form()
             </div>
         </form>
     </div>
-
-    <style>
-        .wpum-form-row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .wpum-form-group {
-            flex: 1;
-            margin-right: 10px;
-        }
-
-        .wpum-form-group:last-child {
-            margin-right: 0;
-        }
-    </style>
 <?php
     return ob_get_clean();
 }

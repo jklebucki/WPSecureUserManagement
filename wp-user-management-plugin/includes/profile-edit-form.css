@@ -40,11 +40,11 @@
     display: flex;
 }
 
-#logout {
+/* #logout {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+} */
 
 #sum-logout-button {
     padding: 10px 20px;
