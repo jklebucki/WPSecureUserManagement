@@ -10,6 +10,56 @@ require_once plugin_dir_path(__FILE__) . 'captcha.php';
 // Display registration form
 function wpum_display_registration_form() {
     ob_start(); ?>
+    <style>
+        .wpum-registration-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .wpum-registration-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .wpum-registration-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .wpum-registration-container input[type="text"],
+        .wpum-registration-container input[type="email"],
+        .wpum-registration-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .wpum-registration-container .wpum-captcha-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .wpum-registration-container .wpum-captcha-container img {
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .wpum-registration-container button {
+            width: 100%;
+            padding: 10px;
+            background: #0073aa;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .wpum-registration-container button:hover {
+            background: #005177;
+        }
+    </style>
     <div class="wpum-registration-container">
         <form id="wpum-registration-form" method="post">
             <h2><?php _e('User Registration', 'wp-user-management-plugin'); ?></h2>

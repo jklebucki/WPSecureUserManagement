@@ -27,6 +27,15 @@ function wp_user_management_load_textdomain() {
 }
 add_action('plugins_loaded', 'wp_user_management_load_textdomain');
 
+// Register shortcodes for all forms
+function wpum_register_shortcodes() {
+    add_shortcode('wpum_user_registration', 'wpum_display_registration_form');
+    add_shortcode('wpum_user_login', 'sum_display_login_form');
+    add_shortcode('wpum_user_profile_edit', 'sum_display_profile_edit_form');
+    add_shortcode('wpum_password_reset', 'sum_display_password_reset_form');
+}
+add_action('init', 'wpum_register_shortcodes');
+
 // Register activation hook
 function wp_user_management_activate() {
     // Code to run on plugin activation
