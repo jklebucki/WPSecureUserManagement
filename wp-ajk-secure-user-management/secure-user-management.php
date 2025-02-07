@@ -26,6 +26,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin-user-list.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/security.php';
 require_once plugin_dir_path(__FILE__) . 'includes/password-reset.php';
+require_once plugin_dir_path(__FILE__) . 'includes/captcha.php';
 
 // Activation hook
 function sum_activate()
@@ -61,7 +62,7 @@ function sum_create_pages()
 // Shortcode registration
 function sum_register_shortcodes()
 {
-    add_shortcode('sum_user_registration', 'sum_display_registration_form');
+    add_shortcode('sum_user_registration', 'sum_display_registration_form_with_captcha');
     add_shortcode('sum_user_login', 'sum_display_login_form');
     add_shortcode('sum_user_profile', 'sum_display_profile_editor');
     add_shortcode('sum_password_reset', 'sum_display_password_reset_form');
@@ -111,3 +112,44 @@ function sum_admin_settings()
 {
     echo '<div class="wrap"><h1>' . __('Settings', 'secure-user-management') . '</h1></div>';
 }
+
+// Function to display registration form with captcha
+function sum_display_registration_form_with_captcha()
+{
+    ob_start();
+    ?>
+    <form method="post" action="">
+        <!-- ...existing form fields... -->
+        <p>
+            <label for="captcha"><?php _e('Captcha', 'secure-user-management'); ?></label>
+            <img src="<?php echo plugin_dir_url(__FILE__) . 'includes/captcha.php'; ?>" alt="CAPTCHA">
+            <input type="text" name="captcha" id="captcha" required>
+        </p>
+        <p>
+            <input type="submit" name="submit" value="<?php _e('Register', 'secure-user-management'); ?>">
+        </p>
+    </form>
+    <?php
+    return ob_get_clean();
+}
+
+// Function to validate captcha
+function sum_validate_captcha($captcha_input)
+{
+    if (isset($_SESSION['sum_captcha']) && $_SESSION['sum_captcha'] === $captcha_input) {
+        return true;
+    }
+    return false;
+}
+
+// Hook into form submission to validate captcha
+function sum_handle_registration_form_submission()
+{
+    if (isset($_POST['submit'])) {
+        if (!sum_validate_captcha($_POST['captcha'])) {
+            wp_die(__('Captcha validation failed. Please try again.', 'secure-user-management'));
+        }
+        // ...existing form handling code...
+    }
+}
+add_action('init', 'sum_handle_registration_form_submission');

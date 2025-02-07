@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Include CAPTCHA logic
+require_once plugin_dir_path(__FILE__) . 'captcha.php';
+
 // Display registration form
 function sum_display_registration_form()
 {
@@ -33,7 +36,7 @@ function sum_display_registration_form()
             <!-- CAPTCHA -->
             <label for="sum-captcha"><?php _e('Enter the code', 'secure-user-management'); ?> *</label>
             <div class="sum-captcha-container">
-                <img src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'captcha.php'); ?>" alt="CAPTCHA">
+                <img src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'captcha-image.php'); ?>" alt="CAPTCHA">
                 <input type="text" name="sum_captcha" id="sum-captcha" required>
             </div>
 
@@ -105,16 +108,6 @@ function sum_process_registration()
     }
 }
 add_action('init', 'sum_process_registration');
-
-// Check CAPTCHA
-function sum_check_captcha($captcha_input)
-{
-    session_start();
-    if (isset($_SESSION['sum_captcha']) && $_SESSION['sum_captcha'] === $captcha_input) {
-        return true;
-    }
-    return false;
-}
 
 // Register shortcode
 function sum_register_registration_shortcode()

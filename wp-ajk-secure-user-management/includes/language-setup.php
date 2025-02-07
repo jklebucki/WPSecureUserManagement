@@ -29,3 +29,4 @@ function sum_create_language_directory() {
         );
     }
 }
+add_action('init', 'sum_create_language_directory');
