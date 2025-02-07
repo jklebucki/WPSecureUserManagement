@@ -20,17 +20,25 @@ function sum_display_profile_edit_form() {
         </div>
         <div id="profile" class="sum-tab-content active">
             <form id="sum-profile-edit-form" method="post">
-                <label for="sum-username"><?php _e('Username', 'secure-user-management'); ?> *</label>
-                <input type="text" name="sum_username" id="sum-username" value="<?php echo esc_attr($current_user->user_login); ?>" required>
+                <div class="sum-form-group">
+                    <label for="sum-username"><?php _e('Username', 'secure-user-management'); ?> *</label>
+                    <input type="text" name="sum_username" id="sum-username" value="<?php echo esc_attr($current_user->user_login); ?>" required>
+                </div>
 
-                <label for="sum-email"><?php _e('Email', 'secure-user-management'); ?> *</label>
-                <input type="email" name="sum_email" id="sum-email" value="<?php echo esc_attr($current_user->user_email); ?>" required>
+                <div class="sum-form-group">
+                    <label for="sum-email"><?php _e('Email', 'secure-user-management'); ?> *</label>
+                    <input type="email" name="sum_email" id="sum-email" value="<?php echo esc_attr($current_user->user_email); ?>" required>
+                </div>
 
-                <label for="sum-firstname"><?php _e('First Name', 'secure-user-management'); ?> *</label>
-                <input type="text" name="sum_firstname" id="sum-firstname" value="<?php echo esc_attr(get_user_meta($current_user->ID, 'first_name', true)); ?>" required>
+                <div class="sum-form-group">
+                    <label for="sum-firstname"><?php _e('First Name', 'secure-user-management'); ?> *</label>
+                    <input type="text" name="sum_firstname" id="sum-firstname" value="<?php echo esc_attr(get_user_meta($current_user->ID, 'first_name', true)); ?>" required>
+                </div>
 
-                <label for="sum-lastname"><?php _e('Last Name', 'secure-user-management'); ?> *</label>
-                <input type="text" name="sum_lastname" id="sum-lastname" value="<?php echo esc_attr(get_user_meta($current_user->ID, 'last_name', true)); ?>" required>
+                <div class="sum-form-group">
+                    <label for="sum-lastname"><?php _e('Last Name', 'secure-user-management'); ?> *</label>
+                    <input type="text" name="sum_lastname" id="sum-lastname" value="<?php echo esc_attr(get_user_meta($current_user->ID, 'last_name', true)); ?>" required>
+                </div>
 
                 <input type="hidden" name="sum_profile_edit_nonce" value="<?php echo wp_create_nonce('sum_profile_edit_nonce'); ?>">
                 <button type="submit"><?php _e('Update Profile', 'secure-user-management'); ?></button>

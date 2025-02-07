@@ -5,6 +5,7 @@
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 .wpum-registration-container h2 {
@@ -21,11 +22,12 @@
 .wpum-registration-container input[type="text"],
 .wpum-registration-container input[type="email"],
 .wpum-registration-container input[type="password"] {
-    width: 100%;
+    width: 96%; /* Adjust width to ensure it fits within the parent container */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 .wpum-registration-container .wpum-captcha-container {
@@ -56,12 +58,16 @@
 
 .wpum-form-row {
     display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
     justify-content: space-between;
 }
 
 .wpum-form-group {
     flex: 1;
     margin-right: 10px;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    display: flex;
+    flex-direction: column;
 }
 
 .wpum-form-group:last-child {

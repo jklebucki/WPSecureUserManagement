@@ -60,4 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     };
+
+    const formGroups = document.querySelectorAll('.sum-form-group');
+    formGroups.forEach(group => {
+        group.style.display = 'flex';
+        group.style.flexDirection = 'column';
+    });
 });

@@ -5,6 +5,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     display: flex;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 .sum-tabs {
@@ -72,11 +73,12 @@
 .sum-tab-content input[type="text"],
 .sum-tab-content input[type="email"],
 .sum-tab-content input[type="password"] {
-    width: 100%;
+    width: 96%; /* Adjust width to ensure it fits within the parent container */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 .sum-modal {

@@ -11,8 +11,10 @@ function sum_display_password_reset_form() {
         <form id="sum-password-reset-form" method="post">
             <h2><?php _e('Password Reset', 'secure-user-management'); ?></h2>
 
-            <label for="sum-email"><?php _e('Email', 'secure-user-management'); ?> *</label>
-            <input type="email" name="sum_email" id="sum-email" required>
+            <div class="sum-form-group">
+                <label for="sum-email"><?php _e('Email', 'secure-user-management'); ?> *</label>
+                <input type="email" name="sum_email" id="sum-email" required>
+            </div>
 
             <input type="hidden" name="sum_password_reset_nonce" value="<?php echo wp_create_nonce('sum_password_reset_nonce'); ?>">
             <button type="submit"><?php _e('Reset Password', 'secure-user-management'); ?></button>
