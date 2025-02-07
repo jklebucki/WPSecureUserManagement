@@ -1,4 +1,6 @@
 <?php
+require_once plugin_dir_path(__FILE__) . 'session.php';
+
 // Custom CAPTCHA implementation for user registration, login, and password reset
 
 if (session_status() == PHP_SESSION_NONE) {
