@@ -11,7 +11,7 @@
 }
 
 button.button-primary {
-    margin-top: 20px;
+    margin-top: 10px !important;
 }
 
 .inline-form {
@@ -27,7 +27,7 @@ button.button-primary {
     border-radius: 4px;
     background-color: #fff;
     flex: 1 1 auto; /* Allow the dropdown to resize */
-    min-width: 150px; /* Minimum width to prevent too small dropdown */
+    min-width: 100px; /* Minimum width to prevent too small dropdown */
 }
 
 .styled-button {
@@ -50,4 +50,29 @@ button.button-primary {
 
 .styled-button.remove-role:hover {
     background-color: #c9302c; /* Darker red on hover */
+}
+
+.role-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.role-badge .styled-button.remove-role {
+    background-color: transparent;
+    color: #d9534f;
+    border: none;
+    margin-left: 5px;
+    cursor: pointer;
+    padding: 0 5px; /* Adjust padding to make the button smaller */
+    font-size: 12px; /* Adjust font size to make the button smaller */
+}
+
+.role-badge .styled-button.remove-role:hover {
+    color: #c9302c;
 }

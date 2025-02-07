@@ -88,7 +88,20 @@ function wp_user_management_user_list() {
                                 } elseif ($column === 'user_email') { 
                                     echo esc_html($user->user_email);
                                 } elseif ($column === 'roles') {
-                                    echo esc_html(implode(', ', $user->roles));
+                                    foreach ($user->roles as $role) {
+                                        ?>
+                                        <span class="role-badge">
+                                            <?php echo esc_html($roles[$role]['name']); ?>
+                                            <form method="post" class="inline-form">
+                                                <?php wp_nonce_field('wp_user_management_remove_role'); ?>
+                                                <input type="hidden" name="action" value="remove_role">
+                                                <input type="hidden" name="user_id" value="<?php echo esc_attr($user->ID); ?>">
+                                                <input type="hidden" name="role" value="<?php echo esc_attr($role); ?>">
+                                                <button type="submit" class="styled-button remove-role">x</button>
+                                            </form>
+                                        </span>
+                                        <?php
+                                    }
                                 } elseif ($column === 'actions') {
                                     ?>
                                     <form method="post" class="inline-form">
@@ -131,6 +144,22 @@ function wp_user_management_handle_add_role() {
     }
 }
 add_action('admin_init', 'wp_user_management_handle_add_role');
+
+// Handle removing roles
+function wp_user_management_handle_remove_role() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'remove_role' && isset($_POST['user_id'], $_POST['role'])) {
+        check_admin_referer('wp_user_management_remove_role');
+
+        $user_id = intval($_POST['user_id']);
+        $role = sanitize_text_field($_POST['role']);
+
+        $user = get_userdata($user_id);
+        if ($user && in_array($role, $user->roles)) {
+            $user->remove_role($role);
+        }
+    }
+}
+add_action('admin_init', 'wp_user_management_handle_remove_role');
 
 // Display configuration page
 function wp_user_management_configuration() {
