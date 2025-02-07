@@ -15,51 +15,131 @@ function wp_user_management_add_admin_menu() {
         'dashicons-admin-users',
         6
     );
+
+    add_submenu_page(
+        'wp_user_management',
+        __('Configurable User List', 'wp-user-management-plugin'),
+        __('Configurable User List', 'wp-user-management-plugin'),
+        'manage_options',
+        'wp_user_management',
+        'wp_user_management_user_list'
+    );
+
+    add_submenu_page(
+        'wp_user_management',
+        __('Configuration', 'wp-user-management-plugin'),
+        __('Configuration', 'wp-user-management-plugin'),
+        'manage_options',
+        'wp_user_management_configuration',
+        'wp_user_management_configuration'
+    );
 }
 add_action('admin_menu', 'wp_user_management_add_admin_menu');
 
-// Display user list
+// Display configurable user list
 function wp_user_management_user_list() {
-    // Check user capabilities
     if (!current_user_can('manage_options')) {
         return;
     }
 
-    // Fetch users
+    // Fetch users with filters
+    $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
     $args = [
-        'role' => 'subscriber',
+        'search' => '*' . esc_attr($search) . '*',
+        'search_columns' => ['ID', 'user_login', 'user_email'],
         'orderby' => 'registered',
         'order' => 'DESC',
         'number' => -1,
     ];
     $users = get_users($args);
 
-    // Display user list
+    // Get configurable columns
+    $columns = get_option('wp_user_management_columns', ['ID', 'username', 'email']);
+
     ?>
     <div class="wrap">
-        <h1><?php _e('User List', 'wp-user-management-plugin'); ?></h1>
+        <h1><?php _e('Configurable User List', 'wp-user-management-plugin'); ?></h1>
+        <form method="get">
+            <input type="hidden" name="page" value="wp_user_management">
+            <input type="text" name="search" value="<?php echo esc_attr($search); ?>" placeholder="<?php _e('Search...', 'wp-user-management-plugin'); ?>">
+            <button type="submit"><?php _e('Search', 'wp-user-management-plugin'); ?></button>
+        </form>
         <table class="wp-list-table widefat fixed striped">
             <thead>
                 <tr>
-                    <th><?php _e('Username', 'wp-user-management-plugin'); ?></th>
-                    <th><?php _e('Email', 'wp-user-management-plugin'); ?></th>
-                    <th><?php _e('First Name', 'wp-user-management-plugin'); ?></th>
-                    <th><?php _e('Last Name', 'wp-user-management-plugin'); ?></th>
-                    <th><?php _e('Registered', 'wp-user-management-plugin'); ?></th>
+                    <?php foreach ($columns as $column): ?>
+                        <th><?php echo esc_html(ucfirst($column)); ?></th>
+                    <?php endforeach; ?>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($users as $user): ?>
                     <tr>
-                        <td><?php echo esc_html($user->user_login); ?></td>
-                        <td><?php echo esc_html($user->user_email); ?></td>
-                        <td><?php echo esc_html(get_user_meta($user->ID, 'first_name', true)); ?></td>
-                        <td><?php echo esc_html(get_user_meta($user->ID, 'last_name', true)); ?></td>
-                        <td><?php echo esc_html(date('Y-m-d', strtotime($user->user_registered))); ?></td>
+                        <?php foreach ($columns as $column): ?>
+                            <td><?php echo esc_html($user->$column); ?></td>
+                        <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+    <?php
+}
+
+// Display configuration page
+function wp_user_management_configuration() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        check_admin_referer('wp_user_management_configuration');
+
+        $columns = array_map('sanitize_text_field', $_POST['columns']);
+        update_option('wp_user_management_columns', $columns);
+
+        $metadata = array_map('sanitize_text_field', $_POST['metadata']);
+        update_option('wp_user_management_metadata', $metadata);
+
+        echo '<div class="updated"><p>' . __('Settings saved.', 'wp-user-management-plugin') . '</p></div>';
+    }
+
+    $columns = get_option('wp_user_management_columns', ['ID', 'username', 'email']);
+    $metadata = get_option('wp_user_management_metadata', []);
+
+    ?>
+    <div class="wrap">
+        <h1><?php _e('Configuration', 'wp-user-management-plugin'); ?></h1>
+        <form method="post">
+            <?php wp_nonce_field('wp_user_management_configuration'); ?>
+            <h2><?php _e('User List Columns', 'wp-user-management-plugin'); ?></h2>
+            <label>
+                <input type="checkbox" name="columns[]" value="ID" <?php checked(in_array('ID', $columns)); ?>>
+                <?php _e('ID', 'wp-user-management-plugin'); ?>
+            </label>
+            <label>
+                <input type="checkbox" name="columns[]" value="username" <?php checked(in_array('username', $columns)); ?>>
+                <?php _e('Username', 'wp-user-management-plugin'); ?>
+            </label>
+            <label>
+                <input type="checkbox" name="columns[]" value="email" <?php checked(in_array('email', $columns)); ?>>
+                <?php _e('Email', 'wp-user-management-plugin'); ?>
+            </label>
+            <!-- Add more columns as needed -->
+
+            <h2><?php _e('User Profile Metadata', 'wp-user-management-plugin'); ?></h2>
+            <label>
+                <input type="checkbox" name="metadata[]" value="phone" <?php checked(in_array('phone', $metadata)); ?>>
+                <?php _e('Phone', 'wp-user-management-plugin'); ?>
+            </label>
+            <label>
+                <input type="checkbox" name="metadata[]" value="address" <?php checked(in_array('address', $metadata)); ?>>
+                <?php _e('Address', 'wp-user-management-plugin'); ?>
+            </label>
+            <!-- Add more metadata as needed -->
+
+            <button type="submit"><?php _e('Save Settings', 'wp-user-management-plugin'); ?></button>
+        </form>
     </div>
     <?php
 }

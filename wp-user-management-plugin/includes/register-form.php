@@ -8,8 +8,7 @@ if (!defined('ABSPATH')) {
 require_once plugin_dir_path(__FILE__) . 'captcha.php';
 
 // Display registration form
-function wpum_display_registration_form()
-{
+function wpum_display_registration_form() {
     ob_start(); ?>
     <div class="wpum-registration-container">
         <form id="wpum-registration-form" method="post">
@@ -49,8 +48,7 @@ function wpum_display_registration_form()
 }
 
 // Handle user registration
-function wpum_process_registration()
-{
+function wpum_process_registration() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wpum_register_nonce'])) {
         if (!wp_verify_nonce($_POST['wpum_register_nonce'], 'wpum_register_nonce')) {
             wp_die(__('Security check failed!', 'wp-user-management-plugin'));
@@ -110,8 +108,8 @@ function wpum_process_registration()
 add_action('init', 'wpum_process_registration');
 
 // Register shortcode
-function wpum_register_registration_shortcode()
-{
+function wpum_register_registration_shortcode() {
     add_shortcode('wpum_user_registration', 'wpum_display_registration_form');
 }
 add_action('init', 'wpum_register_registration_shortcode');
+?>

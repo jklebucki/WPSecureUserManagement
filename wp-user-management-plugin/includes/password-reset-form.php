@@ -5,8 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Display password reset form
-function sum_display_password_reset_form()
-{
+function sum_display_password_reset_form() {
     ob_start(); ?>
     <div class="sum-password-reset-container">
         <form id="sum-password-reset-form" method="post">
@@ -24,8 +23,7 @@ function sum_display_password_reset_form()
 }
 
 // Handle password reset request
-function sum_process_password_reset()
-{
+function sum_process_password_reset() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_password_reset_nonce'])) {
         if (!wp_verify_nonce($_POST['sum_password_reset_nonce'], 'sum_password_reset_nonce')) {
             wp_die(__('Security check failed!', 'secure-user-management'));
@@ -61,8 +59,7 @@ function sum_process_password_reset()
 add_action('init', 'sum_process_password_reset');
 
 // Register shortcode
-function sum_register_password_reset_shortcode()
-{
+function sum_register_password_reset_shortcode() {
     add_shortcode('sum_password_reset', 'sum_display_password_reset_form');
 }
 add_action('init', 'sum_register_password_reset_shortcode');
