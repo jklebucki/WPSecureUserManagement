@@ -1,7 +1,9 @@
 <?php
 // Custom CAPTCHA implementation for user registration, login, and password reset
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 function sum_generate_captcha() {
     $captcha_code = '';
@@ -15,7 +17,12 @@ function sum_generate_captcha() {
     $background_color = imagecolorallocate($image, 255, 255, 255);
     $text_color = imagecolorallocate($image, 0, 0, 0);
     imagefilledrectangle($image, 0, 0, 120, 40, $background_color);
-    imagettftext($image, 20, 0, 10, 30, $text_color, dirname(__FILE__) . '/fonts/arial.ttf', $captcha_code);
+    $font_path = plugin_dir_path(__FILE__) . 'fonts/NotoSans-Italic.ttf';
+    if (file_exists($font_path)) {
+        imagettftext($image, 20, 0, 10, 30, $text_color, $font_path, $captcha_code);
+    } else {
+        imagestring($image, 5, 10, 10, $captcha_code, $text_color);
+    }
     
     header('Content-Type: image/png');
     imagepng($image);
