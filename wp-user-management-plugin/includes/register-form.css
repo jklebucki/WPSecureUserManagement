@@ -28,6 +28,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    background-color: #f9f9f9; /* Lighten background color */
 }
 
 .wpum-registration-container .wpum-captcha-container {
