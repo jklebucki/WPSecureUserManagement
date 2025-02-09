@@ -45,10 +45,16 @@ function sum_display_profile_edit_form() {
             </form>
         </div>
         <div id="user-data" class="sum-tab-content">
-            <?php foreach ($metadata as $meta_key): ?>
-                <label for="sum-<?php echo esc_attr($meta_key); ?>"><?php echo esc_html(ucfirst(str_replace('_', ' ', $meta_key))); ?></label>
-                <input type="text" name="sum_<?php echo esc_attr($meta_key); ?>" id="sum-<?php echo esc_attr($meta_key); ?>" value="<?php echo esc_attr(get_user_meta($current_user->ID, $meta_key, true)); ?>" readonly>
-            <?php endforeach; ?>
+            <form id="sum-user-data-form" method="post">
+                <?php foreach ($metadata as $meta_key): ?>
+                    <div class="sum-form-group">
+                        <label for="sumv-<?php echo esc_attr($meta_key); ?>"><?php echo esc_html(ucfirst(str_replace('_', ' ', $meta_key))); ?></label>
+                        <input type="text" name="sumv_<?php echo esc_attr($meta_key); ?>" id="sumv-<?php echo esc_attr($meta_key); ?>" value="<?php echo esc_attr(get_user_meta($current_user->ID, $meta_key, true)); ?>">
+                    </div>
+                <?php endforeach; ?>
+                <input type="hidden" name="sum_user_data_nonce" value="<?php echo wp_create_nonce('sum_user_data_nonce'); ?>">
+                <button type="submit"><?php _e('Save Data', 'secure-user-management'); ?></button>
+            </form>
         </div>
         <div id="change-password" class="sum-tab-content">
             <form id="sum-change-password-form" method="post">
@@ -119,6 +125,24 @@ function sum_process_profile_update() {
         // Update password if provided
         if (!empty($password) && $password === $confirm_password) {
             wp_set_password($password, $current_user->ID);
+        }
+
+        // Redirect to profile edit page
+        wp_redirect($_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_user_data_nonce'])) {
+        if (!wp_verify_nonce($_POST['sum_user_data_nonce'], 'sum_user_data_nonce')) {
+            wp_die(__('Security check failed!', 'secure-user-management'));
+        }
+
+        $current_user = wp_get_current_user();
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, 'sumv_') === 0) {
+                $meta_key = substr($key, 5);
+                update_user_meta($current_user->ID, $meta_key, sanitize_text_field($value));
+            }
         }
 
         // Redirect to profile edit page
