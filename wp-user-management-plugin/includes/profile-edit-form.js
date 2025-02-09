@@ -39,28 +39,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    const logoutForm = document.createElement('form');
+    logoutForm.method = 'POST';
+    logoutForm.style.display = 'none';
+    const logoutNonceInput = document.createElement('input');
+    logoutNonceInput.type = 'hidden';
+    logoutNonceInput.name = 'sum_logout_nonce';
+    logoutNonceInput.value = document.getElementById('sum-logout-nonce').value;
+    logoutForm.appendChild(logoutNonceInput);
+    document.body.appendChild(logoutForm);
+
     logoutBtn.onclick = function() {
         if (confirm('Are you sure you want to log out?')) {
-            fetch('/wp-json/wp/v2/users/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-WP-Nonce': sum_logout_nonce // Use the nonce in the request
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = '/';
-                } else {
-                    alert('Logout failed. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
+            logoutForm.submit();
         }
     };
 
