@@ -182,7 +182,8 @@ function sum_process_logout() {
         exit;
     }
 }
-add_action('init', 'sum_process_logout');
+add_action('admin_post_sum_logout', 'sum_process_logout');
+add_action('admin_post_nopriv_sum_logout', 'sum_process_logout');
 
 // Register shortcode
 function sum_register_profile_edit_shortcode() {

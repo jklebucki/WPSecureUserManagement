@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     logoutBtn.onclick = function() {
         if (confirm('Are you sure you want to log out?')) {
+            logoutForm.action = '/wp-admin/admin-post.php?action=sum_logout';
             logoutForm.submit();
         }
     };
