@@ -22,6 +22,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/profile-edit-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/password-reset-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
+require_once plugin_dir_path(__FILE__) . 'includes/my-account.php';
 
 // Load text domain for translations
 function wp_user_management_load_textdomain() {
@@ -35,8 +36,10 @@ function wpum_register_shortcodes() {
     add_shortcode('wpum_user_login', 'sum_display_login_form');
     add_shortcode('wpum_user_profile_edit', 'sum_display_profile_edit_form');
     add_shortcode('wpum_password_reset', 'sum_display_password_reset_form');
+    add_shortcode('wpum_my_account_content', 'wpum_my_account_shortcode');
 }
 add_action('init', 'wpum_register_shortcodes');
+
 
 // Register activation hook
 function wp_user_management_activate() {
