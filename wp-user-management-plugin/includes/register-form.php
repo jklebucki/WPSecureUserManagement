@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 
 // Include CAPTCHA functions
 require_once plugin_dir_path(__FILE__) . 'captcha.php';
+require_once plugin_dir_path(__FILE__) . 'user-functions.php';
 
 // Enqueue styles and scripts
 function wpum_enqueue_styles() {
