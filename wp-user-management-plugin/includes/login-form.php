@@ -1,11 +1,12 @@
 <?php
 // Exit if accessed directly
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
 // Enqueue styles
-function sum_enqueue_styles() {
+function sum_enqueue_styles()
+{
     wp_enqueue_style('sum-login-form', plugin_dir_url(__FILE__) . 'login-form.css');
 }
 add_action('wp_enqueue_scripts', 'sum_enqueue_styles');
@@ -37,12 +38,12 @@ function sum_display_login_form()
 function sum_process_login()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_login_nonce'])) {
-        if (!wp_verify_nonce($_POST['sum_login_nonce'], 'sum_login_nonce')) {
+        if (! wp_verify_nonce($_POST['sum_login_nonce'], 'sum_login_nonce')) {
             wp_die(__('Security check failed!', 'secure-user-management'));
         }
 
         $username_email = sanitize_text_field($_POST['sum_username_email']);
-        $password = $_POST['sum_password'];
+        $password       = $_POST['sum_password'];
 
         // Attempt to log the user in
         $creds = array();
@@ -52,9 +53,12 @@ function sum_process_login()
             $creds['user_login'] = $username_email;
         }
         $creds['user_password'] = $password;
-        $creds['remember'] = true;
+        $creds['remember']      = true;
 
-        $user = wp_signon($creds, false);
+        // Ustawienie secure cookie dynamicznie (jeśli strona używa SSL lub wymaga SSL w panelu admina)
+        $secure_cookie = is_ssl() || force_ssl_admin();
+        $user = wp_signon($creds, $secure_cookie);
+
         if (is_wp_error($user)) {
             wp_die(__('Login failed. Please check your credentials.', 'secure-user-management'));
         } else {
