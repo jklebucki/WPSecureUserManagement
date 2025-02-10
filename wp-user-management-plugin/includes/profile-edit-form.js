@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const tabs = document.querySelectorAll('.sum-tabs button');
     const tabContents = document.querySelectorAll('.sum-tab-content');
     const modal = document.getElementById('sum-delete-account-modal');
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sum_logout_nonce = document.getElementById('sum-logout-nonce').value; // Ensure nonce is retrieved correctly
 
     tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             tabs.forEach(t => t.classList.remove('active'));
             tabContents.forEach(tc => tc.classList.remove('active'));
 
@@ -18,26 +18,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    btn.onclick = function() {
+    btn.onclick = function () {
         modal.style.display = 'block';
         modal.setAttribute('tabindex', '-1'); // Ensure modal can gain focus
         modal.focus(); // Focus on the modal when displayed
         modal.classList.remove('hidden'); // Remove any hidden class that might be applied
-    }
+    };
 
-    span.onclick = function() {
+    span.onclick = function () {
         modal.style.display = 'none';
-    }
+    };
 
-    cancelBtn.onclick = function() {
+    cancelBtn.onclick = function () {
         modal.style.display = 'none';
-    }
+    };
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = 'none';
         }
-    }
+    };
 
     const logoutForm = document.createElement('form');
     logoutForm.method = 'POST';
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     logoutForm.appendChild(logoutNonceInput);
     document.body.appendChild(logoutForm);
 
-    logoutBtn.onclick = function() {
+    logoutBtn.onclick = function () {
         if (confirm('Are you sure you want to log out?')) {
             logoutForm.action = '/wp-admin/admin-post.php?action=sum_logout';
             logoutForm.submit();

@@ -5,7 +5,8 @@ if (!defined('ABSPATH')) {
 }
 
 // Display profile edit form
-function sum_display_profile_edit_form() {
+function sum_display_profile_edit_form()
+{
     $current_user = wp_get_current_user();
     $metadata = get_option('wp_user_management_metadata', []);
     ob_start(); ?>
@@ -75,7 +76,7 @@ function sum_display_profile_edit_form() {
         <div id="logout" class="sum-tab-content">
             <h3><?php _e('Logout', 'secure-user-management'); ?></h3>
             <button type="button" id="sum-logout-button"><?php _e('Logout', 'secure-user-management'); ?></button>
-            <?php $logout_nonce = wp_create_nonce('wp_rest'); ?>
+            <?php $logout_nonce = wp_create_nonce('sum_logout_nonce'); ?>
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
         </div>
     </div>
@@ -94,12 +95,13 @@ function sum_display_profile_edit_form() {
     </div>
 
     <script src="<?php echo plugin_dir_url(__FILE__) . 'profile-edit-form.js'; ?>"></script>
-    <?php
+<?php
     return ob_get_clean();
 }
 
 // Handle profile update
-function sum_process_profile_update() {
+function sum_process_profile_update()
+{
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_profile_edit_nonce'])) {
         if (!wp_verify_nonce($_POST['sum_profile_edit_nonce'], 'sum_profile_edit_nonce')) {
             wp_die(__('Security check failed!', 'secure-user-management'));
@@ -153,7 +155,8 @@ function sum_process_profile_update() {
 add_action('init', 'sum_process_profile_update');
 
 // Handle account deletion
-function sum_process_account_deletion() {
+function sum_process_account_deletion()
+{
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_delete_account_nonce'])) {
         if (!wp_verify_nonce($_POST['sum_delete_account_nonce'], 'sum_delete_account_nonce')) {
             wp_die(__('Security check failed!', 'secure-user-management'));
@@ -171,7 +174,8 @@ function sum_process_account_deletion() {
 add_action('init', 'sum_process_account_deletion');
 
 // Handle logout
-function sum_process_logout() {
+function sum_process_logout()
+{
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_logout_nonce'])) {
         if (!wp_verify_nonce($_POST['sum_logout_nonce'], 'sum_logout_nonce')) {
             wp_die(__('Security check failed!', 'secure-user-management'));
@@ -186,7 +190,8 @@ add_action('admin_post_sum_logout', 'sum_process_logout');
 add_action('admin_post_nopriv_sum_logout', 'sum_process_logout');
 
 // Register shortcode
-function sum_register_profile_edit_shortcode() {
+function sum_register_profile_edit_shortcode()
+{
     add_shortcode('sum_user_profile_edit', 'sum_display_profile_edit_form');
 }
 add_action('init', 'sum_register_profile_edit_shortcode');
