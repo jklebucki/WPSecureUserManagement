@@ -4,6 +4,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Enqueue styles and scripts
+function sum_enqueue_profile_edit_styles() {
+    wp_enqueue_style('sum-profile-edit-form', plugin_dir_url(__FILE__) . 'profile-edit-form.css');
+    wp_enqueue_script('sum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], null, true);
+}
+add_action('wp_enqueue_scripts', 'sum_enqueue_profile_edit_styles');
+
 // Display profile edit form
 function sum_display_profile_edit_form()
 {
@@ -61,6 +68,7 @@ function sum_display_profile_edit_form()
             <form id="sum-change-password-form" method="post">
                 <label for="sum-password"><?php _e('New Password', 'secure-user-management'); ?></label>
                 <input type="password" name="sum_password" id="sum-password">
+                <div id="password-strength-meter"></div>
 
                 <label for="sum-confirm-password"><?php _e('Confirm New Password', 'secure-user-management'); ?></label>
                 <input type="password" name="sum_confirm_password" id="sum-confirm-password">
@@ -125,7 +133,15 @@ function sum_process_profile_update()
         ]);
 
         // Update password if provided
-        if (!empty($password) && $password === $confirm_password) {
+        if (!empty($password)) {
+            if ($password !== $confirm_password) {
+                wp_die(__('Passwords do not match.', 'secure-user-management'));
+            }
+
+            if (!sum_validate_password_strength($password)) {
+                wp_die(__('Password does not meet the strength requirements.', 'secure-user-management'));
+            }
+
             wp_set_password($password, $current_user->ID);
         }
 
@@ -152,7 +168,6 @@ function sum_process_profile_update()
         exit;
     }
 }
-add_action('init', 'sum_process_profile_update');
 
 // Handle account deletion
 function sum_process_account_deletion()
@@ -195,4 +210,27 @@ function sum_register_profile_edit_shortcode()
     add_shortcode('sum_user_profile_edit', 'sum_display_profile_edit_form');
 }
 add_action('init', 'sum_register_profile_edit_shortcode');
+
+// Validate password strength
+function sum_validate_password_strength($password)
+{
+    // Add your password strength validation logic here
+    // For example, check for minimum length, uppercase, lowercase, numbers, and special characters
+    if (strlen($password) < 8) {
+        return false;
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[a-z]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[\W]/', $password)) {
+        return false;
+    }
+    return true;
+}
 ?>

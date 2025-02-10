@@ -53,7 +53,8 @@ function sum_user_exists($username_or_email) {
 
 // Validate password strength
 function sum_validate_password_strength($password) {
-    if (strlen($password) < 8) {
+    $min_length = get_option('wp_user_management_password_length', 8);
+    if (strlen($password) < $min_length) {
         return false;
     }
     if (!preg_match('/[A-Z]/', $password)) {
@@ -63,6 +64,9 @@ function sum_validate_password_strength($password) {
         return false;
     }
     if (!preg_match('/[0-9]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[\W_]/', $password)) {
         return false;
     }
     return true;

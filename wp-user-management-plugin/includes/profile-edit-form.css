@@ -95,6 +95,29 @@
     background-color: #f9feff; /* Lighten background color */
 }
 
+#password-strength-meter {
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#password-strength-meter.weak {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+
+#password-strength-meter.medium {
+    background-color: #ffcc00;
+    color: #fff;
+}
+
+#password-strength-meter.strong {
+    background-color: #4caf50;
+    color: #fff;
+}
+
 .sum-modal {
     position: fixed !important;
     z-index: 1000 !important;

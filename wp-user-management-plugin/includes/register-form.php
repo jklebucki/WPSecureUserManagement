@@ -7,9 +7,10 @@ if (!defined('ABSPATH')) {
 // Include CAPTCHA functions
 require_once plugin_dir_path(__FILE__) . 'captcha.php';
 
-// Enqueue styles
+// Enqueue styles and scripts
 function wpum_enqueue_styles() {
     wp_enqueue_style('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.css');
+    wp_enqueue_script('wpum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], null, true);
 }
 add_action('wp_enqueue_scripts', 'wpum_enqueue_styles');
 
@@ -47,6 +48,7 @@ function wpum_display_registration_form()
                 <div class="wpum-form-group">
                     <label for="wpum-password"><?php _e('Password', 'wp-user-management-plugin'); ?> *</label>
                     <input type="password" name="wpum_password" id="wpum-password" required>
+                    <div id="password-strength-meter"></div>
                 </div>
                 <div class="wpum-form-group">
                     <label for="wpum-confirm-password"><?php _e('Confirm Password', 'wp-user-management-plugin'); ?> *</label>
@@ -109,6 +111,11 @@ function wpum_process_registration()
         // Validate passwords
         if ($password !== $confirm_password) {
             wp_die(__('Passwords do not match.', 'wp-user-management-plugin'));
+        }
+
+        // Validate password strength
+        if (!sum_validate_password_strength($password)) {
+            wp_die(__('Password does not meet the strength requirements.', 'wp-user-management-plugin'));
         }
 
         // Check CAPTCHA

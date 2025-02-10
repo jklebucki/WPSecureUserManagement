@@ -51,10 +51,12 @@
 
 .sum-login-container a {
     color: #0073aa;
+    text-decoration: none;
 }
 
 .sum-login-container a:hover {
     color: #005177;
+    text-decoration: underline;
 }
 
 .sum-form-group {

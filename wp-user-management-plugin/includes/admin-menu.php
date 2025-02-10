@@ -168,11 +168,15 @@ function wp_user_management_configuration() {
         $metadata = array_map('sanitize_text_field', $_POST['metadata']);
         update_option('wp_user_management_metadata', $metadata);
 
+        $password_length = max(8, intval($_POST['password_length']));
+        update_option('wp_user_management_password_length', $password_length);
+
         echo '<div class="updated"><p>' . __('Settings saved.', 'wp-user-management-plugin') . '</p></div>';
     }
 
     $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
     $metadata = get_option('wp_user_management_metadata', []);
+    $password_length = get_option('wp_user_management_password_length', 8);
 
     // Get all user fields dynamically
     $user_fields = [
@@ -217,6 +221,10 @@ function wp_user_management_configuration() {
                     </label>
                 <?php endforeach; ?>
             </div>
+
+            <h2><?php _e('Password Settings', 'wp-user-management-plugin'); ?></h2>
+            <label for="password_length"><?php _e('Minimum Password Length', 'wp-user-management-plugin'); ?></label>
+            <input type="number" name="password_length" id="password_length" value="<?php echo esc_attr($password_length); ?>" min="8">
 
             <button type="submit" class="button button-primary"><?php _e('Save Settings', 'wp-user-management-plugin'); ?></button>
         </form>

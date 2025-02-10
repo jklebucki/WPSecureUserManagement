@@ -29,6 +29,7 @@ function sum_display_login_form()
             <button type="submit"><?php _e('Login', 'secure-user-management'); ?></button>
         </form>
         <p><a href="<?php echo wp_lostpassword_url(); ?>"><?php _e('Forgot Password?', 'secure-user-management'); ?></a></p>
+        <p><a href="<?php echo home_url('/register'); ?>"><?php _e('Register', 'secure-user-management'); ?></a></p>
     </div>
 <?php
     return ob_get_clean();
