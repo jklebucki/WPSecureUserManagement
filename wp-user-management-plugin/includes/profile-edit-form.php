@@ -5,11 +5,21 @@ if (!defined('ABSPATH')) {
 }
 
 // Enqueue styles and scripts
-function sum_enqueue_profile_edit_styles() {
+function sum_enqueue_profile_edit_styles()
+{
     wp_enqueue_style('sum-profile-edit-form', plugin_dir_url(__FILE__) . 'profile-edit-form.css');
     wp_enqueue_script('sum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], null, true);
 }
 add_action('wp_enqueue_scripts', 'sum_enqueue_profile_edit_styles');
+
+// Meta keys for user data
+function wpum_get_meta_label($meta_key)
+{
+    $meta_labels = array(
+        'club_number' => __('Club Number', 'wp-user-management-plugin'),
+    );
+    return isset($meta_labels[$meta_key]) ? $meta_labels[$meta_key] : ucfirst(str_replace('_', ' ', $meta_key));
+}
 
 // Display profile edit form
 function sum_display_profile_edit_form()
@@ -56,7 +66,7 @@ function sum_display_profile_edit_form()
             <form id="sum-user-data-form" method="post">
                 <?php foreach ($metadata as $meta_key): ?>
                     <div class="sum-form-group">
-                        <label for="sumv-<?php echo esc_attr($meta_key); ?>"><?php echo esc_html(ucfirst(str_replace('_', ' ', $meta_key))); ?></label>
+                        <label for="sumv-<?php echo esc_attr($meta_key); ?>"><?php echo esc_html(wpum_get_meta_label($meta_key)); ?></label>
                         <input type="text" name="sumv_<?php echo esc_attr($meta_key); ?>" id="sumv-<?php echo esc_attr($meta_key); ?>" value="<?php echo esc_attr(get_user_meta($current_user->ID, $meta_key, true)); ?>">
                     </div>
                 <?php endforeach; ?>

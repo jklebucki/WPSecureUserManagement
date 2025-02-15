@@ -13,22 +13,33 @@
     display: flex;
     flex-direction: column;
     margin-right: 20px;
+    background: #f8f9fa; /* Light background color */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sum-tabs button {
     padding: 10px;
-    background: #f1f1f1;
-    border: 1px solid #ccc;
+    background: #e9ecef; /* Light gray background */
+    border: none; /* Remove border */
     cursor: pointer;
     margin-bottom: 5px;
     width: 100%;
     text-align: center; /* Ensure text is centered */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    color: #495057; /* Dark gray text color */
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sum-tabs button:hover {
+    background: #dee2e6; /* Slightly darker gray on hover */
 }
 
 .sum-tabs button.active {
-    background: #0073aa;
-    color: #fff;
+    background: #007bff; /* Primary color for active tab */
+    color: #fff; /* White text for active tab */
 }
 
 .sum-tab-content {
@@ -197,4 +208,19 @@
 
 .sum-cancel {
     margin-left: 10px !important;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #007bff;
+    color: #fff;
 }

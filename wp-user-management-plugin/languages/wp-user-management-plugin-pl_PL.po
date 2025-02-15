@@ -15,19 +15,18 @@ msgstr ""
 msgid "User Registration"
 msgstr "Rejestracja użytkownika"
 
-#: includes/register-form.php:15
-msgid "Username"
-msgstr "Nazwa użytkownika"
-
 #: includes/register-form.php:16
+#: includes/profile-edit-form.php:90
 msgid "Email"
 msgstr "Email"
 
 #: includes/register-form.php:17
+#: includes/profile-edit-form.php:95
 msgid "First Name"
 msgstr "Imię"
 
 #: includes/register-form.php:18
+#: includes/profile-edit-form.php:100
 msgid "Last Name"
 msgstr "Nazwisko"
 
@@ -80,6 +79,7 @@ msgid "Registration failed. Please try again."
 msgstr "Rejestracja nie powiodła się. Spróbuj ponownie."
 
 #: includes/common.php:5
+#: includes/profile-edit-form.php:135
 msgid "Security check failed!"
 msgstr "Weryfikacja bezpieczeństwa nie powiodła się!"
 
@@ -87,13 +87,61 @@ msgstr "Weryfikacja bezpieczeństwa nie powiodła się!"
 msgid "Profile updated successfully."
 msgstr "Profil zaktualizowany pomyślnie."
 
-#: includes/profile-edit-form.php:80
+#: includes/profile-edit-form.php:55
+#: includes/profile-edit-form.php:85
+msgid "Profile"
+msgstr "Profil"
+
+#: includes/profile-edit-form.php:60
+#: includes/profile-edit-form.php:90
+msgid "User Data"
+msgstr "Dane użytkownika"
+
+#: includes/profile-edit-form.php:65
 msgid "Password changed successfully."
 msgstr "Hasło zmienione pomyślnie."
 
-#: includes/account-deletion.php:10
+#: includes/profile-edit-form.php:70
+#: includes/profile-edit-form.php:75
+msgid "Delete Account"
+msgstr "Usuń konto"
+
+#: includes/profile-edit-form.php:75
+#: includes/profile-edit-form.php:95
+msgid "Logout"
+msgstr "Wyloguj się"
+
+#: includes/profile-edit-form.php:80
 msgid "Account deleted successfully."
 msgstr "Konto usunięte pomyślnie."
+
+#: includes/profile-edit-form.php:85
+#: includes/register-form.php:15
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+#: includes/profile-edit-form.php:105
+#: includes/profile-edit-form.php:60
+msgid "Update Profile"
+msgstr "Zaktualizuj profil"
+
+#: includes/profile-edit-form.php:110
+#: includes/profile-edit-form.php:115
+msgid "Save Data"
+msgstr "Zapisz dane"
+
+#: includes/profile-edit-form.php:115
+msgid "New Password"
+msgstr "Nowe hasło"
+
+#: includes/profile-edit-form.php:120
+msgid "Confirm New Password"
+msgstr "Potwierdź nowe hasło"
+
+#: includes/profile-edit-form.php:130
+#: includes/profile-edit-form.php:100
+msgid "Are you sure you want to delete your account?"
+msgstr "Czy na pewno chcesz usunąć swoje konto?"
 
 #: includes/password-reset-form.php:12
 msgid "Password reset link sent."
@@ -123,21 +171,9 @@ msgstr "Rola użytkownika"
 msgid "Actions"
 msgstr "Akcje"
 
-#: includes/profile-edit-form.php:60
-msgid "Update Profile"
-msgstr "Zaktualizuj profil"
-
 #: includes/profile-edit-form.php:65
 msgid "Change Password"
 msgstr "Zmień hasło"
-
-#: includes/profile-edit-form.php:70
-msgid "Account Deleted"
-msgstr "Konto usunięte"
-
-#: includes/profile-edit-form.php:75
-msgid "Delete Account"
-msgstr "Usuń konto"
 
 #: includes/password-reset-form.php:18
 msgid "Password Reset"
@@ -167,26 +203,9 @@ msgstr "Nazwa użytkownika lub Email"
 msgid "Forgot Password?"
 msgstr "Zapomniałeś hasła?"
 
-
 #: includes/login-form.php:30
 msgid "Login failed. Please check your credentials."
 msgstr "Logowanie nie powiodło się. Sprawdź swoje dane."
-
-#: includes/profile-edit-form.php:85
-msgid "Profile"
-msgstr "Profil"
-
-#: includes/profile-edit-form.php:90
-msgid "User Data"
-msgstr "Dane użytkownika"
-
-#: includes/profile-edit-form.php:95
-msgid "Logout"
-msgstr "Wyloguj się"
-
-#: includes/profile-edit-form.php:100
-msgid "Are you sure you want to delete your account?"
-msgstr "Czy na pewno chcesz usunąć swoje konto?"
 
 #: includes/profile-edit-form.php:105
 msgid "Yes, Delete My Account"
@@ -195,10 +214,6 @@ msgstr "Tak, usuń moje konto"
 #: includes/profile-edit-form.php:110
 msgid "Cancel"
 msgstr "Anuluj"
-
-#: includes/profile-edit-form.php:115
-msgid "Save Data"
-msgstr "Zapisz dane"
 
 #: includes/profile-edit-form.php:130
 msgid "Password Reset Request"
@@ -243,3 +258,6 @@ msgstr "Ustawienia hasła"
 #: includes/profile-edit-form.php:180
 msgid "Save Settings"
 msgstr "Zapisz ustawienia"
+
+msgid "Club Number"
+msgstr "Numer klubowy"
