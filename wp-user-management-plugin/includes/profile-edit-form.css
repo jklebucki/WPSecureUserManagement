@@ -88,6 +88,9 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
 }
 
 .sum-tab-content input {
@@ -104,6 +107,9 @@
     border-radius: 4px;
     box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
     background-color: #f9feff; /* Lighten background color */
+    font-size: 14px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
 }
 
 #password-strength-meter {

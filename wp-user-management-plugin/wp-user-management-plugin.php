@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP User Management Plugin
  * Description: A plugin for user registration, login, and profile editing with enhanced security and a modern interface.
- * Version: 1.0
+ * Version: 1.1
  * Author: Jarosław Kłębucki
  * Text Domain: wp-user-management-plugin
  */
