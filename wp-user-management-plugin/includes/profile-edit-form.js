@@ -49,10 +49,43 @@ document.addEventListener('DOMContentLoaded', function () {
     logoutForm.appendChild(logoutNonceInput);
     document.body.appendChild(logoutForm);
 
+    const logoutModal = document.createElement('div');
+    logoutModal.id = 'sum-logout-modal';
+    logoutModal.classList.add('modal');
+    logoutModal.innerHTML = `
+        <div class="modal-content">
+            <span class="sum-close">&times;</span>
+            <p>Are you sure you want to log out?</p>
+            <button id="sum-confirm-logout">Yes</button>
+            <button id="sum-cancel-logout">No</button>
+        </div>
+    `;
+    document.body.appendChild(logoutModal);
+
+    const logoutModalClose = logoutModal.querySelector('.sum-close');
+    const confirmLogoutBtn = document.getElementById('sum-confirm-logout');
+    const cancelLogoutBtn = document.getElementById('sum-cancel-logout');
+
     logoutBtn.onclick = function () {
-        if (confirm('Are you sure you want to log out?')) {
-            logoutForm.action = '/wp-admin/admin-post.php?action=sum_logout';
-            logoutForm.submit();
+        logoutModal.style.display = 'block';
+    };
+
+    logoutModalClose.onclick = function () {
+        logoutModal.style.display = 'none';
+    };
+
+    cancelLogoutBtn.onclick = function () {
+        logoutModal.style.display = 'none';
+    };
+
+    confirmLogoutBtn.onclick = function () {
+        logoutForm.action = '/wp-admin/admin-post.php?action=sum_logout';
+        logoutForm.submit();
+    };
+
+    window.onclick = function (event) {
+        if (event.target == logoutModal) {
+            logoutModal.style.display = 'none';
         }
     };
 
