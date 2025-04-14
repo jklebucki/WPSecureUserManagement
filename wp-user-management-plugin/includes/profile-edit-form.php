@@ -35,7 +35,9 @@ function sum_display_profile_edit_form()
             <button type="button" data-tab="change-password"><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
-            <button type="button" data-tab="shooting-credentials"><?php _e('Shooting Credentials', 'wp-user-management-plugin'); ?></button>
+            <button type="button" data-tab="shooting-credentials">
+                <?php _e('Shooting Credentials', 'wp-user-management-plugin'); ?>
+            </button>
         </div>
         <div id="profile" class="sum-tab-content active">
             <form id="sum-profile-edit-form" method="post">
@@ -111,13 +113,17 @@ function sum_display_profile_edit_form()
                     $current_credential = reset($current_credential);
                 ?>
                     <div class="sum-form-group">
-                        <label for="<?php echo esc_attr($type); ?>_number"><?php echo esc_html($label); ?></label>
+                        <label for="<?php echo esc_attr($type); ?>_number">
+                            <?php echo esc_html($label); ?>
+                        </label>
                         <input type="text" 
                                name="<?php echo esc_attr($type); ?>_number" 
                                id="<?php echo esc_attr($type); ?>_number"
                                value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>">
                         
-                        <label for="<?php echo esc_attr($type); ?>_file"><?php _e('PDF Document', 'wp-user-management-plugin'); ?></label>
+                        <label for="<?php echo esc_attr($type); ?>_file">
+                            <?php _e('PDF Document', 'wp-user-management-plugin'); ?>
+                        </label>
                         <input type="file" 
                                name="<?php echo esc_attr($type); ?>_file" 
                                id="<?php echo esc_attr($type); ?>_file"
@@ -137,7 +143,9 @@ function sum_display_profile_edit_form()
                 
                 <input type="hidden" name="sum_shooting_credentials_nonce" 
                        value="<?php echo wp_create_nonce('sum_shooting_credentials_nonce'); ?>">
-                <button type="submit"><?php _e('Save Credentials', 'wp-user-management-plugin'); ?></button>
+                <button type="submit">
+                    <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
+                </button>
             </form>
         </div>
     </div>

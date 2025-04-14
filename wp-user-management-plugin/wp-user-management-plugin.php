@@ -27,7 +27,11 @@ require_once plugin_dir_path(__FILE__) . 'includes/shooting-credentials.php';
 
 // Load text domain for translations
 function wp_user_management_load_textdomain() {
-    load_plugin_textdomain('wp-user-management-plugin', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+    load_plugin_textdomain(
+        'wp-user-management-plugin',
+        false,
+        dirname(plugin_basename(__FILE__)) . '/languages/'
+    );
 }
 add_action('plugins_loaded', 'wp_user_management_load_textdomain');
 

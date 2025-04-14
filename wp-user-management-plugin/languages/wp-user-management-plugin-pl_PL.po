@@ -1,15 +1,22 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin 1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 12:00+0000\n"
-"PO-Revision-Date: 2025-02-10 12:00+0000\n"
-"Last-Translator: Jarosław Kłębucki <j.klebucki@ajksoftware.pl>\n"
-"Language-Team: Polish\n"
+"Project-Id-Version: WP User Management Plugin\n"
+"POT-Creation-Date: 2024-03-21\n"
+"PO-Revision-Date: 2024-03-21\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
+"|| n%100>14) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: includes/register-form.php:10
 msgid "User Registration"
@@ -81,7 +88,7 @@ msgstr "Rejestracja nie powiodła się. Spróbuj ponownie."
 #: includes/common.php:5
 #: includes/profile-edit-form.php:135
 msgid "Security check failed!"
-msgstr "Weryfikacja bezpieczeństwa nie powiodła się!"
+msgstr "Błąd weryfikacji bezpieczeństwa!"
 
 #: includes/profile-edit-form.php:50
 msgid "Profile updated successfully."
@@ -261,3 +268,34 @@ msgstr "Zapisz ustawienia"
 
 msgid "Club Number"
 msgstr "Numer klubowy"
+
+# Nowe tłumaczenia dla sekcji uprawnień strzeleckich
+msgid "Shooting Credentials"
+msgstr "Uprawnienia strzeleckie"
+
+msgid "Shooting Patent Number"
+msgstr "Numer patentu strzeleckiego"
+
+msgid "Shooting Instructor License Number"
+msgstr "Numer legitymacji prowadzącego strzelanie"
+
+msgid "PDF Document"
+msgstr "Dokument PDF"
+
+msgid "Current file:"
+msgstr "Aktualny plik:"
+
+msgid "View Document"
+msgstr "Zobacz dokument"
+
+msgid "Save Credentials"
+msgstr "Zapisz uprawnienia"
+
+msgid "File upload failed"
+msgstr "Przesyłanie pliku nie powiodło się"
+
+msgid "Only PDF files are allowed"
+msgstr "Dozwolone są tylko pliki PDF"
+
+msgid "Failed to save file"
+msgstr "Nie udało się zapisać pliku"
