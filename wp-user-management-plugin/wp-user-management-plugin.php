@@ -23,6 +23,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/password-reset-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/my-account.php';
+require_once plugin_dir_path(__FILE__) . 'includes/shooting-credentials.php';
 
 // Load text domain for translations
 function wp_user_management_load_textdomain() {
@@ -42,7 +43,10 @@ add_action('init', 'wpum_register_shortcodes');
 
 // Register activation hook
 function wp_user_management_activate() {
-    // Code to run on plugin activation
+    // Existing activation code...
+    
+    // Create shooting credentials table
+    wpum_create_shooting_credentials_table();
 }
 register_activation_hook(__FILE__, 'wp_user_management_activate');
 

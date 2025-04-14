@@ -35,6 +35,7 @@ function sum_display_profile_edit_form()
             <button type="button" data-tab="change-password"><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
+            <button type="button" data-tab="shooting-credentials"><?php _e('Shooting Credentials', 'wp-user-management-plugin'); ?></button>
         </div>
         <div id="profile" class="sum-tab-content active">
             <form id="sum-profile-edit-form" method="post">
@@ -97,6 +98,47 @@ function sum_display_profile_edit_form()
             <button type="button" id="sum-logout-button"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
             <?php $logout_nonce = wp_create_nonce('sum_logout_nonce'); ?>
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
+        </div>
+        <div id="shooting-credentials" class="sum-tab-content">
+            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
+                <?php
+                $credentials = wpum_get_user_credentials(get_current_user_id());
+                $credential_types = wpum_get_shooting_credential_types();
+                foreach ($credential_types as $type => $label):
+                    $current_credential = array_filter($credentials, function($cred) use ($type) {
+                        return $cred->credential_type === $type;
+                    });
+                    $current_credential = reset($current_credential);
+                ?>
+                    <div class="sum-form-group">
+                        <label for="<?php echo esc_attr($type); ?>_number"><?php echo esc_html($label); ?></label>
+                        <input type="text" 
+                               name="<?php echo esc_attr($type); ?>_number" 
+                               id="<?php echo esc_attr($type); ?>_number"
+                               value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>">
+                        
+                        <label for="<?php echo esc_attr($type); ?>_file"><?php _e('PDF Document', 'wp-user-management-plugin'); ?></label>
+                        <input type="file" 
+                               name="<?php echo esc_attr($type); ?>_file" 
+                               id="<?php echo esc_attr($type); ?>_file"
+                               accept=".pdf">
+                        
+                        <?php if ($current_credential && $current_credential->file_path): ?>
+                            <div class="current-file">
+                                <span><?php _e('Current file:', 'wp-user-management-plugin'); ?></span>
+                                <a href="<?php echo esc_url(wp_upload_dir()['baseurl'] . $current_credential->file_path); ?>" 
+                                   target="_blank">
+                                    <?php _e('View Document', 'wp-user-management-plugin'); ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+                
+                <input type="hidden" name="sum_shooting_credentials_nonce" 
+                       value="<?php echo wp_create_nonce('sum_shooting_credentials_nonce'); ?>">
+                <button type="submit"><?php _e('Save Credentials', 'wp-user-management-plugin'); ?></button>
+            </form>
         </div>
     </div>
 
@@ -222,5 +264,54 @@ function sum_register_profile_edit_shortcode()
     add_shortcode('sum_user_profile_edit', 'sum_display_profile_edit_form');
 }
 add_action('init', 'sum_register_profile_edit_shortcode');
+
+// Add this function to handle the form submission
+function sum_process_shooting_credentials() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_shooting_credentials_nonce'])) {
+        if (!wp_verify_nonce($_POST['sum_shooting_credentials_nonce'], 'sum_shooting_credentials_nonce')) {
+            wp_die(__('Security check failed!', 'wp-user-management-plugin'));
+        }
+
+        $user_id = get_current_user_id();
+        $credential_types = wpum_get_shooting_credential_types();
+
+        foreach ($credential_types as $type => $label) {
+            $number_field = $type . '_number';
+            $file_field = $type . '_file';
+
+            if (!empty($_POST[$number_field])) {
+                $credential_number = sanitize_text_field($_POST[$number_field]);
+                
+                // Handle file upload if new file is provided
+                if (!empty($_FILES[$file_field]['name'])) {
+                    $upload_result = wpum_handle_credential_file_upload($_FILES[$file_field], $user_id, $type);
+                    
+                    if (is_wp_error($upload_result)) {
+                        wp_die($upload_result->get_error_message());
+                    }
+                    
+                    // Save credential with new file
+                    wpum_save_shooting_credential($user_id, $type, $credential_number, $upload_result);
+                } else {
+                    // Update just the credential number if no new file
+                    $existing_credentials = wpum_get_user_credentials($user_id);
+                    $current_credential = array_filter($existing_credentials, function($cred) use ($type) {
+                        return $cred->credential_type === $type;
+                    });
+                    $current_credential = reset($current_credential);
+                    
+                    if ($current_credential) {
+                        wpum_save_shooting_credential($user_id, $type, $credential_number, $current_credential->file_path);
+                    }
+                }
+            }
+        }
+
+        // Redirect back to the profile page
+        wp_redirect($_SERVER['REQUEST_URI']);
+        exit;
+    }
+}
+add_action('init', 'sum_process_shooting_credentials');
 
 ?>

@@ -230,3 +230,30 @@ button[type="submit"]:hover {
     background: #007bff;
     color: #fff;
 }
+
+/* Add these styles to your existing CSS file */
+#shooting-credentials .sum-form-group {
+    margin-bottom: 2em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#shooting-credentials .current-file {
+    margin-top: 0.5em;
+    font-size: 0.9em;
+}
+
+#shooting-credentials .current-file a {
+    color: #0073aa;
+    text-decoration: none;
+    margin-left: 0.5em;
+}
+
+#shooting-credentials .current-file a:hover {
+    text-decoration: underline;
+}
+
+#shooting-credentials input[type="file"] {
+    margin-top: 0.5em;
+}

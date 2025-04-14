@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <button id="sum-cancel-logout">No</button>
         </div>
     `;
+    
     document.body.appendChild(logoutModal);
 
     const logoutModalClose = logoutModal.querySelector('.sum-close');
