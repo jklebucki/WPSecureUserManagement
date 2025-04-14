@@ -257,3 +257,21 @@ button[type="submit"]:hover {
 #shooting-credentials input[type="file"] {
     margin-top: 0.5em;
 }
+
+.sum-message {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.sum-message.success {
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    color: #3c763d;
+}
+
+.sum-message.error {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+}

@@ -173,15 +173,23 @@ function wpum_process_shooting_credentials() {
         wpum_log("Otrzymano żądanie POST");
         wpum_log("POST data: " . print_r($_POST, true));
         
-        if (isset($_POST['sum_shooting_credentials_nonce'])) {
-            wpum_log("Znaleziono nonce");
+        // Sprawdź czy to na pewno nasz formularz
+        if (isset($_POST['submit_shooting_credentials'])) {
+            wpum_log("Wykryto przesłanie formularza uprawnień strzeleckich");
             
-            if (!wp_verify_nonce($_POST['sum_shooting_credentials_nonce'], 'sum_shooting_credentials_nonce')) {
+            // Sprawdź nonce
+            if (!isset($_POST['sum_shooting_credentials_nonce']) || 
+                !wp_verify_nonce($_POST['sum_shooting_credentials_nonce'], 'sum_shooting_credentials_nonce')) {
                 wpum_log("Błąd weryfikacji nonce");
                 wp_die(__('Security check failed!', 'wp-user-management-plugin'));
             }
 
             $user_id = get_current_user_id();
+            if (!$user_id) {
+                wpum_log("Użytkownik nie jest zalogowany");
+                wp_die(__('You must be logged in to perform this action.', 'wp-user-management-plugin'));
+            }
+            
             wpum_log("ID użytkownika: " . $user_id);
             
             $credential_types = wpum_get_shooting_credential_types();
@@ -212,22 +220,34 @@ function wpum_process_shooting_credentials() {
                     } else {
                         wpum_log("Aktualizacja tylko numeru uprawnienia");
                         $existing_credentials = wpum_get_user_credentials($user_id);
+                        $current_credential = null;
+                        
                         foreach ($existing_credentials as $cred) {
                             if ($cred->credential_type === $type) {
-                                $save_result = wpum_save_shooting_credential($user_id, $type, $credential_number, $cred->file_path);
-                                wpum_log("Wynik zapisu bez pliku: " . ($save_result ? 'sukces' : 'błąd'));
+                                $current_credential = $cred;
                                 break;
                             }
+                        }
+                        
+                        if ($current_credential) {
+                            $save_result = wpum_save_shooting_credential(
+                                $user_id, 
+                                $type, 
+                                $credential_number, 
+                                $current_credential->file_path
+                            );
+                            wpum_log("Wynik zapisu bez pliku: " . ($save_result ? 'sukces' : 'błąd'));
+                        } else {
+                            wpum_log("Brak pliku dla nowego uprawnienia - wymagany jest plik PDF");
+                            wp_die(__('PDF file is required for new credentials.', 'wp-user-management-plugin'));
                         }
                     }
                 }
             }
 
             wpum_log("Przekierowanie po zapisie");
-            wp_redirect($_SERVER['REQUEST_URI']);
+            wp_safe_redirect(add_query_arg('updated', '1', $_SERVER['REQUEST_URI']));
             exit;
-        } else {
-            wpum_log("Nie znaleziono nonce w żądaniu POST");
         }
     }
 }

@@ -102,10 +102,19 @@ function sum_display_profile_edit_form()
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
         </div>
         <div id="shooting-credentials" class="sum-tab-content">
+            <?php if (isset($_GET['updated'])): ?>
+                <div class="sum-message success">
+                    <?php _e('Credentials have been updated successfully.', 'wp-user-management-plugin'); ?>
+                </div>
+            <?php endif; ?>
+            
             <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
+                <?php wp_nonce_field('sum_shooting_credentials_nonce', 'sum_shooting_credentials_nonce'); ?>
+                
                 <?php
                 $credentials = wpum_get_user_credentials(get_current_user_id());
                 $credential_types = wpum_get_shooting_credential_types();
+                
                 foreach ($credential_types as $type => $label):
                     $current_credential = array_filter($credentials, function($cred) use ($type) {
                         return $cred->credential_type === $type;
@@ -141,9 +150,7 @@ function sum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 
-                <input type="hidden" name="sum_shooting_credentials_nonce" 
-                       value="<?php echo wp_create_nonce('sum_shooting_credentials_nonce'); ?>">
-                <button type="submit">
+                <button type="submit" name="submit_shooting_credentials">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
