@@ -30,13 +30,13 @@ if (!function_exists('wpum_log')) {
 }
 
 // Include necessary files
-require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/captcha.php';
 require_once plugin_dir_path(__FILE__) . 'includes/register-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/login-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/profile-edit-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/password-reset-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
+require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/my-account.php';
 require_once plugin_dir_path(__FILE__) . 'includes/shooting-credentials.php';
 require_once plugin_dir_path(__FILE__) . 'includes/db-migrations.php';
@@ -51,7 +51,17 @@ function wp_user_management_load_textdomain() {
 }
 add_action('plugins_loaded', 'wp_user_management_load_textdomain');
 
-// Register shortcodes for all forms
+// Enqueue scripts and styles
+function wpum_enqueue_scripts() {
+    wp_enqueue_script('jquery');
+    wp_localize_script('jquery', 'wpumAjax', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('wpum_shooting_credentials')
+    ));
+}
+add_action('wp_enqueue_scripts', 'wpum_enqueue_scripts');
+
+// Register shortcodes
 function wpum_register_shortcodes() {
     add_shortcode('wpum_user_registration', 'wpum_display_registration_form');
     add_shortcode('wpum_user_login', 'sum_display_login_form');
@@ -104,14 +114,4 @@ function wp_user_management_deactivate() {
     wpum_log('Plugin został deaktywowany');
 }
 register_deactivation_hook(__FILE__, 'wp_user_management_deactivate');
-
-// Dodaj skrypty i style
-function wpum_enqueue_scripts() {
-    wp_enqueue_script('jquery');
-    wp_localize_script('jquery', 'wpumAjax', array(
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('wpum_shooting_credentials')
-    ));
-}
-add_action('wp_enqueue_scripts', 'wpum_enqueue_scripts');
 ?>
