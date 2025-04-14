@@ -102,18 +102,28 @@ function sum_display_profile_edit_form()
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
         </div>
         <div id="shooting-credentials" class="sum-tab-content">
+            <?php 
+            // Dodaj debugowanie formularza
+            wpum_log("Renderowanie formularza uprawnień strzeleckich");
+            ?>
+            
             <?php if (isset($_GET['updated'])): ?>
                 <div class="sum-message success">
                     <?php _e('Credentials have been updated successfully.', 'wp-user-management-plugin'); ?>
                 </div>
             <?php endif; ?>
             
-            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
-                <?php wp_nonce_field('sum_shooting_credentials_nonce', 'sum_shooting_credentials_nonce'); ?>
+            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data" action="">
+                <?php 
+                // Użyj nonce_field zamiast ręcznego tworzenia pola
+                wp_nonce_field('sum_shooting_credentials_nonce', 'sum_shooting_credentials_nonce'); 
+                ?>
                 
                 <?php
                 $credentials = wpum_get_user_credentials(get_current_user_id());
                 $credential_types = wpum_get_shooting_credential_types();
+                
+                wpum_log("Aktualne uprawnienia: " . print_r($credentials, true));
                 
                 foreach ($credential_types as $type => $label):
                     $current_credential = array_filter($credentials, function($cred) use ($type) {
@@ -150,7 +160,8 @@ function sum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 
-                <button type="submit" name="submit_shooting_credentials">
+                <input type="hidden" name="action" value="save_shooting_credentials">
+                <button type="submit" name="submit_shooting_credentials" value="1">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
@@ -330,3 +341,14 @@ function sum_process_shooting_credentials() {
 add_action('init', 'sum_process_shooting_credentials');
 
 ?>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('sum-shooting-credentials-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Formularz jest wysyłany');
+            // Możesz dodać tutaj dodatkową walidację
+        });
+    }
+});
+</script>

@@ -29,13 +29,24 @@ if (!function_exists('wpum_log')) {
     }
 }
 
-// Inicjalizacja sesji
+// Usuń poprzednią funkcję wpum_init_session i dodaj nową
 function wpum_init_session() {
-    if (!session_id() && !headers_sent()) {
-        session_start();
+    if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+        @session_start();
     }
 }
+// Zmień priorytet na bardzo wysoki (1), aby funkcja wykonała się jak najwcześniej
 add_action('init', 'wpum_init_session', 1);
+
+// Dodaj obsługę błędów sesji
+function wpum_handle_session_error($errno, $errstr, $errfile, $errline) {
+    if (strpos($errstr, 'session_start()') !== false) {
+        wpum_log("Błąd sesji: " . $errstr);
+        return true; // Zapobiegaj wyświetlaniu błędu
+    }
+    return false; // Pozwól na normalne przetwarzanie innych błędów
+}
+set_error_handler('wpum_handle_session_error', E_WARNING);
 
 // Include necessary files
 require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
