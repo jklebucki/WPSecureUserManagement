@@ -108,8 +108,11 @@ function wpum_get_user_credentials($user_id) {
     
     // Sprawdź czy tabela istnieje
     if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-        wpum_log("Tabela $table_name nie istnieje");
-        return array();
+        // Spróbuj utworzyć tabelę
+        if (!wpum_create_tables()) {
+            wpum_log("Nie można utworzyć tabeli $table_name");
+            return array();
+        }
     }
     
     $results = $wpdb->get_results($wpdb->prepare(
