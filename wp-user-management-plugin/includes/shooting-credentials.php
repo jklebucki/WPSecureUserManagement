@@ -107,8 +107,12 @@ function wpum_get_user_credentials($user_id) {
     $table_name = $wpdb->prefix . 'wpum_shooting_credentials';
     
     // Sprawdź czy tabela istnieje
-    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-        // Spróbuj utworzyć tabelę
+    if (!wpum_table_exists($table_name)) {
+        wpum_log("Tabela $table_name nie istnieje - próba utworzenia");
+        if (!function_exists('wpum_create_tables')) {
+            wpum_log("Funkcja wpum_create_tables nie jest dostępna");
+            return array();
+        }
         if (!wpum_create_tables()) {
             wpum_log("Nie można utworzyć tabeli $table_name");
             return array();

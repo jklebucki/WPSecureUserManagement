@@ -36,13 +36,13 @@ function wpum_init_session() {
 add_action('init', 'wpum_init_session', 1);
 
 // Include necessary files
+require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/captcha.php';
 require_once plugin_dir_path(__FILE__) . 'includes/register-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/login-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/profile-edit-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/password-reset-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
-require_once plugin_dir_path(__FILE__) . 'includes/user-functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/my-account.php';
 require_once plugin_dir_path(__FILE__) . 'includes/shooting-credentials.php';
 
@@ -68,29 +68,8 @@ add_action('init', 'wpum_register_shortcodes');
 
 // Register activation hook
 function wp_user_management_activate() {
-    global $wpdb;
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    
-    $charset_collate = $wpdb->get_charset_collate();
-    $table_name = $wpdb->prefix . 'wpum_shooting_credentials';
-    
-    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-        id bigint(20) NOT NULL AUTO_INCREMENT,
-        user_id bigint(20) NOT NULL,
-        credential_type varchar(50) NOT NULL,
-        credential_number varchar(100) NOT NULL,
-        file_path varchar(255) NOT NULL,
-        uploaded_at datetime DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY  (id),
-        KEY user_id (user_id)
-    ) $charset_collate;";
-    
-    dbDelta($sql);
-    
-    // Sprawdź czy tabela została utworzona
-    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-        wpum_log("Nie udało się utworzyć tabeli: $table_name");
-        wp_die('Nie udało się utworzyć tabeli w bazie danych. Sprawdź uprawnienia bazy danych.');
+    if (!wpum_create_tables()) {
+        wp_die('Nie udało się utworzyć wymaganych tabel w bazie danych. Sprawdź uprawnienia bazy danych i logi błędów.');
     }
 }
 register_activation_hook(__FILE__, 'wp_user_management_activate');
