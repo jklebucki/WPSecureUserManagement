@@ -104,4 +104,14 @@ function wp_user_management_deactivate() {
     wpum_log('Plugin został deaktywowany');
 }
 register_deactivation_hook(__FILE__, 'wp_user_management_deactivate');
+
+// Dodaj skrypty i style
+function wpum_enqueue_scripts() {
+    wp_enqueue_script('jquery');
+    wp_localize_script('jquery', 'wpumAjax', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('wpum_shooting_credentials')
+    ));
+}
+add_action('wp_enqueue_scripts', 'wpum_enqueue_scripts');
 ?>

@@ -165,41 +165,34 @@ function wpum_get_user_credentials($user_id) {
     return $results ?: array();
 }
 
-// Dodaj obsługę formularza przez admin-post.php
-function wpum_handle_shooting_credentials_submission() {
-    wpum_log("Rozpoczęcie przetwarzania formularza przez admin-post.php");
+// Dodaj obsługę AJAX dla zalogowanych użytkowników
+add_action('wp_ajax_wpum_save_credentials', 'wpum_ajax_save_credentials');
+
+function wpum_ajax_save_credentials() {
+    wpum_log("Rozpoczęcie przetwarzania AJAX");
     
     // Sprawdź nonce
-    if (!isset($_POST['wpum_credentials_nonce']) || 
-        !wp_verify_nonce($_POST['wpum_credentials_nonce'], 'wpum_save_shooting_credentials')) {
+    if (!check_ajax_referer('wpum_shooting_credentials', 'wpum_nonce', false)) {
         wpum_log("Błąd weryfikacji nonce");
-        wp_safe_redirect(add_query_arg(
-            array(
-                'wpum_message' => urlencode(__('Security check failed.', 'wp-user-management-plugin')),
-                'wpum_status' => 'error'
-            ),
-            $_POST['redirect_to']
+        wp_send_json_error(array(
+            'message' => __('Security check failed.', 'wp-user-management-plugin')
         ));
-        exit;
     }
     
-    // Sprawdź czy użytkownik jest zalogowany
     $user_id = get_current_user_id();
     if (!$user_id) {
         wpum_log("Brak zalogowanego użytkownika");
-        wp_safe_redirect(add_query_arg(
-            array(
-                'wpum_message' => urlencode(__('You must be logged in to perform this action.', 'wp-user-management-plugin')),
-                'wpum_status' => 'error'
-            ),
-            $_POST['redirect_to']
+        wp_send_json_error(array(
+            'message' => __('You must be logged in to perform this action.', 'wp-user-management-plugin')
         ));
-        exit;
     }
     
     wpum_log("Przetwarzanie dla użytkownika ID: " . $user_id);
     wpum_log("POST data: " . print_r($_POST, true));
     wpum_log("FILES data: " . print_r($_FILES, true));
+    
+    $success = true;
+    $messages = array();
     
     if (isset($_POST['wpum_credentials']) && is_array($_POST['wpum_credentials'])) {
         foreach ($_POST['wpum_credentials'] as $type => $data) {
@@ -211,27 +204,24 @@ function wpum_handle_shooting_credentials_submission() {
                     $upload_result = wpum_handle_credential_file_upload($_FILES[$file_field], $user_id, $type);
                     
                     if (is_wp_error($upload_result)) {
-                        wpum_log("Błąd uploadu: " . $upload_result->get_error_message());
-                        wp_safe_redirect(add_query_arg(
-                            array(
-                                'wpum_message' => urlencode($upload_result->get_error_message()),
-                                'wpum_status' => 'error'
-                            ),
-                            $_POST['redirect_to']
-                        ));
-                        exit;
+                        wpum_log("Błąd uploadu dla typu $type: " . $upload_result->get_error_message());
+                        $messages[] = sprintf(
+                            __('Error uploading file for %s: %s', 'wp-user-management-plugin'),
+                            $type,
+                            $upload_result->get_error_message()
+                        );
+                        $success = false;
+                        continue;
                     }
                     
                     if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $upload_result)) {
-                        wpum_log("Błąd zapisu do bazy");
-                        wp_safe_redirect(add_query_arg(
-                            array(
-                                'wpum_message' => urlencode(__('Failed to save credential data.', 'wp-user-management-plugin')),
-                                'wpum_status' => 'error'
-                            ),
-                            $_POST['redirect_to']
-                        ));
-                        exit;
+                        wpum_log("Błąd zapisu do bazy dla typu $type");
+                        $messages[] = sprintf(
+                            __('Failed to save %s credential data.', 'wp-user-management-plugin'),
+                            $type
+                        );
+                        $success = false;
+                        continue;
                     }
                 } else {
                     // Aktualizacja bez pliku
@@ -247,15 +237,13 @@ function wpum_handle_shooting_credentials_submission() {
                     
                     if ($current_credential) {
                         if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $current_credential->file_path)) {
-                            wpum_log("Błąd aktualizacji danych");
-                            wp_safe_redirect(add_query_arg(
-                                array(
-                                    'wpum_message' => urlencode(__('Failed to update credential data.', 'wp-user-management-plugin')),
-                                    'wpum_status' => 'error'
-                                ),
-                                $_POST['redirect_to']
-                            ));
-                            exit;
+                            wpum_log("Błąd aktualizacji danych dla typu $type");
+                            $messages[] = sprintf(
+                                __('Failed to update %s credential data.', 'wp-user-management-plugin'),
+                                $type
+                            );
+                            $success = false;
+                            continue;
                         }
                     }
                 }
@@ -263,17 +251,16 @@ function wpum_handle_shooting_credentials_submission() {
         }
     }
     
-    wpum_log("Zakończono przetwarzanie formularza pomyślnie");
-    wp_safe_redirect(add_query_arg(
-        array(
-            'wpum_message' => urlencode(__('Credentials saved successfully.', 'wp-user-management-plugin')),
-            'wpum_status' => 'success'
-        ),
-        $_POST['redirect_to']
-    ));
-    exit;
-}
-
-// Dodaj akcje dla zalogowanych i niezalogowanych użytkowników
-add_action('admin_post_wpum_save_shooting_credentials', 'wpum_handle_shooting_credentials_submission');
-add_action('admin_post_nopriv_wpum_save_shooting_credentials', 'wpum_handle_shooting_credentials_submission'); 
+    if ($success) {
+        wpum_log("Zakończono przetwarzanie AJAX pomyślnie");
+        wp_send_json_success(array(
+            'message' => __('Credentials saved successfully.', 'wp-user-management-plugin'),
+            'reload' => true
+        ));
+    } else {
+        wpum_log("Zakończono przetwarzanie AJAX z błędami: " . implode(', ', $messages));
+        wp_send_json_error(array(
+            'message' => implode('<br>', $messages)
+        ));
+    }
+} 

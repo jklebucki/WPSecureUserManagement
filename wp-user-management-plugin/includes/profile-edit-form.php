@@ -102,23 +102,10 @@ function sum_display_profile_edit_form()
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
         </div>
         <div id="shooting-credentials" class="sum-tab-content">
-            <?php 
-            wpum_log("Renderowanie formularza uprawnień strzeleckich");
+            <div id="wpum-messages" class="sum-message" style="display: none;"></div>
             
-            // Pokaż komunikaty o sukcesie/błędach
-            if (isset($_GET['wpum_message'])) {
-                $message_type = isset($_GET['wpum_status']) ? $_GET['wpum_status'] : 'error';
-                ?>
-                <div class="sum-message <?php echo esc_attr($message_type); ?>">
-                    <?php echo esc_html(urldecode($_GET['wpum_message'])); ?>
-                </div>
-                <?php
-            }
-            ?>
-            
-            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <input type="hidden" name="action" value="wpum_save_shooting_credentials">
-                <?php wp_nonce_field('wpum_save_shooting_credentials', 'wpum_credentials_nonce'); ?>
+            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
+                <?php wp_nonce_field('wpum_shooting_credentials', 'wpum_nonce'); ?>
                 
                 <?php
                 $credentials = wpum_get_user_credentials(get_current_user_id());
@@ -159,7 +146,6 @@ function sum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 
-                <input type="hidden" name="redirect_to" value="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
                 <button type="submit" class="button button-primary">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
@@ -341,15 +327,44 @@ add_action('init', 'sum_process_shooting_credentials');
 
 ?>
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {
-    var form = document.getElementById('sum-shooting-credentials-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            console.log('Wysyłanie formularza uprawnień strzeleckich');
-            // Nie blokujemy domyślnej akcji formularza
+jQuery(document).ready(function($) {
+    $('#sum-shooting-credentials-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        var formData = new FormData(this);
+        formData.append('action', 'wpum_save_credentials');
+        
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                var messageDiv = $('#wpum-messages');
+                messageDiv.removeClass('success error').hide();
+                
+                if (response.success) {
+                    messageDiv.addClass('success')
+                            .html(response.data.message)
+                            .show();
+                    if (response.data.reload) {
+                        location.reload();
+                    }
+                } else {
+                    messageDiv.addClass('error')
+                            .html(response.data.message)
+                            .show();
+                }
+            },
+            error: function() {
+                $('#wpum-messages')
+                    .removeClass('success')
+                    .addClass('error')
+                    .html('<?php _e('An error occurred while saving the credentials.', 'wp-user-management-plugin'); ?>')
+                    .show();
+            }
         });
-    } else {
-        console.error('Nie znaleziono formularza uprawnień strzeleckich');
-    }
+    });
 });
 </script>
