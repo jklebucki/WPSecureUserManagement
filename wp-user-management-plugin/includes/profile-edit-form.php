@@ -104,20 +104,21 @@ function sum_display_profile_edit_form()
         <div id="shooting-credentials" class="sum-tab-content">
             <?php 
             wpum_log("Renderowanie formularza uprawnień strzeleckich");
+            
+            // Pokaż komunikaty o sukcesie/błędach
+            if (isset($_GET['wpum_message'])) {
+                $message_type = isset($_GET['wpum_status']) ? $_GET['wpum_status'] : 'error';
+                ?>
+                <div class="sum-message <?php echo esc_attr($message_type); ?>">
+                    <?php echo esc_html(urldecode($_GET['wpum_message'])); ?>
+                </div>
+                <?php
+            }
             ?>
             
-            <?php if (isset($_GET['updated'])): ?>
-                <div class="sum-message success">
-                    <?php _e('Credentials have been updated successfully.', 'wp-user-management-plugin'); ?>
-                </div>
-            <?php endif; ?>
-            
-            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
-                <?php 
-                // Dodaj ukryte pole do identyfikacji formularza
-                ?>
-                <input type="hidden" name="wpum_action" value="save_shooting_credentials">
-                <?php wp_nonce_field('wpum_shooting_credentials', 'wpum_shooting_credentials_nonce'); ?>
+            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                <input type="hidden" name="action" value="wpum_save_shooting_credentials">
+                <?php wp_nonce_field('wpum_save_shooting_credentials', 'wpum_credentials_nonce'); ?>
                 
                 <?php
                 $credentials = wpum_get_user_credentials(get_current_user_id());
@@ -158,7 +159,8 @@ function sum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 
-                <button type="submit" name="submit_shooting_credentials" value="1">
+                <input type="hidden" name="redirect_to" value="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
+                <button type="submit" class="button button-primary">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
