@@ -13,6 +13,8 @@ if (!defined('ABSPATH')) {
 }
 
 define('MY_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('WPUM_VERSION', '1.1.2');
+define('WPUM_DB_VERSION', '1.0'); // Wersja struktury bazy danych
 
 // Funkcja debugowania
 if (!function_exists('wpum_log')) {
@@ -45,6 +47,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/password-reset-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/my-account.php';
 require_once plugin_dir_path(__FILE__) . 'includes/shooting-credentials.php';
+require_once plugin_dir_path(__FILE__) . 'includes/db-migrations.php';
 
 // Load text domain for translations
 function wp_user_management_load_textdomain() {
@@ -66,17 +69,46 @@ function wpum_register_shortcodes() {
 }
 add_action('init', 'wpum_register_shortcodes');
 
-// Register activation hook
+// Dodaj funkcję sprawdzającą i wykonującą aktualizacje
+function wpum_check_version() {
+    $current_version = get_option('wpum_version', '0');
+    $current_db_version = get_option('wpum_db_version', '0');
+    
+    if (version_compare($current_version, WPUM_VERSION, '<') || 
+        version_compare($current_db_version, WPUM_DB_VERSION, '<')) {
+        
+        wpum_log("Wykryto nową wersję pluginu. Aktualna: {$current_version}, Nowa: " . WPUM_VERSION);
+        wpum_log("Wersja DB - Aktualna: {$current_db_version}, Nowa: " . WPUM_DB_VERSION);
+        
+        // Wykonaj aktualizacje bazy danych
+        wpum_update_db_schema();
+        
+        // Zaktualizuj wersje w opcjach
+        update_option('wpum_version', WPUM_VERSION);
+        update_option('wpum_db_version', WPUM_DB_VERSION);
+    }
+}
+add_action('plugins_loaded', 'wpum_check_version');
+
+// Dodaj funkcję aktualizacji schematu bazy danych
+function wpum_update_db_schema() {
+    wpum_run_migrations();
+}
+
+// Zmodyfikuj funkcję aktywacji
 function wp_user_management_activate() {
     if (!wpum_create_tables()) {
         wp_die('Nie udało się utworzyć wymaganych tabel w bazie danych. Sprawdź uprawnienia bazy danych i logi błędów.');
     }
+    
+    // Ustaw początkowe wersje
+    update_option('wpum_version', WPUM_VERSION);
+    update_option('wpum_db_version', WPUM_DB_VERSION);
 }
-register_activation_hook(__FILE__, 'wp_user_management_activate');
 
-// Register deactivation hook
+// Dodaj funkcję dezaktywacji (opcjonalnie)
 function wp_user_management_deactivate() {
-    // Kod do wykonania podczas deaktywacji pluginu
+    // Możesz dodać kod czyszczący, jeśli jest potrzebny
     wpum_log('Plugin został deaktywowany');
 }
 register_deactivation_hook(__FILE__, 'wp_user_management_deactivate');
