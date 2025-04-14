@@ -29,14 +29,14 @@ if (!function_exists('wpum_log')) {
     }
 }
 
-// Usuń poprzednią funkcję wpum_init_session i dodaj nową
-function wpum_init_session() {
-    if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+// Usuń poprzednią implementację sesji i dodaj nową
+function wpum_start_session() {
+    if (!headers_sent() && session_status() === PHP_SESSION_NONE) {
         @session_start();
     }
 }
-// Zmień priorytet na bardzo wysoki (1), aby funkcja wykonała się jak najwcześniej
-add_action('init', 'wpum_init_session', 1);
+// Użyj hooka plugins_loaded zamiast init
+add_action('plugins_loaded', 'wpum_start_session', 1);
 
 // Dodaj obsługę błędów sesji
 function wpum_handle_session_error($errno, $errstr, $errfile, $errline) {

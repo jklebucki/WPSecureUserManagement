@@ -175,80 +175,75 @@ function wpum_process_shooting_credentials() {
         wpum_log("FILES data: " . print_r($_FILES, true));
         
         // Sprawdź czy to nasz formularz
-        if (isset($_POST['submit_shooting_credentials']) && $_POST['submit_shooting_credentials'] === '1') {
-            wpum_log("Wykryto przesłanie formularza uprawnień strzeleckich");
+        if (isset($_POST['wpum_action']) && $_POST['wpum_action'] === 'save_shooting_credentials') {
+            wpum_log("Wykryto akcję zapisu uprawnień strzeleckich");
             
-            if (!isset($_POST['sum_shooting_credentials_nonce'])) {
-                wpum_log("Brak nonce w żądaniu");
-                wp_die(__('Security token is missing.', 'wp-user-management-plugin'));
-            }
-            
-            if (!wp_verify_nonce($_POST['sum_shooting_credentials_nonce'], 'sum_shooting_credentials_nonce')) {
-                wpum_log("Nieprawidłowy nonce");
+            // Sprawdź nonce
+            if (!isset($_POST['wpum_shooting_credentials_nonce']) || 
+                !wp_verify_nonce($_POST['wpum_shooting_credentials_nonce'], 'wpum_shooting_credentials')) {
+                wpum_log("Błąd weryfikacji nonce");
                 wp_die(__('Security check failed!', 'wp-user-management-plugin'));
             }
-
+            
             $user_id = get_current_user_id();
             if (!$user_id) {
-                wpum_log("Użytkownik nie jest zalogowany");
+                wpum_log("Brak zalogowanego użytkownika");
                 wp_die(__('You must be logged in to perform this action.', 'wp-user-management-plugin'));
             }
             
             wpum_log("Przetwarzanie dla użytkownika ID: " . $user_id);
             
-            $credential_types = wpum_get_shooting_credential_types();
-            foreach ($credential_types as $type => $label) {
-                $number_field = $type . '_number';
-                $file_field = $type . '_file';
-
-                wpum_log("Przetwarzanie typu: " . $type);
-                wpum_log("Dane pola number: " . (isset($_POST[$number_field]) ? $_POST[$number_field] : 'brak'));
-                wpum_log("Dane pliku: " . (isset($_FILES[$file_field]) ? 'obecny' : 'brak'));
-
-                if (!empty($_POST[$number_field])) {
-                    $credential_number = sanitize_text_field($_POST[$number_field]);
+            if (isset($_POST['wpum_credentials']) && is_array($_POST['wpum_credentials'])) {
+                foreach ($_POST['wpum_credentials'] as $type => $data) {
+                    wpum_log("Przetwarzanie typu: " . $type);
                     
-                    if (!empty($_FILES[$file_field]['name'])) {
-                        $upload_result = wpum_handle_credential_file_upload($_FILES[$file_field], $user_id, $type);
+                    if (!empty($data['number'])) {
+                        $credential_number = sanitize_text_field($data['number']);
+                        $file_key = "wpum_credentials_{$type}_file";
                         
-                        if (is_wp_error($upload_result)) {
-                            wpum_log("Błąd uploadu: " . $upload_result->get_error_message());
-                            wp_die($upload_result->get_error_message());
-                        }
-                        
-                        if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $upload_result)) {
-                            wpum_log("Błąd zapisu do bazy");
-                            wp_die(__('Failed to save credential data.', 'wp-user-management-plugin'));
-                        }
-                    } else {
-                        // Aktualizacja bez pliku
-                        $existing_credentials = wpum_get_user_credentials($user_id);
-                        $current_credential = null;
-                        
-                        foreach ($existing_credentials as $cred) {
-                            if ($cred->credential_type === $type) {
-                                $current_credential = $cred;
-                                break;
+                        if (!empty($_FILES[$file_key]['name'])) {
+                            wpum_log("Znaleziono nowy plik dla typu: " . $type);
+                            $upload_result = wpum_handle_credential_file_upload($_FILES[$file_key], $user_id, $type);
+                            
+                            if (is_wp_error($upload_result)) {
+                                wpum_log("Błąd uploadu: " . $upload_result->get_error_message());
+                                wp_die($upload_result->get_error_message());
                             }
-                        }
-                        
-                        if ($current_credential) {
-                            if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $current_credential->file_path)) {
-                                wpum_log("Błąd aktualizacji danych");
-                                wp_die(__('Failed to update credential data.', 'wp-user-management-plugin'));
+                            
+                            if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $upload_result)) {
+                                wpum_log("Błąd zapisu do bazy");
+                                wp_die(__('Failed to save credential data.', 'wp-user-management-plugin'));
                             }
                         } else {
-                            wpum_log("Próba utworzenia nowego uprawnienia bez pliku");
-                            wp_die(__('PDF file is required for new credentials.', 'wp-user-management-plugin'));
+                            // Aktualizacja bez pliku
+                            $existing_credentials = wpum_get_user_credentials($user_id);
+                            $current_credential = null;
+                            
+                            foreach ($existing_credentials as $cred) {
+                                if ($cred->credential_type === $type) {
+                                    $current_credential = $cred;
+                                    break;
+                                }
+                            }
+                            
+                            if ($current_credential) {
+                                if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $current_credential->file_path)) {
+                                    wpum_log("Błąd aktualizacji danych");
+                                    wp_die(__('Failed to update credential data.', 'wp-user-management-plugin'));
+                                }
+                            } else if (!empty($_FILES[$file_key]['name'])) {
+                                wpum_log("Próba utworzenia nowego uprawnienia bez pliku");
+                                wp_die(__('PDF file is required for new credentials.', 'wp-user-management-plugin'));
+                            }
                         }
                     }
                 }
             }
-
-            wpum_log("Zakończono przetwarzanie formularza");
+            
+            wpum_log("Zakończono przetwarzanie formularza pomyślnie");
             wp_safe_redirect(add_query_arg('updated', '1', $_SERVER['REQUEST_URI']));
             exit;
         }
     }
 }
-add_action('init', 'wpum_process_shooting_credentials'); 
+add_action('init', 'wpum_process_shooting_credentials', 20); 

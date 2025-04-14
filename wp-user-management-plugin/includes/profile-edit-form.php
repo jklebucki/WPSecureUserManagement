@@ -103,7 +103,6 @@ function sum_display_profile_edit_form()
         </div>
         <div id="shooting-credentials" class="sum-tab-content">
             <?php 
-            // Dodaj debugowanie formularza
             wpum_log("Renderowanie formularza uprawnień strzeleckich");
             ?>
             
@@ -113,17 +112,16 @@ function sum_display_profile_edit_form()
                 </div>
             <?php endif; ?>
             
-            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data" action="">
+            <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
                 <?php 
-                // Użyj nonce_field zamiast ręcznego tworzenia pola
-                wp_nonce_field('sum_shooting_credentials_nonce', 'sum_shooting_credentials_nonce'); 
+                // Dodaj ukryte pole do identyfikacji formularza
                 ?>
+                <input type="hidden" name="wpum_action" value="save_shooting_credentials">
+                <?php wp_nonce_field('wpum_shooting_credentials', 'wpum_shooting_credentials_nonce'); ?>
                 
                 <?php
                 $credentials = wpum_get_user_credentials(get_current_user_id());
                 $credential_types = wpum_get_shooting_credential_types();
-                
-                wpum_log("Aktualne uprawnienia: " . print_r($credentials, true));
                 
                 foreach ($credential_types as $type => $label):
                     $current_credential = array_filter($credentials, function($cred) use ($type) {
@@ -132,20 +130,20 @@ function sum_display_profile_edit_form()
                     $current_credential = reset($current_credential);
                 ?>
                     <div class="sum-form-group">
-                        <label for="<?php echo esc_attr($type); ?>_number">
+                        <label for="wpum_<?php echo esc_attr($type); ?>_number">
                             <?php echo esc_html($label); ?>
                         </label>
                         <input type="text" 
-                               name="<?php echo esc_attr($type); ?>_number" 
-                               id="<?php echo esc_attr($type); ?>_number"
+                               name="wpum_credentials[<?php echo esc_attr($type); ?>][number]" 
+                               id="wpum_<?php echo esc_attr($type); ?>_number"
                                value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>">
                         
-                        <label for="<?php echo esc_attr($type); ?>_file">
+                        <label for="wpum_<?php echo esc_attr($type); ?>_file">
                             <?php _e('PDF Document', 'wp-user-management-plugin'); ?>
                         </label>
                         <input type="file" 
-                               name="<?php echo esc_attr($type); ?>_file" 
-                               id="<?php echo esc_attr($type); ?>_file"
+                               name="wpum_credentials[<?php echo esc_attr($type); ?>][file]" 
+                               id="wpum_<?php echo esc_attr($type); ?>_file"
                                accept=".pdf">
                         
                         <?php if ($current_credential && $current_credential->file_path): ?>
@@ -160,7 +158,6 @@ function sum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 
-                <input type="hidden" name="action" value="save_shooting_credentials">
                 <button type="submit" name="submit_shooting_credentials" value="1">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
@@ -346,9 +343,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('sum-shooting-credentials-form');
     if (form) {
         form.addEventListener('submit', function(e) {
-            console.log('Formularz jest wysyłany');
-            // Możesz dodać tutaj dodatkową walidację
+            console.log('Wysyłanie formularza uprawnień strzeleckich');
+            // Nie blokujemy domyślnej akcji formularza
         });
+    } else {
+        console.error('Nie znaleziono formularza uprawnień strzeleckich');
     }
 });
 </script>
