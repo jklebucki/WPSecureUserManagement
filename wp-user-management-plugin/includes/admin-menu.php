@@ -56,6 +56,8 @@ function wp_user_management_user_list() {
     // Get configurable columns
     $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
     $columns[] = 'roles'; // Add roles column
+    $columns[] = 'shooting_license'; // Add shooting license column
+    $columns[] = 'shooting_file'; // Add shooting file column
     $columns[] = 'actions'; // Add actions column
 
     // Get all roles
@@ -95,6 +97,25 @@ function wp_user_management_user_list() {
                                             <a href="<?php echo esc_url(add_query_arg(['action' => 'remove_role', 'user_id' => $user->ID, 'role' => $role])); ?>" class="styled-button remove-role">x</a>
                                         </span>
                                         <?php
+                                    }
+                                } elseif ($column === 'shooting_license') {
+                                    $credentials = wpum_get_user_credentials($user->ID);
+                                    $license_number = '';
+                                    foreach ($credentials as $credential) {
+                                        if ($credential->credential_type === 'shooting_license') {
+                                            $license_number = esc_html($credential->credential_number);
+                                            break;
+                                        }
+                                    }
+                                    echo $license_number;
+                                } elseif ($column === 'shooting_file') {
+                                    $credentials = wpum_get_user_credentials($user->ID);
+                                    foreach ($credentials as $credential) {
+                                        if ($credential->credential_type === 'shooting_license' && !empty($credential->file_path)) {
+                                            $file_url = wp_upload_dir()['baseurl'] . $credential->file_path;
+                                            echo '<a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
+                                            break;
+                                        }
                                     }
                                 } elseif ($column === 'actions') {
                                     ?>

@@ -299,3 +299,6 @@ msgstr "Dozwolone są tylko pliki PDF"
 
 msgid "Failed to save file"
 msgstr "Nie udało się zapisać pliku"
+
+msgid "Click the button below to logout from your account."
+msgstr "Kliknij przycisk poniżej, aby się wylogować z swojego konta."

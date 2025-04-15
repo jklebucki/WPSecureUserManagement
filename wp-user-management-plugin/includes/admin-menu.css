@@ -76,3 +76,31 @@ button.button-primary {
 .role-badge .styled-button.remove-role:hover {
     color: #c9302c;
 }
+
+/* Shooting credentials columns */
+.wp-list-table td .dashicons-media-document {
+    color: #0073aa;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.wp-list-table td .dashicons-media-document:hover {
+    color: #005177;
+}
+
+.wp-list-table td a[target="_blank"] {
+    text-decoration: none;
+}
+
+/* Column widths */
+.wp-list-table th:nth-child(4), /* shooting_license column */
+.wp-list-table td:nth-child(4) {
+    width: 150px;
+}
+
+.wp-list-table th:nth-child(5), /* shooting_file column */
+.wp-list-table td:nth-child(5) {
+    width: 50px;
+    text-align: center;
+}
