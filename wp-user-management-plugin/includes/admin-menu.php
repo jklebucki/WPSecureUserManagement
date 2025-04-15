@@ -57,7 +57,7 @@ function wp_user_management_user_list() {
     $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
     $columns[] = 'roles'; // Add roles column
     $columns[] = 'shooting_license'; // Add shooting license column
-    $columns[] = 'shooting_file'; // Add shooting file column
+    $columns[] = 'shooting_instructor'; // Add shooting instructor license column
     $columns[] = 'actions'; // Add actions column
 
     // Get all roles
@@ -101,21 +101,38 @@ function wp_user_management_user_list() {
                                 } elseif ($column === 'shooting_license') {
                                     $credentials = wpum_get_user_credentials($user->ID);
                                     $license_number = '';
+                                    $file_path = '';
+                                    
                                     foreach ($credentials as $credential) {
                                         if ($credential->credential_type === 'shooting_license') {
                                             $license_number = esc_html($credential->credential_number);
+                                            $file_path = $credential->file_path;
                                             break;
                                         }
                                     }
+                                    
                                     echo $license_number;
-                                } elseif ($column === 'shooting_file') {
+                                    if (!empty($file_path)) {
+                                        $file_url = wp_upload_dir()['baseurl'] . $file_path;
+                                        echo ' <a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
+                                    }
+                                } elseif ($column === 'shooting_instructor') {
                                     $credentials = wpum_get_user_credentials($user->ID);
+                                    $instructor_number = '';
+                                    $file_path = '';
+                                    
                                     foreach ($credentials as $credential) {
-                                        if ($credential->credential_type === 'shooting_license' && !empty($credential->file_path)) {
-                                            $file_url = wp_upload_dir()['baseurl'] . $credential->file_path;
-                                            echo '<a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
+                                        if ($credential->credential_type === 'shooting_instructor') {
+                                            $instructor_number = esc_html($credential->credential_number);
+                                            $file_path = $credential->file_path;
                                             break;
                                         }
+                                    }
+                                    
+                                    echo $instructor_number;
+                                    if (!empty($file_path)) {
+                                        $file_url = wp_upload_dir()['baseurl'] . $file_path;
+                                        echo ' <a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
                                     }
                                 } elseif ($column === 'actions') {
                                     ?>

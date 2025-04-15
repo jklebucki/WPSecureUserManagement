@@ -83,6 +83,8 @@ button.button-primary {
     text-decoration: none;
     font-size: 20px;
     line-height: 1.4;
+    margin-left: 5px;
+    vertical-align: middle;
 }
 
 .wp-list-table td .dashicons-media-document:hover {
@@ -95,12 +97,13 @@ button.button-primary {
 
 /* Column widths */
 .wp-list-table th:nth-child(4), /* shooting_license column */
-.wp-list-table td:nth-child(4) {
-    width: 150px;
+.wp-list-table td:nth-child(4),
+.wp-list-table th:nth-child(5), /* shooting_instructor column */
+.wp-list-table td:nth-child(5) {
+    width: 200px;
 }
 
-.wp-list-table th:nth-child(5), /* shooting_file column */
-.wp-list-table td:nth-child(5) {
-    width: 50px;
-    text-align: center;
+/* Add some spacing between the license number and file icon */
+.wp-list-table td .dashicons-media-document {
+    margin-left: 8px;
 }
