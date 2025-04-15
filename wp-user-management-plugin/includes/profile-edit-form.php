@@ -99,24 +99,14 @@ function sum_display_profile_edit_form()
         </div>
         <div id="logout" class="sum-tab-content">
             <h3><?php _e('Logout', 'wp-user-management-plugin'); ?></h3>
-            <button type="button" id="sum-logout-button" class="button button-primary">
-                <?php _e('Logout', 'wp-user-management-plugin'); ?>
-            </button>
-            <?php $logout_nonce = wp_create_nonce('sum_logout_nonce'); ?>
-            <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
-            <!-- Modal dla wylogowania -->
-            <div id="sum-logout-modal" class="sum-modal hidden">
-                <div class="sum-modal-content">
-                    <span class="sum-close">&times;</span>
-                    <p><?php _e('Are you sure you want to logout?', 'wp-user-management-plugin'); ?></p>
-                    <form id="sum-logout-form" method="post" action="<?php echo admin_url('admin-post.php'); ?>">
-                        <input type="hidden" name="action" value="sum_logout">
-                        <input type="hidden" name="sum_logout_nonce" value="<?php echo wp_create_nonce('sum_logout_nonce'); ?>">
-                        <button type="submit" class="button button-primary"><?php _e('Yes, Logout', 'wp-user-management-plugin'); ?></button>
-                        <button type="button" class="sum-cancel button"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
-                    </form>
-                </div>
-            </div>
+            <p><?php _e('Click the button below to logout from your account.', 'wp-user-management-plugin'); ?></p>
+            <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+                <input type="hidden" name="action" value="sum_logout">
+                <input type="hidden" name="sum_logout_nonce" value="<?php echo wp_create_nonce('sum_logout_nonce'); ?>">
+                <button type="submit" class="button button-primary">
+                    <?php _e('Logout', 'wp-user-management-plugin'); ?>
+                </button>
+            </form>
         </div>
         <div id="shooting-credentials" class="sum-tab-content">
             <div id="wpum-messages" class="sum-message" style="display: none;"></div>
