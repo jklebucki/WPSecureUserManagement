@@ -173,8 +173,13 @@ function sum_display_profile_edit_form()
         </div>
     </div>
 
-
     <script src="<?php echo plugin_dir_url(__FILE__) . 'profile-edit-form.js'; ?>"></script>
+    <script>
+    // Przenosimy modal do końca body po załadowaniu strony
+    jQuery(document).ready(function($) {
+        $('#sum-delete-account-modal').appendTo('body');
+    });
+    </script>
 <?php
     return ob_get_clean();
 }

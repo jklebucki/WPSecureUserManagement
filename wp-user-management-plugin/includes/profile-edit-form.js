@@ -39,19 +39,35 @@ jQuery(document).ready(function($) {
     // Obsługa przycisku usuwania konta
     $('#sum-delete-account-button').on('click', function(e) {
         e.preventDefault();
+        $('body').addClass('modal-open');
         $('#sum-delete-account-modal').removeClass('hidden');
     });
 
     // Zamykanie modalu
     $('.sum-close, .sum-cancel').on('click', function() {
-        $(this).closest('.sum-modal').addClass('hidden');
+        $('body').removeClass('modal-open');
+        $('#sum-delete-account-modal').addClass('hidden');
     });
 
-    // Zamykanie modalu po kliknięciu poza nim
-    $(window).on('click', function(e) {
-        if ($(e.target).hasClass('sum-modal')) {
-            $('.sum-modal').addClass('hidden');
+    // Zamykanie modalu po kliknięciu w tło
+    $(document).on('click', '.sum-modal', function(e) {
+        if (e.target === this) {
+            $('body').removeClass('modal-open');
+            $(this).addClass('hidden');
         }
+    });
+
+    // Obsługa klawisza ESC
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && !$('#sum-delete-account-modal').hasClass('hidden')) {
+            $('body').removeClass('modal-open');
+            $('#sum-delete-account-modal').addClass('hidden');
+        }
+    });
+
+    // Zatrzymanie propagacji kliknięć wewnątrz modalu
+    $('.sum-modal-content').on('click', function(e) {
+        e.stopPropagation();
     });
 
     // Obsługa formularza usuwania konta
