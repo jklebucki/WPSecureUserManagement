@@ -112,7 +112,7 @@ function wp_user_management_user_list() {
                                     }
                                     
                                     echo $license_number;
-                                    if (!empty($file_path)) {
+                                    if (!empty($file_path) && strpos($file_path, 'empty') === false) {
                                         $file_url = wp_upload_dir()['baseurl'] . $file_path;
                                         echo ' <a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
                                     }
@@ -130,7 +130,7 @@ function wp_user_management_user_list() {
                                     }
                                     
                                     echo $instructor_number;
-                                    if (!empty($file_path)) {
+                                    if (!empty($file_path) && strpos($file_path, 'empty') === false) {
                                         $file_url = wp_upload_dir()['baseurl'] . $file_path;
                                         echo ' <a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
                                     }
