@@ -129,13 +129,20 @@ jQuery(document).ready(function($) {
     });
 
     // Zamykanie modala
-    $('.sum-close, .sum-cancel').on('click', function() {
-        $('#sum-logout-modal').removeClass('show');
+    $('.sum-close, .sum-cancel, .sum-modal').on('click', function(e) {
+        if (e.target === this) {
+            $('#sum-logout-modal').removeClass('show');
+        }
     });
 
-    // Zamykanie modala po kliknięciu poza nim
-    $(window).on('click', function(e) {
-        if ($(e.target).hasClass('sum-modal')) {
+    // Zatrzymaj propagację kliknięć wewnątrz modala
+    $('.sum-modal-content').on('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Obsługa klawisza ESC
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape') {
             $('#sum-logout-modal').removeClass('show');
         }
     });

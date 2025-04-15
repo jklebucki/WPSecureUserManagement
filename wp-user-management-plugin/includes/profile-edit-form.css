@@ -158,7 +158,7 @@
 .sum-modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 9999; /* Zwiększamy z-index */
     left: 0;
     top: 0;
     width: 100%;
@@ -176,9 +176,10 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    max-width: 500px;
+    max-width: 400px; /* Zmniejszamy maksymalną szerokość */
     border-radius: 4px;
     position: relative;
+    text-align: center; /* Centrujemy zawartość */
 }
 
 .sum-close {
@@ -188,18 +189,42 @@
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    color: #666;
+    line-height: 1;
 }
 
 .sum-close:hover {
-    color: #666;
+    color: #333;
 }
 
 .sum-modal button {
     margin: 10px 5px;
+    padding: 8px 16px;
+}
+
+.sum-modal button.button-primary {
+    background-color: #dc3545; /* Czerwony kolor dla przycisku wylogowania */
+    border-color: #dc3545;
+}
+
+.sum-modal button.button-primary:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.sum-modal button.sum-cancel {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+
+.sum-modal button.sum-cancel:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Add these styles to your existing CSS file */

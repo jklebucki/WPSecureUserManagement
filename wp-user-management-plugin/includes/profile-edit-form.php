@@ -99,9 +99,8 @@ function sum_display_profile_edit_form()
         </div>
         <div id="logout" class="sum-tab-content">
             <h3><?php _e('Logout', 'wp-user-management-plugin'); ?></h3>
-            <p><?php _e('Are you sure you want to logout?', 'wp-user-management-plugin'); ?></p>
             <button type="button" id="sum-logout-button" class="button button-primary">
-                <?php _e('Yes, Logout', 'wp-user-management-plugin'); ?>
+                <?php _e('Logout', 'wp-user-management-plugin'); ?>
             </button>
             <?php $logout_nonce = wp_create_nonce('sum_logout_nonce'); ?>
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
