@@ -73,21 +73,37 @@ add_action('init', 'wpum_register_shortcodes');
 
 // Dodaj funkcję sprawdzającą i wykonującą aktualizacje
 function wpum_check_version() {
-    $current_version = get_option('wpum_version', '0');
-    $current_db_version = get_option('wpum_db_version', '0');
-    
-    if (version_compare($current_version, WPUM_VERSION, '<') || 
-        version_compare($current_db_version, WPUM_DB_VERSION, '<')) {
+    try {
+        $current_version = get_option('wpum_version', '0');
+        $current_db_version = get_option('wpum_db_version', '0');
         
-        wpum_log("Wykryto nową wersję pluginu. Aktualna: {$current_version}, Nowa: " . WPUM_VERSION);
-        wpum_log("Wersja DB - Aktualna: {$current_db_version}, Nowa: " . WPUM_DB_VERSION);
+        wpum_log("Sprawdzanie wersji pluginu - Aktualna: {$current_version}, Nowa: " . WPUM_VERSION);
+        wpum_log("Sprawdzanie wersji DB - Aktualna: {$current_db_version}, Nowa: " . WPUM_DB_VERSION);
         
-        // Wykonaj aktualizacje bazy danych
-        wpum_update_db_schema();
+        if (version_compare($current_version, WPUM_VERSION, '<') || 
+            version_compare($current_db_version, WPUM_DB_VERSION, '<')) {
+            
+            wpum_log("Wykryto nową wersję pluginu lub bazy danych - rozpoczynam aktualizację");
+            
+            // Wykonaj aktualizacje bazy danych
+            $update_result = wpum_update_db_schema();
+            if (!$update_result) {
+                throw new Exception("Nie udało się zaktualizować schematu bazy danych");
+            }
+            
+            // Zaktualizuj wersje w opcjach
+            update_option('wpum_version', WPUM_VERSION);
+            update_option('wpum_db_version', WPUM_DB_VERSION);
+            
+            wpum_log("Aktualizacja pluginu zakończona pomyślnie");
+        } else {
+            wpum_log("Plugin jest aktualny - nie wymaga aktualizacji");
+        }
         
-        // Zaktualizuj wersje w opcjach
-        update_option('wpum_version', WPUM_VERSION);
-        update_option('wpum_db_version', WPUM_DB_VERSION);
+        return true;
+    } catch (Exception $e) {
+        wpum_log("Błąd podczas aktualizacji pluginu: " . $e->getMessage());
+        return false;
     }
 }
 add_action('plugins_loaded', 'wpum_check_version');
@@ -107,6 +123,9 @@ function wp_user_management_activate() {
     update_option('wpum_version', WPUM_VERSION);
     update_option('wpum_db_version', WPUM_DB_VERSION);
 }
+
+// Zarejestruj hook aktywacji pluginu
+register_activation_hook(__FILE__, 'wp_user_management_activate');
 
 // Dodaj funkcję dezaktywacji (opcjonalnie)
 function wp_user_management_deactivate() {

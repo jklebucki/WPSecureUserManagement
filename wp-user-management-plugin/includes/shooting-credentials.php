@@ -8,20 +8,67 @@ if (!defined('ABSPATH')) {
 function wpum_create_shooting_credentials_table() {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
+    $table_name = $wpdb->prefix . 'wpum_shooting_credentials';
     
-    $sql = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}wpum_shooting_credentials (
-        id bigint(20) NOT NULL AUTO_INCREMENT,
-        user_id bigint(20) NOT NULL,
-        credential_type varchar(50) NOT NULL,
-        credential_number varchar(100) NOT NULL,
-        file_path varchar(255) NOT NULL,
-        uploaded_at datetime DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY  (id),
-        KEY user_id (user_id)
-    ) $charset_collate;";
+    // Sprawdź czy tabela istnieje
+    $table_exists = wpum_table_exists($table_name);
     
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
+    // Rozpocznij transakcję
+    $wpdb->query('START TRANSACTION');
+    
+    try {
+        // Jeśli tabela istnieje, zrób backup
+        if ($table_exists) {
+            wpum_log("Tabela $table_name istnieje - tworzenie kopii zapasowej");
+            $backup_table_name = $table_name . '_backup_' . date('YmdHis');
+            $backup_sql = "CREATE TABLE IF NOT EXISTS $backup_table_name LIKE $table_name";
+            $backup_result = $wpdb->query($backup_sql);
+            
+            if ($backup_result === false) {
+                throw new Exception("Nie udało się utworzyć kopii zapasowej tabeli: " . $wpdb->last_error);
+            }
+            
+            $copy_data_sql = "INSERT INTO $backup_table_name SELECT * FROM $table_name";
+            $copy_result = $wpdb->query($copy_data_sql);
+            
+            if ($copy_result === false) {
+                throw new Exception("Nie udało się skopiować danych do kopii zapasowej: " . $wpdb->last_error);
+            }
+            
+            wpum_log("Kopia zapasowa tabeli $table_name została utworzona: $backup_table_name");
+        }
+        
+        // Utwórz lub zaktualizuj tabelę
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            user_id bigint(20) NOT NULL,
+            credential_type varchar(50) NOT NULL,
+            credential_number varchar(100) NOT NULL,
+            file_path varchar(255) NOT NULL,
+            uploaded_at datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY  (id),
+            KEY user_id (user_id)
+        ) $charset_collate;";
+        
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+        
+        // Sprawdź czy tabela została utworzona poprawnie
+        if (!wpum_table_exists($table_name)) {
+            throw new Exception("Nie udało się utworzyć tabeli $table_name");
+        }
+        
+        // Zatwierdź transakcję
+        $wpdb->query('COMMIT');
+        wpum_log("Tabela $table_name została pomyślnie utworzona lub zaktualizowana");
+        return true;
+        
+    } catch (Exception $e) {
+        // Wycofaj transakcję w przypadku błędu
+        $wpdb->query('ROLLBACK');
+        wpum_log("Błąd podczas tworzenia/aktualizacji tabeli $table_name: " . $e->getMessage());
+        return false;
+    }
 }
 
 // Register shooting credential types
@@ -96,11 +143,23 @@ function wpum_save_shooting_credential($user_id, $credential_type, $credential_n
     wpum_log("- credential_type: " . $credential_type);
     wpum_log("- credential_number: " . $credential_number);
     wpum_log("- file_path: " . $file_path);
+    wpum_log("- table_name: " . $table_name);
     
     // Sprawdź czy tabela istnieje
     if (!wpum_table_exists($table_name)) {
         wpum_log("Tabela $table_name nie istnieje!");
-        return false;
+        wpum_log("Próba utworzenia tabeli...");
+        if (function_exists('wpum_create_shooting_credentials_table')) {
+            wpum_create_shooting_credentials_table();
+            if (!wpum_table_exists($table_name)) {
+                wpum_log("Nie udało się utworzyć tabeli $table_name!");
+                return false;
+            }
+            wpum_log("Tabela $table_name została utworzona pomyślnie!");
+        } else {
+            wpum_log("Funkcja wpum_create_shooting_credentials_table nie jest dostępna!");
+            return false;
+        }
     }
     
     // Usuń istniejące uprawnienie tego samego typu
@@ -198,10 +257,23 @@ function wpum_ajax_save_credentials() {
         foreach ($_POST['wpum_credentials'] as $type => $data) {
             if (!empty($data['number'])) {
                 $credential_number = sanitize_text_field($data['number']);
-                $file_field = "wpum_credentials_{$type}_file";
                 
-                if (!empty($_FILES[$file_field]['name'])) {
-                    $upload_result = wpum_handle_credential_file_upload($_FILES[$file_field], $user_id, $type);
+                // Sprawdź czy plik został przesłany
+                $file_key = "wpum_credentials_{$type}_file";
+                if (isset($_FILES['wpum_credentials']) && 
+                    isset($_FILES['wpum_credentials']['name'][$type]['file']) && 
+                    !empty($_FILES['wpum_credentials']['name'][$type]['file'])) {
+                    
+                    // Przygotuj dane pliku w formacie wymaganym przez wpum_handle_credential_file_upload
+                    $file_data = array(
+                        'name' => $_FILES['wpum_credentials']['name'][$type]['file'],
+                        'type' => $_FILES['wpum_credentials']['type'][$type]['file'],
+                        'tmp_name' => $_FILES['wpum_credentials']['tmp_name'][$type]['file'],
+                        'error' => $_FILES['wpum_credentials']['error'][$type]['file'],
+                        'size' => $_FILES['wpum_credentials']['size'][$type]['file']
+                    );
+                    
+                    $upload_result = wpum_handle_credential_file_upload($file_data, $user_id, $type);
                     
                     if (is_wp_error($upload_result)) {
                         wpum_log("Błąd uploadu dla typu $type: " . $upload_result->get_error_message());
@@ -236,10 +308,24 @@ function wpum_ajax_save_credentials() {
                     }
                     
                     if ($current_credential) {
+                        // Aktualizacja istniejącego uprawnienia
                         if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $current_credential->file_path)) {
                             wpum_log("Błąd aktualizacji danych dla typu $type");
                             $messages[] = sprintf(
                                 __('Failed to update %s credential data.', 'wp-user-management-plugin'),
+                                $type
+                            );
+                            $success = false;
+                            continue;
+                        }
+                    } else {
+                        // Tworzenie nowego uprawnienia bez pliku
+                        // Używamy pustego pliku jako wartości domyślnej
+                        $default_file_path = '/shooting-credentials/' . $user_id . '/' . $type . '-empty.pdf';
+                        if (!wpum_save_shooting_credential($user_id, $type, $credential_number, $default_file_path)) {
+                            wpum_log("Błąd tworzenia nowego uprawnienia dla typu $type");
+                            $messages[] = sprintf(
+                                __('Failed to create %s credential data.', 'wp-user-management-plugin'),
                                 $type
                             );
                             $success = false;

@@ -74,4 +74,49 @@ jQuery(document).ready(function($) {
     $('#sum-delete-account-form').on('submit', function(e) {
         // Form będzie wysłany normalnie
     });
+    
+    // Obsługa formularza shooting credentials
+    $('#sum-shooting-credentials-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        var formData = new FormData(this);
+        formData.append('action', 'wpum_save_credentials');
+        formData.append('wpum_nonce', wpumAjax.nonce);
+        
+        $.ajax({
+            url: wpumAjax.ajaxurl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    $('#wpum-messages')
+                        .html(response.data.message)
+                        .removeClass('error')
+                        .addClass('success')
+                        .show();
+                    
+                    if (response.data.reload) {
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    }
+                } else {
+                    $('#wpum-messages')
+                        .html(response.data.message)
+                        .removeClass('success')
+                        .addClass('error')
+                        .show();
+                }
+            },
+            error: function() {
+                $('#wpum-messages')
+                    .html('An error occurred. Please try again.')
+                    .removeClass('success')
+                    .addClass('error')
+                    .show();
+            }
+        });
+    });
 });
