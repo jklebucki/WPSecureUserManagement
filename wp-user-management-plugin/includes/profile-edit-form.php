@@ -104,19 +104,32 @@ function sum_display_profile_edit_form()
             </button>
             <?php $logout_nonce = wp_create_nonce('sum_logout_nonce'); ?>
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
+            <!-- Modal dla wylogowania -->
+            <div id="sum-logout-modal" class="sum-modal hidden">
+                <div class="sum-modal-content">
+                    <span class="sum-close">&times;</span>
+                    <p><?php _e('Are you sure you want to logout?', 'wp-user-management-plugin'); ?></p>
+                    <form id="sum-logout-form" method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+                        <input type="hidden" name="action" value="sum_logout">
+                        <input type="hidden" name="sum_logout_nonce" value="<?php echo wp_create_nonce('sum_logout_nonce'); ?>">
+                        <button type="submit" class="button button-primary"><?php _e('Yes, Logout', 'wp-user-management-plugin'); ?></button>
+                        <button type="button" class="sum-cancel button"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
+                    </form>
+                </div>
+            </div>
         </div>
         <div id="shooting-credentials" class="sum-tab-content">
             <div id="wpum-messages" class="sum-message" style="display: none;"></div>
-            
+
             <form id="sum-shooting-credentials-form" method="post" enctype="multipart/form-data">
                 <?php wp_nonce_field('wpum_shooting_credentials', 'wpum_nonce'); ?>
-                
+
                 <?php
                 $credentials = wpum_get_user_credentials(get_current_user_id());
                 $credential_types = wpum_get_shooting_credential_types();
-                
+
                 foreach ($credential_types as $type => $label):
-                    $current_credential = array_filter($credentials, function($cred) use ($type) {
+                    $current_credential = array_filter($credentials, function ($cred) use ($type) {
                         return $cred->credential_type === $type;
                     });
                     $current_credential = reset($current_credential);
@@ -125,31 +138,31 @@ function sum_display_profile_edit_form()
                         <label for="wpum_<?php echo esc_attr($type); ?>_number">
                             <?php echo esc_html($label); ?>
                         </label>
-                        <input type="text" 
-                               name="wpum_credentials[<?php echo esc_attr($type); ?>][number]" 
-                               id="wpum_<?php echo esc_attr($type); ?>_number"
-                               value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>">
-                        
+                        <input type="text"
+                            name="wpum_credentials[<?php echo esc_attr($type); ?>][number]"
+                            id="wpum_<?php echo esc_attr($type); ?>_number"
+                            value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>">
+
                         <label for="wpum_<?php echo esc_attr($type); ?>_file">
                             <?php _e('PDF Document', 'wp-user-management-plugin'); ?>
                         </label>
-                        <input type="file" 
-                               name="wpum_credentials[<?php echo esc_attr($type); ?>][file]" 
-                               id="wpum_<?php echo esc_attr($type); ?>_file"
-                               accept=".pdf">
-                        
+                        <input type="file"
+                            name="wpum_credentials[<?php echo esc_attr($type); ?>][file]"
+                            id="wpum_<?php echo esc_attr($type); ?>_file"
+                            accept=".pdf">
+
                         <?php if ($current_credential && $current_credential->file_path): ?>
                             <div class="current-file">
                                 <span><?php _e('Current file:', 'wp-user-management-plugin'); ?></span>
-                                <a href="<?php echo esc_url(wp_upload_dir()['baseurl'] . $current_credential->file_path); ?>" 
-                                   target="_blank">
+                                <a href="<?php echo esc_url(wp_upload_dir()['baseurl'] . $current_credential->file_path); ?>"
+                                    target="_blank">
                                     <?php _e('View Document', 'wp-user-management-plugin'); ?>
                                 </a>
                             </div>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
-                
+
                 <button type="submit" class="button button-primary">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
@@ -170,19 +183,6 @@ function sum_display_profile_edit_form()
         </div>
     </div>
 
-    <!-- Modal dla wylogowania -->
-    <div id="sum-logout-modal" class="sum-modal hidden">
-        <div class="sum-modal-content">
-            <span class="sum-close">&times;</span>
-            <p><?php _e('Are you sure you want to logout?', 'wp-user-management-plugin'); ?></p>
-            <form id="sum-logout-form" method="post" action="<?php echo admin_url('admin-post.php'); ?>">
-                <input type="hidden" name="action" value="sum_logout">
-                <input type="hidden" name="sum_logout_nonce" value="<?php echo wp_create_nonce('sum_logout_nonce'); ?>">
-                <button type="submit" class="button button-primary"><?php _e('Yes, Logout', 'wp-user-management-plugin'); ?></button>
-                <button type="button" class="sum-cancel button"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
-            </form>
-        </div>
-    </div>
 
     <script src="<?php echo plugin_dir_url(__FILE__) . 'profile-edit-form.js'; ?>"></script>
 <?php
@@ -295,7 +295,8 @@ function sum_register_profile_edit_shortcode()
 add_action('init', 'sum_register_profile_edit_shortcode');
 
 // Add this function to handle the form submission
-function sum_process_shooting_credentials() {
+function sum_process_shooting_credentials()
+{
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_shooting_credentials_nonce'])) {
         if (!wp_verify_nonce($_POST['sum_shooting_credentials_nonce'], 'sum_shooting_credentials_nonce')) {
             wp_die(__('Security check failed!', 'wp-user-management-plugin'));
@@ -310,25 +311,25 @@ function sum_process_shooting_credentials() {
 
             if (!empty($_POST[$number_field])) {
                 $credential_number = sanitize_text_field($_POST[$number_field]);
-                
+
                 // Handle file upload if new file is provided
                 if (!empty($_FILES[$file_field]['name'])) {
                     $upload_result = wpum_handle_credential_file_upload($_FILES[$file_field], $user_id, $type);
-                    
+
                     if (is_wp_error($upload_result)) {
                         wp_die($upload_result->get_error_message());
                     }
-                    
+
                     // Save credential with new file
                     wpum_save_shooting_credential($user_id, $type, $credential_number, $upload_result);
                 } else {
                     // Update just the credential number if no new file
                     $existing_credentials = wpum_get_user_credentials($user_id);
-                    $current_credential = array_filter($existing_credentials, function($cred) use ($type) {
+                    $current_credential = array_filter($existing_credentials, function ($cred) use ($type) {
                         return $cred->credential_type === $type;
                     });
                     $current_credential = reset($current_credential);
-                    
+
                     if ($current_credential) {
                         wpum_save_shooting_credential($user_id, $type, $credential_number, $current_credential->file_path);
                     }
