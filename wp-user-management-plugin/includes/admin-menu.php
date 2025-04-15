@@ -56,8 +56,8 @@ function wp_user_management_user_list() {
     // Get configurable columns
     $columns = get_option('wp_user_management_columns', ['ID', 'user_login', 'user_email']); // native fields
     $columns[] = 'roles'; // Add roles column
-    $columns[] = 'shooting_license'; // Add shooting license column
-    $columns[] = 'shooting_instructor'; // Add shooting instructor license column
+    $columns[] = 'shooting_patent'; // Add shooting patent column
+    $columns[] = 'instructor_license'; // Add instructor license column
     $columns[] = 'actions'; // Add actions column
 
     // Get all roles
@@ -98,13 +98,13 @@ function wp_user_management_user_list() {
                                         </span>
                                         <?php
                                     }
-                                } elseif ($column === 'shooting_license') {
+                                } elseif ($column === 'shooting_patent') {
                                     $credentials = wpum_get_user_credentials($user->ID);
                                     $license_number = '';
                                     $file_path = '';
                                     
                                     foreach ($credentials as $credential) {
-                                        if ($credential->credential_type === 'shooting_license') {
+                                        if ($credential->credential_type === 'shooting_patent') {
                                             $license_number = esc_html($credential->credential_number);
                                             $file_path = $credential->file_path;
                                             break;
@@ -116,13 +116,13 @@ function wp_user_management_user_list() {
                                         $file_url = wp_upload_dir()['baseurl'] . $file_path;
                                         echo ' <a href="' . esc_url($file_url) . '" target="_blank"><span class="dashicons dashicons-media-document"></span></a>';
                                     }
-                                } elseif ($column === 'shooting_instructor') {
+                                } elseif ($column === 'instructor_license') {
                                     $credentials = wpum_get_user_credentials($user->ID);
                                     $instructor_number = '';
                                     $file_path = '';
                                     
                                     foreach ($credentials as $credential) {
-                                        if ($credential->credential_type === 'shooting_instructor') {
+                                        if ($credential->credential_type === 'instructor_license') {
                                             $instructor_number = esc_html($credential->credential_number);
                                             $file_path = $credential->file_path;
                                             break;

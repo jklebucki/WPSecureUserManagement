@@ -96,9 +96,9 @@ button.button-primary {
 }
 
 /* Column widths */
-.wp-list-table th:nth-child(4), /* shooting_license column */
+.wp-list-table th:nth-child(4), /* shooting_patent column */
 .wp-list-table td:nth-child(4),
-.wp-list-table th:nth-child(5), /* shooting_instructor column */
+.wp-list-table th:nth-child(5), /* instructor_license column */
 .wp-list-table td:nth-child(5) {
     width: 200px;
 }
