@@ -8,6 +8,8 @@ if (!defined('ABSPATH')) {
 function sum_enqueue_profile_edit_styles()
 {
     wp_enqueue_style('sum-profile-edit-form', plugin_dir_url(__FILE__) . 'profile-edit-form.css');
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('sum-profile-edit-form', plugin_dir_url(__FILE__) . 'profile-edit-form.js', ['jquery'], null, true);
     wp_enqueue_script('sum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], null, true);
 }
 add_action('wp_enqueue_scripts', 'sum_enqueue_profile_edit_styles');
@@ -97,7 +99,10 @@ function sum_display_profile_edit_form()
         </div>
         <div id="logout" class="sum-tab-content">
             <h3><?php _e('Logout', 'wp-user-management-plugin'); ?></h3>
-            <button type="button" id="sum-logout-button"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
+            <p><?php _e('Are you sure you want to logout?', 'wp-user-management-plugin'); ?></p>
+            <button type="button" id="sum-logout-button" class="button button-primary">
+                <?php _e('Yes, Logout', 'wp-user-management-plugin'); ?>
+            </button>
             <?php $logout_nonce = wp_create_nonce('sum_logout_nonce'); ?>
             <input type="hidden" id="sum-logout-nonce" value="<?php echo esc_attr($logout_nonce); ?>">
         </div>
@@ -153,7 +158,7 @@ function sum_display_profile_edit_form()
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal dla usuwania konta -->
     <div id="sum-delete-account-modal" class="sum-modal hidden">
         <div class="sum-modal-content">
             <span class="sum-close">&times;</span>
@@ -162,6 +167,20 @@ function sum_display_profile_edit_form()
                 <input type="hidden" name="sum_delete_account_nonce" value="<?php echo wp_create_nonce('sum_delete_account_nonce'); ?>">
                 <button type="submit"><?php _e('Yes, Delete My Account', 'wp-user-management-plugin'); ?></button>
                 <button type="button" class="sum-cancel"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal dla wylogowania -->
+    <div id="sum-logout-modal" class="sum-modal hidden">
+        <div class="sum-modal-content">
+            <span class="sum-close">&times;</span>
+            <p><?php _e('Are you sure you want to logout?', 'wp-user-management-plugin'); ?></p>
+            <form id="sum-logout-form" method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+                <input type="hidden" name="action" value="sum_logout">
+                <input type="hidden" name="sum_logout_nonce" value="<?php echo wp_create_nonce('sum_logout_nonce'); ?>">
+                <button type="submit" class="button button-primary"><?php _e('Yes, Logout', 'wp-user-management-plugin'); ?></button>
+                <button type="button" class="sum-cancel button"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
     </div>
@@ -326,45 +345,3 @@ function sum_process_shooting_credentials() {
 add_action('init', 'sum_process_shooting_credentials');
 
 ?>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    $('#sum-shooting-credentials-form').on('submit', function(e) {
-        e.preventDefault();
-        
-        var formData = new FormData(this);
-        formData.append('action', 'wpum_save_credentials');
-        
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                var messageDiv = $('#wpum-messages');
-                messageDiv.removeClass('success error').hide();
-                
-                if (response.success) {
-                    messageDiv.addClass('success')
-                            .html(response.data.message)
-                            .show();
-                    if (response.data.reload) {
-                        location.reload();
-                    }
-                } else {
-                    messageDiv.addClass('error')
-                            .html(response.data.message)
-                            .show();
-                }
-            },
-            error: function() {
-                $('#wpum-messages')
-                    .removeClass('success')
-                    .addClass('error')
-                    .html('<?php _e('An error occurred while saving the credentials.', 'wp-user-management-plugin'); ?>')
-                    .show();
-            }
-        });
-    });
-});
-</script>

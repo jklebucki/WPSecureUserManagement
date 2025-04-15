@@ -120,3 +120,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+jQuery(document).ready(function($) {
+    // Obsługa przycisku logout
+    $('#sum-logout-button').on('click', function(e) {
+        e.preventDefault();
+        $('#sum-logout-modal').addClass('show');
+    });
+
+    // Zamykanie modala
+    $('.sum-close, .sum-cancel').on('click', function() {
+        $('#sum-logout-modal').removeClass('show');
+    });
+
+    // Zamykanie modala po kliknięciu poza nim
+    $(window).on('click', function(e) {
+        if ($(e.target).hasClass('sum-modal')) {
+            $('#sum-logout-modal').removeClass('show');
+        }
+    });
+
+    // Obsługa formularza wylogowania
+    $('#sum-logout-form').on('submit', function(e) {
+        // Form będzie wysłany normalnie do admin-post.php
+    });
+});
