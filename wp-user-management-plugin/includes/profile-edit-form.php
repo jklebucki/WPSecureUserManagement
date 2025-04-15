@@ -35,10 +35,10 @@ function sum_display_profile_edit_form()
             <button type="button" class="active" data-tab="profile"><?php _e('Profile', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="user-data"><?php _e('User Data', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="change-password"><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
-            <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="shooting-credentials">
                 <?php _e('Shooting Credentials', 'wp-user-management-plugin'); ?>
             </button>
+            <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
             <button type="button" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
         </div>
         <div id="profile" class="sum-tab-content active">
