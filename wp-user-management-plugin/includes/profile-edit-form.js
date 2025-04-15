@@ -39,8 +39,23 @@ jQuery(document).ready(function($) {
     // Obsługa przycisku usuwania konta
     $('#sum-delete-account-button').on('click', function(e) {
         e.preventDefault();
-        if (confirm('Czy na pewno chcesz usunąć swoje konto? Ta operacja jest nieodwracalna.')) {
-            $('#sum-delete-account-form').submit();
+        $('#sum-delete-account-modal').removeClass('hidden');
+    });
+
+    // Zamykanie modalu
+    $('.sum-close, .sum-cancel').on('click', function() {
+        $(this).closest('.sum-modal').addClass('hidden');
+    });
+
+    // Zamykanie modalu po kliknięciu poza nim
+    $(window).on('click', function(e) {
+        if ($(e.target).hasClass('sum-modal')) {
+            $('.sum-modal').addClass('hidden');
         }
+    });
+
+    // Obsługa formularza usuwania konta
+    $('#sum-delete-account-form').on('submit', function(e) {
+        // Form będzie wysłany normalnie
     });
 });
