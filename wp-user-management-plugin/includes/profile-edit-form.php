@@ -192,8 +192,8 @@ function sum_process_profile_update()
         $email = sanitize_email($_POST['sum_email']);
         $firstname = sanitize_text_field($_POST['sum_firstname']);
         $lastname = sanitize_text_field($_POST['sum_lastname']);
-        $password = $_POST['sum_password'];
-        $confirm_password = $_POST['sum_confirm_password'];
+        $password = isset($_POST['sum_password']) ? $_POST['sum_password'] : '';
+        $confirm_password = isset($_POST['sum_confirm_password']) ? $_POST['sum_confirm_password'] : '';
 
         // Update user data
         wp_update_user([

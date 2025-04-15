@@ -1,71 +1,46 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const tabs = document.querySelectorAll('.sum-tabs button');
-    const tabContents = document.querySelectorAll('.sum-tab-content');
-    const modal = document.getElementById('sum-delete-account-modal');
-    const btn = document.getElementById('sum-delete-account-button');
-    const span = document.getElementsByClassName('sum-close')[0];
-    const cancelBtn = document.querySelector('.sum-cancel');
-    const logoutBtn = document.getElementById('sum-logout-button');
-    const sum_logout_nonce = document.getElementById('sum-logout-nonce').value; // Ensure nonce is retrieved correctly
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function () {
-            tabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(tc => tc.classList.remove('active'));
-
-            tab.classList.add('active');
-            document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
-        });
+jQuery(document).ready(function($) {
+    // Obsługa zakładek
+    $('.sum-tabs button').on('click', function() {
+        var tabId = $(this).data('tab');
+        
+        // Usuń klasę active ze wszystkich przycisków i zawartości
+        $('.sum-tabs button').removeClass('active');
+        $('.sum-tab-content').removeClass('active');
+        
+        // Dodaj klasę active do klikniętego przycisku i odpowiedniej zawartości
+        $(this).addClass('active');
+        $('#' + tabId).addClass('active');
     });
 
-    btn.onclick = function () {
-        modal.style.display = 'block';
-        modal.setAttribute('tabindex', '-1'); // Ensure modal can gain focus
-        modal.focus(); // Focus on the modal when displayed
-        modal.classList.remove('hidden'); // Remove any hidden class that might be applied
-    };
-
-    span.onclick = function () {
-        modal.style.display = 'none';
-    };
-
-    cancelBtn.onclick = function () {
-        modal.style.display = 'none';
-    };
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    };
-
-    const formGroups = document.querySelectorAll('.sum-form-group');
-    formGroups.forEach(group => {
-        group.style.display = 'flex';
-        group.style.flexDirection = 'column';
-    });
-
-    // Ensure modal is appended to the body to avoid conflicts with other styles
-    if (modal && !document.body.contains(modal)) {
-        document.body.appendChild(modal);
-    }
-
-    const passwordInput = document.getElementById('sum-password');
-    const confirmPasswordInput = document.getElementById('sum-confirm-password');
-    const changePasswordButton = document.getElementById('sum-change-password-button');
-    const passwordMatchMessage = document.getElementById('password-match-message');
-
-    confirmPasswordInput.addEventListener('input', function () {
-        if (passwordInput.value === confirmPasswordInput.value) {
-            passwordMatchMessage.textContent = 'Passwords match';
-            passwordMatchMessage.classList.remove('no-match');
-            passwordMatchMessage.classList.add('match');
-            changePasswordButton.disabled = false;
+    // Obsługa formularza zmiany hasła
+    $('#sum-password, #sum-confirm-password').on('input', function() {
+        var password = $('#sum-password').val();
+        var confirmPassword = $('#sum-confirm-password').val();
+        var submitButton = $('#sum-change-password-button');
+        
+        if (password && confirmPassword && password === confirmPassword) {
+            submitButton.prop('disabled', false);
         } else {
-            passwordMatchMessage.textContent = 'Passwords do not match';
-            passwordMatchMessage.classList.remove('match');
-            passwordMatchMessage.classList.add('no-match');
-            changePasswordButton.disabled = true;
+            submitButton.prop('disabled', true);
+        }
+        
+        // Pokaż komunikat o zgodności haseł
+        if (password && confirmPassword) {
+            if (password === confirmPassword) {
+                $('#password-match-message').html('Hasła są zgodne').css('color', 'green');
+            } else {
+                $('#password-match-message').html('Hasła nie są zgodne').css('color', 'red');
+            }
+        } else {
+            $('#password-match-message').html('');
+        }
+    });
+
+    // Obsługa przycisku usuwania konta
+    $('#sum-delete-account-button').on('click', function(e) {
+        e.preventDefault();
+        if (confirm('Czy na pewno chcesz usunąć swoje konto? Ta operacja jest nieodwracalna.')) {
+            $('#sum-delete-account-form').submit();
         }
     });
 });
