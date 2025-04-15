@@ -5,48 +5,51 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     display: flex;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    box-sizing: border-box;
 }
 
 .sum-tabs {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
-    padding-bottom: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sum-tabs button {
-    background: none;
-    border: 1px solid transparent;
-    border-bottom: none;
-    padding: 10px 20px;
-    margin-bottom: -1px;
+    padding: 10px;
+    background: #e9ecef;
+    border: none;
     cursor: pointer;
-    font-size: 14px;
-    color: #666;
-    transition: all 0.3s ease;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    color: #495057;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .sum-tabs button:hover {
-    color: #333;
-    border-color: #ddd #ddd transparent;
-    background-color: #f8f9fa;
+    background: #dee2e6;
 }
 
 .sum-tabs button.active {
-    color: #333;
-    background-color: #fff;
-    border-color: #ddd #ddd #fff;
-    font-weight: 500;
+    background: #007bff;
+    color: #fff;
 }
 
 .sum-tab-content {
+    flex: 3;
     display: none;
-    padding: 20px;
-    background: #fff;
+    flex-direction: column;
 }
 
 .sum-tab-content.active {
-    display: block;
+    display: flex;
 }
 
 /* #logout {
@@ -97,13 +100,13 @@
 .sum-tab-content input[type="text"],
 .sum-tab-content input[type="email"],
 .sum-tab-content input[type="password"] {
-    width: 100%; /* Adjust width to ensure it fits within the parent container */
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-    background-color: #f9feff; /* Lighten background color */
+    box-sizing: border-box;
+    background-color: #f9feff;
     font-size: 14px;
     color: #333;
     font-family: 'Arial', sans-serif;
@@ -135,7 +138,11 @@
 
 #password-match-message {
     margin-top: 5px;
-    font-size: 14px;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
 }
 
 #password-match-message.match {
@@ -149,64 +156,79 @@
 }
 
 .sum-modal {
-    /* ... */
+    position: fixed !important;
+    z-index: 1000 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: auto !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
-.sum-modal.show {
-    /* ... */
+.sum-modal.hidden {
+    display: none !important;
 }
 
 .sum-modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px; /* Zmniejszamy maksymalną szerokość */
-    border-radius: 4px;
-    position: relative;
-    text-align: center; /* Centrujemy zawartość */
+    background-color: #fff !important;
+    margin: auto !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    padding: 20px !important;
+    border: 1px solid #888 !important;
+    width: 80% !important;
+    max-width: 500px !important;
+    text-align: center !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.sum-modal-content button[type="submit"] {
+    padding: 10px 20px !important;
+    background: #d9534f !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+}
+
+.sum-modal-content button[type="submit"]:hover {
+    background: #c9302c !important;
 }
 
 .sum-close {
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    font-size: 28px;
-    font-weight: bold;
+    color: #aaa !important;
+    float: right !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+}
+
+.sum-close:hover,
+.sum-close:focus {
+    color: black !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.sum-cancel {
+    margin-left: 10px !important;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 4px;
     cursor: pointer;
-    color: #666;
-    line-height: 1;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.sum-close:hover {
-    color: #333;
-}
-
-.sum-modal button {
-    margin: 10px 5px;
-    padding: 8px 16px;
-}
-
-.sum-modal button.button-primary {
-    background-color: #dc3545; /* Czerwony kolor dla przycisku wylogowania */
-    border-color: #dc3545;
-}
-
-.sum-modal button.button-primary:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
-}
-
-.sum-modal button.sum-cancel {
-    background-color: #6c757d;
-    border-color: #6c757d;
+button[type="submit"]:hover {
+    background: #007bff;
     color: #fff;
-}
-
-.sum-modal button.sum-cancel:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
 }
 
 .hidden {
