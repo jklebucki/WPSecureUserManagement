@@ -299,13 +299,6 @@ function wpum_process_logout()
 add_action('admin_post_wpum_logout', 'wpum_process_logout');
 add_action('admin_post_nopriv_wpum_logout', 'wpum_process_logout');
 
-// Register shortcode
-function wpum_register_profile_edit_shortcode()
-{
-    add_shortcode('wpum_user_profile_edit', 'wpum_display_profile_edit_form');
-}
-add_action('init', 'wpum_register_profile_edit_shortcode');
-
 // Add this function to handle the form submission
 function wpum_process_shooting_credentials()
 {
@@ -355,5 +348,11 @@ function wpum_process_shooting_credentials()
     }
 }
 add_action('init', 'wpum_process_shooting_credentials');
+
+function wpum_process_profile_edit()
+{
+    // ... existing code ...
+}
+add_action('init', 'wpum_process_profile_edit');
 
 ?>

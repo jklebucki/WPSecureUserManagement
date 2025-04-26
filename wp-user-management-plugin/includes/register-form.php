@@ -4,9 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Include CAPTCHA functions
-require_once plugin_dir_path(__FILE__) . 'captcha.php';
-
 // Enqueue styles and scripts
 function wpum_enqueue_styles() {
     wp_enqueue_style('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.css');
@@ -146,11 +143,4 @@ function wpum_process_registration()
     }
 }
 add_action('init', 'wpum_process_registration');
-
-// Register shortcode
-function wpum_register_registration_shortcode()
-{
-    add_shortcode('wpum_user_registration', 'wpum_display_registration_form');
-}
-add_action('init', 'wpum_register_registration_shortcode');
 ?>

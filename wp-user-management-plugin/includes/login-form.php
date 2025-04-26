@@ -79,11 +79,4 @@ function wpum_process_login()
     }
 }
 add_action('init', 'wpum_process_login');
-
-// Register shortcode
-function wpum_register_login_shortcode()
-{
-    add_shortcode('wpum_user_login', 'wpum_display_login_form');
-}
-add_action('init', 'wpum_register_login_shortcode');
 ?>

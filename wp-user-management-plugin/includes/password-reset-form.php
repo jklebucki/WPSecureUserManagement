@@ -69,10 +69,4 @@ function wpum_process_password_reset() {
     }
 }
 add_action('init', 'wpum_process_password_reset');
-
-// Register shortcode
-function wpum_register_password_reset_shortcode() {
-    add_shortcode('wpum_password_reset', 'wpum_display_password_reset_form');
-}
-add_action('init', 'wpum_register_password_reset_shortcode');
 ?>
