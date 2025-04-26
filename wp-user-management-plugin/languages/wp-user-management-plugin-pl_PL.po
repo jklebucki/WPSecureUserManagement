@@ -241,12 +241,17 @@ msgstr "Jeśli to była pomyłka, zignoruj ten email i nic się nie stanie."
 msgid "To reset your password, visit the following address: %s"
 msgstr "Aby zresetować hasło, odwiedź następujący adres: %s"
 
-msgid "Password Reset"
-msgstr "Resetowanie hasła""
+msgid "If you don't wish to change your password, just ignore this email and nothing will happen."
+msgstr "Jeśli nie chcesz zmieniać hasła, zignoruj ten email i nic się nie stanie."
 
-msgid "Reset Password"
-msgstr "Resetuj hasło""
+msgid "This password reset request will expire in 24 hours."
+msgstr "Ta prośba o zresetowanie hasła wygaśnie za 24 godziny."
 
+msgid "Thanks, %s"
+msgstr "Dziękujemy, %s"
+
+msgid "[%s] Password Reset"
+msgstr "[%s] Resetowanie hasła"
 
 #: includes/profile-edit-form.php:150
 msgid "Settings saved."
@@ -324,15 +329,3 @@ msgstr "Instrukcje resetowania hasła zostały wysłane na Twój adres email."
 
 msgid "Error sending password reset email. Please try again."
 msgstr "Błąd podczas wysyłania emaila z resetowaniem hasła. Spróbuj ponownie."
-
-msgid "If you don't wish to change your password, just ignore this email and nothing will happen."
-msgstr "Jeśli nie chcesz zmieniać hasła, zignoruj ten email i nic się nie stanie."
-
-msgid "This password reset request will expire in 24 hours."
-msgstr "Ta prośba o zresetowanie hasła wygaśnie za 24 godziny."
-
-msgid "Thanks, %s"
-msgstr "Dziękujemy, %s"
-
-msgid "[%s] Password Reset"
-msgstr "[%s] Resetowanie hasła"
