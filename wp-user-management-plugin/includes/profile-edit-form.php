@@ -94,8 +94,8 @@ function wpum_display_profile_edit_form()
             </form>
         </div>
         <div id="delete-account" class="wpum-tab-content">
-            <h3><?php _e('Delete Account', 'wp-user-management-plugin'); ?></h3>
-            <button type="button" id="wpum-delete-account-button" class="btn-outline-danger"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
+            <h3><?php _e('Delete Account', 'wp-user-management-plugin'); ?></h3> 
+            <button type="button" id="wpum-delete-account-button" class="btn-outline-danger btn-absolute-center"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
         </div>
         <div id="logout" class="wpum-tab-content">
             <h3><?php _e('Logout', 'wp-user-management-plugin'); ?></h3>

@@ -746,6 +746,7 @@ button[type="submit"] {
 
 /* Special handling for the delete account button which is not in a form */
 #delete-account {
+    text-align: center;
     position: relative;
     padding-bottom: 60px;
 }
