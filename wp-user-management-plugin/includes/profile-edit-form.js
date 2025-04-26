@@ -1,11 +1,11 @@
 jQuery(document).ready(function($) {
     // Obsługa zakładek
-    $('.sum-tabs button').on('click', function() {
+    $('.wpum-tabs button').on('click', function() {
         var tabId = $(this).data('tab');
         
         // Usuń klasę active ze wszystkich przycisków i zawartości
-        $('.sum-tabs button').removeClass('active');
-        $('.sum-tab-content').removeClass('active');
+        $('.wpum-tabs button').removeClass('active');
+        $('.wpum-tab-content').removeClass('active');
         
         // Dodaj klasę active do klikniętego przycisku i odpowiedniej zawartości
         $(this).addClass('active');
@@ -13,10 +13,10 @@ jQuery(document).ready(function($) {
     });
 
     // Obsługa formularza zmiany hasła
-    $('#sum-password, #sum-confirm-password').on('input', function() {
-        var password = $('#sum-password').val();
-        var confirmPassword = $('#sum-confirm-password').val();
-        var submitButton = $('#sum-change-password-button');
+    $('#wpum-password, #wpum-confirm-password').on('input', function() {
+        var password = $('#wpum-password').val();
+        var confirmPassword = $('#wpum-confirm-password').val();
+        var submitButton = $('#wpum-change-password-button');
         
         if (password && confirmPassword && password === confirmPassword) {
             submitButton.prop('disabled', false);
@@ -37,20 +37,20 @@ jQuery(document).ready(function($) {
     });
 
     // Obsługa przycisku usuwania konta
-    $('#sum-delete-account-button').on('click', function(e) {
+    $('#wpum-delete-account-button').on('click', function(e) {
         e.preventDefault();
         $('body').addClass('modal-open');
-        $('#sum-delete-account-modal').removeClass('hidden');
+        $('#wpum-delete-account-modal').removeClass('hidden');
     });
 
     // Zamykanie modalu
-    $('.sum-close, .sum-cancel').on('click', function() {
+    $('.wpum-close, .wpum-cancel').on('click', function() {
         $('body').removeClass('modal-open');
-        $('#sum-delete-account-modal').addClass('hidden');
+        $('#wpum-delete-account-modal').addClass('hidden');
     });
 
     // Zamykanie modalu po kliknięciu w tło
-    $(document).on('click', '.sum-modal', function(e) {
+    $(document).on('click', '.wpum-modal', function(e) {
         if (e.target === this) {
             $('body').removeClass('modal-open');
             $(this).addClass('hidden');
@@ -59,24 +59,24 @@ jQuery(document).ready(function($) {
 
     // Obsługa klawisza ESC
     $(document).on('keydown', function(e) {
-        if (e.key === 'Escape' && !$('#sum-delete-account-modal').hasClass('hidden')) {
+        if (e.key === 'Escape' && !$('#wpum-delete-account-modal').hasClass('hidden')) {
             $('body').removeClass('modal-open');
-            $('#sum-delete-account-modal').addClass('hidden');
+            $('#wpum-delete-account-modal').addClass('hidden');
         }
     });
 
     // Zatrzymanie propagacji kliknięć wewnątrz modalu
-    $('.sum-modal-content').on('click', function(e) {
+    $('.wpum-modal-content').on('click', function(e) {
         e.stopPropagation();
     });
 
     // Obsługa formularza usuwania konta
-    $('#sum-delete-account-form').on('submit', function(e) {
+    $('#wpum-delete-account-form').on('submit', function(e) {
         // Form będzie wysłany normalnie
     });
     
     // Obsługa formularza shooting credentials
-    $('#sum-shooting-credentials-form').on('submit', function(e) {
+    $('#wpum-shooting-credentials-form').on('submit', function(e) {
         e.preventDefault();
         
         var formData = new FormData(this);

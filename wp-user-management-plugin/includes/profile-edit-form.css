@@ -1,4 +1,4 @@
-.sum-profile-edit-container {
+.wpum-profile-edit-container {
     width: 100%;
     padding: 20px;
     background: #fff;
@@ -8,7 +8,7 @@
     box-sizing: border-box;
 }
 
-.sum-tabs {
+.wpum-tabs {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -19,7 +19,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.sum-tabs button {
+.wpum-tabs button {
     padding: 10px;
     background: #e9ecef;
     border: none;
@@ -33,22 +33,22 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.sum-tabs button:hover {
+.wpum-tabs button:hover {
     background: #dee2e6;
 }
 
-.sum-tabs button.active {
+.wpum-tabs button.active {
     background: #007bff;
     color: #fff;
 }
 
-.sum-tab-content {
+.wpum-tab-content {
     flex: 3;
     display: none;
     flex-direction: column;
 }
 
-.sum-tab-content.active {
+.wpum-tab-content.active {
     display: flex;
 }
 
@@ -58,7 +58,7 @@
     align-items: center;
 } */
 
-#sum-logout-button {
+#wpum-logout-button {
     padding: 10px 20px;
     background: #d9534f;
     color: #fff;
@@ -67,11 +67,11 @@
     cursor: pointer;
 }
 
-#sum-logout-button:hover {
+#wpum-logout-button:hover {
     background: #c9302c;
 }
 
-#sum-delete-account-button {
+#wpum-delete-account-button {
     padding: 10px 20px;
     background: #d9534f;
     color: #fff;
@@ -80,11 +80,11 @@
     cursor: pointer;
 }
 
-#sum-delete-account-button:hover {
+#wpum-delete-account-button:hover {
     background: #c9302c;
 }
 
-.sum-tab-content label {
+.wpum-tab-content label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
@@ -93,13 +93,13 @@
     font-family: 'Arial', sans-serif;
 }
 
-.sum-tab-content input {
+.wpum-tab-content input {
     margin-bottom: 10px;
 }
 
-.sum-tab-content input[type="text"],
-.sum-tab-content input[type="email"],
-.sum-tab-content input[type="password"] {
+.wpum-tab-content input[type="text"],
+.wpum-tab-content input[type="email"],
+.wpum-tab-content input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -156,7 +156,7 @@
 }
 
 /* Reset dla modalu */
-.sum-modal {
+.wpum-modal {
     all: initial !important;
     position: fixed !important;
     inset: 0 !important;
@@ -172,12 +172,12 @@
 }
 
 /* Ukrywanie modalu */
-.sum-modal.hidden {
+.wpum-modal.hidden {
     display: none !important;
 }
 
 /* Kontener treści modalu */
-.sum-modal-content {
+.wpum-modal-content {
     all: initial !important;
     font-family: inherit !important;
     position: relative !important;
@@ -195,7 +195,7 @@
 }
 
 /* Przycisk zamykania */
-.sum-close {
+.wpum-close {
     all: initial !important;
     position: absolute !important;
     right: 1rem !important;
@@ -217,13 +217,13 @@
     justify-content: center !important;
 }
 
-.sum-close:hover {
+.wpum-close:hover {
     opacity: 1 !important;
     text-decoration: none !important;
 }
 
 /* Przyciski w modalu */
-.sum-modal-content button {
+.wpum-modal-content button {
     all: initial !important;
     display: inline-block !important;
     font-family: inherit !important;
@@ -243,31 +243,31 @@
 }
 
 /* Przycisk potwierdzenia usunięcia */
-.sum-modal-content button[type="submit"] {
+.wpum-modal-content button[type="submit"] {
     color: #fff !important;
     background-color: #dc3545 !important;
     border: 1px solid #dc3545 !important;
 }
 
-.sum-modal-content button[type="submit"]:hover {
+.wpum-modal-content button[type="submit"]:hover {
     background-color: #c82333 !important;
     border-color: #bd2130 !important;
 }
 
 /* Przycisk anulowania */
-.sum-modal-content .sum-cancel {
+.wpum-modal-content .wpum-cancel {
     color: #fff !important;
     background-color: #6c757d !important;
     border: 1px solid #6c757d !important;
 }
 
-.sum-modal-content .sum-cancel:hover {
+.wpum-modal-content .wpum-cancel:hover {
     background-color: #5a6268 !important;
     border-color: #545b62 !important;
 }
 
 /* Tekst w modalu */
-.sum-modal-content p {
+.wpum-modal-content p {
     margin: 0 0 1rem 0 !important;
     font-size: 1.1rem !important;
     color: #333 !important;
@@ -299,7 +299,7 @@ button[type="submit"]:hover {
 }
 
 /* Add these styles to your existing CSS file */
-#shooting-credentials .sum-form-group {
+#shooting-credentials .wpum-form-group {
     margin-bottom: 2em;
     padding: 1em;
     border: 1px solid #ddd;
@@ -325,43 +325,43 @@ button[type="submit"]:hover {
     margin-top: 0.5em;
 }
 
-.sum-message {
+.wpum-message {
     padding: 10px 15px;
     margin-bottom: 20px;
     border-radius: 4px;
 }
 
-.sum-message.success {
+.wpum-message.success {
     background-color: #dff0d8;
     border: 1px solid #d6e9c6;
     color: #3c763d;
 }
 
-.sum-message.error {
+.wpum-message.error {
     background-color: #f2dede;
     border: 1px solid #ebccd1;
     color: #a94442;
 }
 
 /* Style dla formularzy */
-.sum-form-group {
+.wpum-form-group {
     margin-bottom: 15px;
 }
 
-.sum-form-group label {
+.wpum-form-group label {
     display: block;
     margin-bottom: 5px;
     color: #333;
 }
 
-.sum-form-group input {
+.wpum-form-group input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.sum-form-group input:focus {
+.wpum-form-group input:focus {
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
@@ -411,7 +411,7 @@ button[type="submit"]:hover {
 
 /* Style dla przycisku wylogowania */
 #logout button[type="submit"],
-#sum-logout-button {
+#wpum-logout-button {
     padding: 10px 20px !important;
     background: #d9534f !important; /* Czerwony kolor tła */
     color: #fff !important; /* Biały kolor tekstu */
@@ -422,7 +422,7 @@ button[type="submit"]:hover {
 }
 
 #logout button[type="submit"]:hover,
-#sum-logout-button:hover {
+#wpum-logout-button:hover {
     background: #c9302c !important; /* Ciemniejszy czerwony na hover */
 }
 
