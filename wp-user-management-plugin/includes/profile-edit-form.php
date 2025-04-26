@@ -38,8 +38,8 @@ function wpum_display_profile_edit_form()
             <button type="button" data-tab="shooting-credentials">
                 <?php _e('Shooting Credentials', 'wp-user-management-plugin'); ?>
             </button>
-            <button type="button" class="btn-absolute-center" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
-            <button type="button" class="btn-absolute-center" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
+            <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
+            <button type="button" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
         </div>
         <div id="profile" class="wpum-tab-content active">
             <form id="wpum-profile-edit-form" method="post">
