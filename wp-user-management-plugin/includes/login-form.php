@@ -74,7 +74,7 @@ function wpum_process_login()
         }
 
         // Redirect to profile page
-        wp_redirect(home_url('/user-profile'));
+        wp_redirect(home_url('/user-account'));
         exit;
     }
 }
