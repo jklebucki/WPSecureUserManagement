@@ -37,6 +37,9 @@ function wpum_display_login_form()
                     <button type="submit"><?php _e('Login', 'wp-user-management-plugin'); ?></button>
                 </div>
                 <div class="wpum-form-group">
+                    <a href="<?php echo esc_url(home_url('/user-register')); ?>"><?php _e('Register', 'wp-user-management-plugin'); ?></a>
+                </div>
+                <div class="wpum-form-group">
                     <a href="<?php echo esc_url(home_url('/password-reset')); ?>"><?php _e('Forgot Password?', 'wp-user-management-plugin'); ?></a>
                 </div>
             </div>

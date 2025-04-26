@@ -329,3 +329,6 @@ msgstr "Instrukcje resetowania hasła zostały wysłane na Twój adres email."
 
 msgid "Error sending password reset email. Please try again."
 msgstr "Błąd podczas wysyłania emaila z resetowaniem hasła. Spróbuj ponownie."
+
+msgid "Reset Password"
+msgstr "Resetuj hasło"

@@ -24,6 +24,9 @@ function wpum_display_registration_form()
                     <label for="wpum-username"><?php _e('Username', 'wp-user-management-plugin'); ?> *</label>
                     <input type="text" name="wpum_username" id="wpum-username" required>
                 </div>
+            </div>
+
+            <div class="wpum-form-row">
                 <div class="wpum-form-group">
                     <label for="wpum-email"><?php _e('Email', 'wp-user-management-plugin'); ?> *</label>
                     <input type="email" name="wpum_email" id="wpum-email" required>
@@ -35,6 +38,9 @@ function wpum_display_registration_form()
                     <label for="wpum-firstname"><?php _e('First Name', 'wp-user-management-plugin'); ?> *</label>
                     <input type="text" name="wpum_firstname" id="wpum-firstname" required>
                 </div>
+            </div>
+
+            <div class="wpum-form-row">
                 <div class="wpum-form-group">
                     <label for="wpum-lastname"><?php _e('Last Name', 'wp-user-management-plugin'); ?> *</label>
                     <input type="text" name="wpum_lastname" id="wpum-lastname" required>
@@ -45,28 +51,33 @@ function wpum_display_registration_form()
                 <div class="wpum-form-group">
                     <label for="wpum-password"><?php _e('Password', 'wp-user-management-plugin'); ?> *</label>
                     <input type="password" name="wpum_password" id="wpum-password" required>
-                    <div id="password-strength-meter"></div>
                 </div>
+            </div>
+
+            <div class="wpum-form-row">
                 <div class="wpum-form-group">
                     <label for="wpum-confirm-password"><?php _e('Confirm Password', 'wp-user-management-plugin'); ?> *</label>
                     <input type="password" name="wpum_confirm_password" id="wpum-confirm-password" required>
                 </div>
             </div>
 
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-captcha"><?php _e('Enter the code', 'wp-user-management-plugin'); ?> *</label>
-                    <div class="wpum-captcha-container">
-                        <?php 
-                        $captcha = wpum_generate_captcha();
-                        echo '<div class="wpum-captcha-code">' . esc_html($captcha['code']) . '</div>';
-                        ?>
+            <div id="password-strength-meter"></div>
+
+            <div class="wpum-captcha-container">
+                <div class="wpum-captcha-label"><?php _e('Enter the code', 'wp-user-management-plugin'); ?> *</div>
+                <div class="wpum-captcha-row">
+                    <?php 
+                    $captcha = wpum_generate_captcha();
+                    echo '<div class="wpum-captcha-code">' . esc_html($captcha['code']) . '</div>';
+                    ?>
+                    <div class="wpum-captcha-input">
                         <input type="text" name="wpum_captcha" id="wpum-captcha" required>
                         <input type="hidden" name="wpum_captcha_token" value="<?php echo esc_attr($captcha['token']); ?>">
-                        <input type="hidden" name="wpum_register_nonce" value="<?php echo wp_create_nonce('wpum_register_nonce'); ?>">
                     </div>
                 </div>
+                <input type="hidden" name="wpum_register_nonce" value="<?php echo wp_create_nonce('wpum_register_nonce'); ?>">
             </div>
+
             <div class="wpum-form-row">
                 <div class="wpum-form-group">
                     <button type="submit"><?php _e('Register', 'wp-user-management-plugin'); ?></button>
