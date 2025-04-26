@@ -773,3 +773,47 @@ button[type="submit"] {
     bottom: 20px;
     right: 150px; /* Position to the left of the submit button */
 }
+
+/* Button positioning utility classes */
+.btn-right {
+    float: right;
+    margin-left: 10px;
+}
+
+.btn-left {
+    float: left;
+    margin-right: 10px;
+}
+
+.btn-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Clearfix for containers with floated buttons */
+.btn-container {
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* For absolute positioning within a container */
+.btn-absolute-right {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.btn-absolute-left {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.btn-absolute-center {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+}

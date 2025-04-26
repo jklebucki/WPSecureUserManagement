@@ -38,8 +38,8 @@ function wpum_display_profile_edit_form()
             <button type="button" data-tab="shooting-credentials">
                 <?php _e('Shooting Credentials', 'wp-user-management-plugin'); ?>
             </button>
-            <button type="button" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
-            <button type="button" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
+            <button type="button" class="btn-absolute-center" data-tab="delete-account"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
+            <button type="button" class="btn-absolute-center" data-tab="logout"><?php _e('Logout', 'wp-user-management-plugin'); ?></button>
         </div>
         <div id="profile" class="wpum-tab-content active">
             <form id="wpum-profile-edit-form" method="post">
@@ -64,7 +64,7 @@ function wpum_display_profile_edit_form()
                 </div>
 
                 <input type="hidden" name="wpum_profile_edit_nonce" value="<?php echo wp_create_nonce('wpum_profile_edit_nonce'); ?>">
-                <button type="submit" class="btn-outline-primary"><?php _e('Update Profile', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" class="btn-outline-primary btn-absolute-right"><?php _e('Update Profile', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
         <div id="user-data" class="wpum-tab-content">
@@ -76,7 +76,7 @@ function wpum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 <input type="hidden" name="wpum_user_data_nonce" value="<?php echo wp_create_nonce('wpum_user_data_nonce'); ?>">
-                <button type="submit" class="btn-outline-primary"><?php _e('Save Data', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" class="btn-outline-primary btn-absolute-right"><?php _e('Save Data', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
         <div id="change-password" class="wpum-tab-content">
@@ -90,7 +90,7 @@ function wpum_display_profile_edit_form()
                 <div id="password-match-message"></div>
 
                 <input type="hidden" name="wpum_profile_edit_nonce" value="<?php echo wp_create_nonce('wpum_profile_edit_nonce'); ?>">
-                <button type="submit" id="wpum-change-password-button" class="btn-outline-primary" disabled><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" id="wpum-change-password-button" class="btn-outline-primary btn-absolute-right" disabled><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
         <div id="delete-account" class="wpum-tab-content">
@@ -103,7 +103,7 @@ function wpum_display_profile_edit_form()
             <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
                 <input type="hidden" name="action" value="wpum_logout">
                 <input type="hidden" name="wpum_logout_nonce" value="<?php echo wp_create_nonce('wpum_logout_nonce'); ?>">
-                <button type="submit" class="btn-outline-danger">
+                <button type="submit" class="btn-outline-danger btn-absolute-center">
                     <?php _e('Logout', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
@@ -154,7 +154,7 @@ function wpum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
 
-                <button type="submit" class="btn-outline-primary">
+                <button type="submit" class="btn-outline-primary btn-absolute-right">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
