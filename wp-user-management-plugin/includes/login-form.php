@@ -8,11 +8,11 @@ if (! defined('ABSPATH')) {
 require_once plugin_dir_path(__FILE__) . 'captcha.php';
 
 // Enqueue styles
-function wpum_enqueue_styles()
+function wpum_enqueue_login_styles()
 {
     wp_enqueue_style('wpum-login-form', plugin_dir_url(__FILE__) . 'login-form.css');
 }
-add_action('wp_enqueue_scripts', 'wpum_enqueue_styles');
+add_action('wp_enqueue_scripts', 'wpum_enqueue_login_styles');
 
 // Display login form
 function wpum_display_login_form()

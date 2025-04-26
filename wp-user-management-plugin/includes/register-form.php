@@ -5,11 +5,11 @@ if (!defined('ABSPATH')) {
 }
 
 // Enqueue styles and scripts
-function wpum_enqueue_styles() {
+function wpum_enqueue_register_styles() {
     wp_enqueue_style('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.css');
     wp_enqueue_script('wpum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], null, true);
 }
-add_action('wp_enqueue_scripts', 'wpum_enqueue_styles');
+add_action('wp_enqueue_scripts', 'wpum_enqueue_register_styles');
 
 // Display registration form
 function wpum_display_registration_form()
