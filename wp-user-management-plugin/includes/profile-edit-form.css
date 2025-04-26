@@ -300,6 +300,7 @@ button[type="submit"]:hover {
 
 /* Add these styles to your existing CSS file */
 #shooting-credentials .wpum-form-group {
+    display: block;
     margin-bottom: 24px;
     padding: 18px 20px;
     border: 1px solid #e0e0e0;
