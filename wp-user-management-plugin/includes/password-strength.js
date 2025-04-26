@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
         }
     }
 
-    $('#wpum-password, #wpum-password').on('input', function() {
+    $('#wpum-password').on('input', function() {
         const password = $(this).val();
         const strength = checkPasswordStrength(password);
         updateStrengthMeter(strength);
