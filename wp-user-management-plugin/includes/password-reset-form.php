@@ -53,10 +53,10 @@ function wpum_process_password_reset() {
         // Send reset email
         $reset_link = network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode(get_user_by('email', $email)->user_login), 'login');
         $message = sprintf(__('Someone has requested a password reset for the following account: %s', 'wp-user-management-plugin'), network_home_url('/')) . "\r\n\r\n";
-        $message .= sprintf(__('If this was a mistake, just ignore this email and nothing will happen.', 'wp-user-management-plugin')) . "\r\n\r\n";
+        $message .= __('If this was a mistake, just ignore this email and nothing will happen.', 'wp-user-management-plugin') . "\r\n\r\n";
         $message .= sprintf(__('To reset your password, visit the following address: %s', 'wp-user-management-plugin'), $reset_link) . "\r\n\r\n";
-        $message .= sprintf(__('If you don\'t wish to change your password, just ignore this email and nothing will happen.', 'wp-user-management-plugin')) . "\r\n\r\n";
-        $message .= sprintf(__('This password reset request will expire in 24 hours.', 'wp-user-management-plugin')) . "\r\n\r\n";
+        $message .= __('If you don\'t wish to change your password, just ignore this email and nothing will happen.', 'wp-user-management-plugin') . "\r\n\r\n";
+        $message .= __('This password reset request will expire in 24 hours.', 'wp-user-management-plugin') . "\r\n\r\n";
         $message .= sprintf(__('Thanks, %s', 'wp-user-management-plugin'), get_bloginfo('name')) . "\r\n\r\n";
         $message .= network_home_url('/') . "\r\n";
 

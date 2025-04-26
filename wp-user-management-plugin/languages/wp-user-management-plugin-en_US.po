@@ -94,6 +94,9 @@ msgstr "Delete Account"
 msgid "Password Reset"
 msgstr "Password Reset"
 
+msgid "Reset Password"
+msgstr "Reset Password"
+
 msgid "Profile Edit"
 msgstr "Profile Edit"
 
@@ -120,3 +123,36 @@ msgstr "Account Deleted"
 
 msgid "Security check failed!"
 msgstr "Security check failed!"
+
+msgid "No user found with that email address."
+msgstr "No user found with that email address."
+
+msgid "Error generating password reset key. Please try again."
+msgstr "Error generating password reset key. Please try again."
+
+msgid "Password reset instructions have been sent to your email address."
+msgstr "Password reset instructions have been sent to your email address."
+
+msgid "Error sending password reset email. Please try again."
+msgstr "Error sending password reset email. Please try again."
+
+msgid "Someone has requested a password reset for the following account: %s"
+msgstr "Someone has requested a password reset for the following account: %s"
+
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr "If this was a mistake, just ignore this email and nothing will happen."
+
+msgid "To reset your password, visit the following address: %s"
+msgstr "To reset your password, visit the following address: %s"
+
+msgid "If you don't wish to change your password, just ignore this email and nothing will happen."
+msgstr "If you don't wish to change your password, just ignore this email and nothing will happen."
+
+msgid "This password reset request will expire in 24 hours."
+msgstr "This password reset request will expire in 24 hours."
+
+msgid "Thanks, %s"
+msgstr "Thanks, %s"
+
+msgid "[%s] Password Reset"
+msgstr "[%s] Password Reset"

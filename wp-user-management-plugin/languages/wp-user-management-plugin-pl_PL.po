@@ -27,6 +27,9 @@ msgstr "Rejestracja użytkownika"
 msgid "Email"
 msgstr "Email"
 
+msgid "Email Address"
+msgstr "Adres email"
+
 #: includes/register-form.php:17
 #: includes/profile-edit-form.php:95
 msgid "First Name"
@@ -227,16 +230,23 @@ msgid "Password Reset Request"
 msgstr "Prośba o zresetowanie hasła"
 
 #: includes/profile-edit-form.php:135
-msgid "Someone has requested a password reset for the following account:"
-msgstr "Ktoś poprosił o zresetowanie hasła dla następującego konta:"
+msgid "Someone has requested a password reset for the following account: %s"
+msgstr "Ktoś poprosił o zresetowanie hasła dla następującego konta: %s"
 
 #: includes/profile-edit-form.php:140
 msgid "If this was a mistake, just ignore this email and nothing will happen."
 msgstr "Jeśli to była pomyłka, zignoruj ten email i nic się nie stanie."
 
 #: includes/profile-edit-form.php:145
-msgid "To reset your password, visit the following address:"
-msgstr "Aby zresetować hasło, odwiedź następujący adres:"
+msgid "To reset your password, visit the following address: %s"
+msgstr "Aby zresetować hasło, odwiedź następujący adres: %s"
+
+msgid "Password Reset"
+msgstr "Resetowanie hasła""
+
+msgid "Reset Password"
+msgstr "Resetuj hasło""
+
 
 #: includes/profile-edit-form.php:150
 msgid "Settings saved."
@@ -302,3 +312,27 @@ msgstr "Nie udało się zapisać pliku"
 
 msgid "Click the button below to logout from your account."
 msgstr "Kliknij przycisk poniżej, aby się wylogować z swojego konta."
+
+msgid "No user found with that email address."
+msgstr "Nie znaleziono użytkownika z tym adresem email."
+
+msgid "Error generating password reset key. Please try again."
+msgstr "Błąd podczas generowania klucza resetowania hasła. Spróbuj ponownie."
+
+msgid "Password reset instructions have been sent to your email address."
+msgstr "Instrukcje resetowania hasła zostały wysłane na Twój adres email."
+
+msgid "Error sending password reset email. Please try again."
+msgstr "Błąd podczas wysyłania emaila z resetowaniem hasła. Spróbuj ponownie."
+
+msgid "If you don't wish to change your password, just ignore this email and nothing will happen."
+msgstr "Jeśli nie chcesz zmieniać hasła, zignoruj ten email i nic się nie stanie."
+
+msgid "This password reset request will expire in 24 hours."
+msgstr "Ta prośba o zresetowanie hasła wygaśnie za 24 godziny."
+
+msgid "Thanks, %s"
+msgstr "Dziękujemy, %s"
+
+msgid "[%s] Password Reset"
+msgstr "[%s] Resetowanie hasła"
