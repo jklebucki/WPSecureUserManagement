@@ -4,79 +4,86 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+// Include CAPTCHA functions
+require_once plugin_dir_path(__FILE__) . 'captcha.php';
+
 // Enqueue styles
-function sum_enqueue_styles()
+function wpum_enqueue_styles()
 {
-    wp_enqueue_style('sum-login-form', plugin_dir_url(__FILE__) . 'login-form.css');
+    wp_enqueue_style('wpum-login-form', plugin_dir_url(__FILE__) . 'login-form.css');
 }
-add_action('wp_enqueue_scripts', 'sum_enqueue_styles');
+add_action('wp_enqueue_scripts', 'wpum_enqueue_styles');
 
 // Display login form
-function sum_display_login_form()
+function wpum_display_login_form()
 {
     ob_start(); ?>
-    <div class="sum-login-container">
-        <form id="sum-login-form" method="post">
+    <div class="wpum-login-container">
+        <form id="wpum-login-form" method="post">
             <h2><?php _e('User Login', 'wp-user-management-plugin'); ?></h2>
-
-            <label for="sum-username-email"><?php _e('Username or Email', 'wp-user-management-plugin'); ?> *</label>
-            <input type="text" name="sum_username_email" id="sum-username-email" required>
-
-            <label for="sum-password"><?php _e('Password', 'wp-user-management-plugin'); ?> *</label>
-            <input type="password" name="sum_password" id="sum-password" required>
-
-            <input type="hidden" name="sum_login_nonce" value="<?php echo wp_create_nonce('sum_login_nonce'); ?>">
-            <button type="submit"><?php _e('Login', 'wp-user-management-plugin'); ?></button>
+            <div class="wpum-form-row">
+                <div class="wpum-form-group">
+                    <label for="wpum-username-email"><?php _e('Username or Email', 'wp-user-management-plugin'); ?> *</label>
+                    <input type="text" name="wpum_username_email" id="wpum-username-email" required>
+                </div>
+                <div class="wpum-form-group">
+                    <label for="wpum-password"><?php _e('Password', 'wp-user-management-plugin'); ?> *</label>
+                    <input type="password" name="wpum_password" id="wpum-password" required>
+                    <input type="hidden" name="wpum_login_nonce" value="<?php echo wp_create_nonce('wpum_login_nonce'); ?>">
+                </div>
+            </div>
+            <div class="wpum-form-row">
+                <div class="wpum-form-group">
+                    <button type="submit"><?php _e('Login', 'wp-user-management-plugin'); ?></button>
+                </div>
+                <div class="wpum-form-group">
+                    <a href="<?php echo esc_url(home_url('/password-reset')); ?>"><?php _e('Forgot Password?', 'wp-user-management-plugin'); ?></a>
+                </div>
+            </div>
         </form>
-        <p><a href="<?php echo wp_lostpassword_url(); ?>"><?php _e('Forgot Password?', 'wp-user-management-plugin'); ?></a></p>
-        <p><a href="<?php echo home_url('/register'); ?>"><?php _e('Register', 'wp-user-management-plugin'); ?></a></p>
     </div>
 <?php
     return ob_get_clean();
 }
 
 // Handle user login
-function sum_process_login()
+function wpum_process_login()
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sum_login_nonce'])) {
-        if (! wp_verify_nonce($_POST['sum_login_nonce'], 'sum_login_nonce')) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wpum_login_nonce'])) {
+        if (! wp_verify_nonce($_POST['wpum_login_nonce'], 'wpum_login_nonce')) {
             wp_die(__('Security check failed!', 'wp-user-management-plugin'));
         }
 
-        $username_email = sanitize_text_field($_POST['sum_username_email']);
-        $password       = $_POST['sum_password'];
+        $username_email = sanitize_text_field($_POST['wpum_username_email']);
+        $password       = $_POST['wpum_password'];
 
-        // Attempt to log the user in
-        $creds = array();
-        if (is_email($username_email)) {
-            $user = get_user_by('email', $username_email);
-            if ($user) {
-                $creds['user_login'] = $user->user_login;
-            }
-        } else {
-            $creds['user_login'] = $username_email;
+        // Check if username or email exists
+        if (!wpum_user_exists($username_email)) {
+            wp_die(__('Invalid username or email.', 'wp-user-management-plugin'));
         }
-        $creds['user_password'] = $password;
-        $creds['remember']      = true;
 
-        // Set secure cookie dynamically (if the site uses SSL or requires SSL in the admin panel)
-        $secure_cookie = is_ssl() || force_ssl_admin();
-        $user = wp_signon($creds, $secure_cookie);
+        // Attempt to login
+        $user = wp_signon(array(
+            'user_login' => $username_email,
+            'user_password' => $password,
+            'remember' => true
+        ));
 
         if (is_wp_error($user)) {
-            wp_die(__('Login failed. Please check your credentials.', 'wp-user-management-plugin'));
-        } else {
-            wp_redirect(home_url('/'));
-            exit;
+            wp_die(__('Invalid password.', 'wp-user-management-plugin'));
         }
+
+        // Redirect to profile page
+        wp_redirect(home_url('/user-profile'));
+        exit;
     }
 }
-add_action('init', 'sum_process_login');
+add_action('init', 'wpum_process_login');
 
 // Register shortcode
-function sum_register_login_shortcode()
+function wpum_register_login_shortcode()
 {
-    add_shortcode('sum_user_login', 'sum_display_login_form');
+    add_shortcode('wpum_user_login', 'wpum_display_login_form');
 }
-add_action('init', 'sum_register_login_shortcode');
+add_action('init', 'wpum_register_login_shortcode');
 ?>

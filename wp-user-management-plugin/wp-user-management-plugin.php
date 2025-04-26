@@ -64,9 +64,9 @@ add_action('wp_enqueue_scripts', 'wpum_enqueue_scripts');
 // Register shortcodes
 function wpum_register_shortcodes() {
     add_shortcode('wpum_user_registration', 'wpum_display_registration_form');
-    add_shortcode('wpum_user_login', 'sum_display_login_form');
-    add_shortcode('wpum_user_profile_edit', 'sum_display_profile_edit_form');
-    add_shortcode('wpum_password_reset', 'sum_display_password_reset_form');
+    add_shortcode('wpum_user_login', 'wpum_display_login_form');
+    add_shortcode('wpum_user_profile_edit', 'wpum_display_profile_edit_form');
+    add_shortcode('wpum_password_reset', 'wpum_display_password_reset_form');
     add_shortcode('wpum_my_account_content', 'wpum_my_account_shortcode');
 }
 add_action('init', 'wpum_register_shortcodes');

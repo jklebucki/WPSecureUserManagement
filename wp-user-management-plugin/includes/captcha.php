@@ -12,7 +12,7 @@ if (!function_exists('plugin_dir_path')) {
 }
 
 // Generuj CAPTCHA używając transients zamiast sesji
-function generate_captcha() {
+function wpum_generate_captcha() {
     $random_string = substr(str_shuffle("23456789ABCDEFGHJKLMNPQRSTUVWXYZ"), 0, 6);
     $captcha_token = wp_generate_password(32, false);
     
@@ -26,7 +26,7 @@ function generate_captcha() {
 }
 
 // Weryfikuj CAPTCHA
-function verify_captcha($token, $user_input) {
+function wpum_verify_captcha($token, $user_input) {
     if (empty($token) || empty($user_input)) {
         return false;
     }
@@ -43,8 +43,8 @@ function verify_captcha($token, $user_input) {
 }
 
 // Wyświetl CAPTCHA
-function display_captcha() {
-    $captcha = generate_captcha();
+function wpum_display_captcha() {
+    $captcha = wpum_generate_captcha();
     ?>
     <div class="wpum-captcha-container">
         <input type="text" 
@@ -63,14 +63,26 @@ function display_captcha() {
 }
 
 // Sprawdź CAPTCHA w formularzu
-function validate_captcha_submission() {
+function wpum_validate_captcha_submission() {
     if (!isset($_POST['wpum_captcha_code']) || !isset($_POST['wpum_captcha_token'])) {
         return false;
     }
     
-    return verify_captcha(
+    return wpum_verify_captcha(
         sanitize_text_field($_POST['wpum_captcha_token']),
         sanitize_text_field($_POST['wpum_captcha_code'])
+    );
+}
+
+// Funkcja do sprawdzania CAPTCHA w formularzu rejestracji
+function wpum_check_captcha($user_input) {
+    if (!isset($_POST['wpum_captcha_token'])) {
+        return false;
+    }
+    
+    return wpum_verify_captcha(
+        sanitize_text_field($_POST['wpum_captcha_token']),
+        sanitize_text_field($user_input)
     );
 }
 ?>

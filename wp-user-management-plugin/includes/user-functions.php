@@ -1,74 +1,99 @@
 <?php
+// Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 // User Functions for User Management Plugin
 
 // Retrieve user data by user ID
-function sum_get_user_data($user_id) {
-    $user = get_userdata($user_id);
+function wpum_get_user_data($user_id) {
+    $user = get_user_by('id', $user_id);
     if (!$user) {
         return false;
     }
-    return [
+    
+    return array(
         'ID' => $user->ID,
-        'user_login' => $user->user_login, // native field
-        'user_email' => $user->user_email, // native field
-        'first_name' => $user->first_name,
-        'last_name' => $user->last_name,
-    ];
+        'username' => $user->user_login,
+        'email' => $user->user_email,
+        'first_name' => get_user_meta($user->ID, 'first_name', true),
+        'last_name' => get_user_meta($user->ID, 'last_name', true),
+        'role' => $user->roles[0]
+    );
 }
 
 // Update user data
-function sum_update_user_data($user_id, $data) {
-    $user_data = [
-        'ID' => $user_id,
-        'user_email' => sanitize_email($data['email']),
-        'first_name' => sanitize_text_field($data['first_name']),
-        'last_name' => sanitize_text_field($data['last_name']),
-    ];
-
-    // Update user
-    return wp_update_user($user_data);
+function wpum_update_user_data($user_id, $data) {
+    $user = get_user_by('id', $user_id);
+    if (!$user) {
+        return false;
+    }
+    
+    $update_data = array('ID' => $user_id);
+    
+    if (isset($data['email'])) {
+        $update_data['user_email'] = sanitize_email($data['email']);
+    }
+    
+    if (isset($data['first_name'])) {
+        update_user_meta($user_id, 'first_name', sanitize_text_field($data['first_name']));
+    }
+    
+    if (isset($data['last_name'])) {
+        update_user_meta($user_id, 'last_name', sanitize_text_field($data['last_name']));
+    }
+    
+    return wp_update_user($update_data);
 }
 
 // Change user password
-function sum_change_user_password($user_id, $new_password) {
+function wpum_change_user_password($user_id, $new_password) {
     return wp_set_password($new_password, $user_id);
 }
 
 // Delete user account
-function sum_delete_user_account($user_id) {
+function wpum_delete_user_account($user_id) {
     require_once(ABSPATH . 'wp-admin/includes/user.php');
     return wp_delete_user($user_id);
 }
 
 // Check if username or email exists
-function sum_user_exists($username_or_email) {
-    if (username_exists($username_or_email)) {
-        return true;
+function wpum_user_exists($username_or_email) {
+    if (is_email($username_or_email)) {
+        return email_exists($username_or_email);
+    } else {
+        return username_exists($username_or_email);
     }
-    if (email_exists($username_or_email)) {
-        return true;
-    }
-    return false;
 }
 
 // Validate password strength
-function sum_validate_password_strength($password) {
-    $min_length = get_option('wp_user_management_password_length', 8);
-    if (strlen($password) < $min_length) {
+function wpum_validate_password_strength($password) {
+    // Minimum 8 znaków
+    if (strlen($password) < 8) {
         return false;
     }
+    
+    // Musi zawierać co najmniej jedną wielką literę
     if (!preg_match('/[A-Z]/', $password)) {
         return false;
     }
+    
+    // Musi zawierać co najmniej jedną małą literę
     if (!preg_match('/[a-z]/', $password)) {
         return false;
     }
+    
+    // Musi zawierać co najmniej jedną cyfrę
     if (!preg_match('/[0-9]/', $password)) {
         return false;
     }
-    if (!preg_match('/[\W_]/', $password)) {
+    
+    // Musi zawierać co najmniej jeden znak specjalny
+    if (!preg_match('/[^A-Za-z0-9]/', $password)) {
         return false;
     }
+    
     return true;
 }
 

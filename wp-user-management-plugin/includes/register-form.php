@@ -60,8 +60,12 @@ function wpum_display_registration_form()
                 <div class="wpum-form-group">
                     <label for="wpum-captcha"><?php _e('Enter the code', 'wp-user-management-plugin'); ?> *</label>
                     <div class="wpum-captcha-container">
-                        <?php sum_generate_captcha(); ?>
+                        <?php 
+                        $captcha = wpum_generate_captcha();
+                        echo '<div class="wpum-captcha-code">' . esc_html($captcha['code']) . '</div>';
+                        ?>
                         <input type="text" name="wpum_captcha" id="wpum-captcha" required>
+                        <input type="hidden" name="wpum_captcha_token" value="<?php echo esc_attr($captcha['token']); ?>">
                         <input type="hidden" name="wpum_register_nonce" value="<?php echo wp_create_nonce('wpum_register_nonce'); ?>">
                     </div>
                 </div>
@@ -114,12 +118,12 @@ function wpum_process_registration()
         }
 
         // Validate password strength
-        if (!sum_validate_password_strength($password)) {
+        if (!wpum_validate_password_strength($password)) {
             wp_die(__('Password does not meet the strength requirements.', 'wp-user-management-plugin'));
         }
 
         // Check CAPTCHA
-        if (!sum_check_captcha($captcha)) {
+        if (!wpum_check_captcha($captcha)) {
             wp_die(__('Invalid CAPTCHA.', 'wp-user-management-plugin'));
         }
 
