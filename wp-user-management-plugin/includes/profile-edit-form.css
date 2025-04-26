@@ -52,38 +52,6 @@
     display: flex;
 }
 
-/* #logout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-} */
-
-#wpum-logout-button {
-    padding: 10px 20px;
-    background: #d9534f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#wpum-logout-button:hover {
-    background: #c9302c;
-}
-
-#wpum-delete-account-button {
-    padding: 10px 20px;
-    background: #d9534f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#wpum-delete-account-button:hover {
-    background: #c9302c;
-}
-
 .wpum-tab-content label {
     display: block;
     margin-bottom: 5px;
@@ -352,24 +320,11 @@ body.modal-open {
     padding-bottom: 60px; /* Add padding to make room for the button */
 }
 
-.wpum-tab-content form button[type="submit"] {
-    position: absolute;
-    bottom: 20px;
-    right: 0;
-}
-
 /* Special handling for the delete account button which is not in a form */
 #delete-account {
     position: relative;
     padding-bottom: 60px;
 }
-
-#wpum-delete-account-button {
-    position: absolute;
-    bottom: 20px;
-    right: 0;
-}
-
 /* Modal button positioning */
 .wpum-modal-content form {
     position: relative;
@@ -404,7 +359,7 @@ body.modal-open {
     font-weight: 600;
     margin-bottom: 8px;
     color: #222;
-    display: block;
+    display: flex;
 }
 
 #shooting-credentials input[type="text"] {
@@ -524,23 +479,11 @@ body.modal-open {
     padding-bottom: 60px; /* Add padding to make room for the button */
 }
 
-.wpum-tab-content form button[type="submit"] {
-    position: absolute;
-    bottom: 20px;
-    right: 0;
-}
-
 /* Special handling for the delete account button which is not in a form */
 #delete-account {
     text-align: center;
     position: relative;
     padding-bottom: 60px;
-}
-
-#wpum-delete-account-button {
-    position: absolute;
-    bottom: 20px;
-    right: 0;
 }
 
 /* Modal button positioning */
