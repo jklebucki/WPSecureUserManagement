@@ -131,9 +131,10 @@ function wpum_display_profile_edit_form()
                         <input type="text"
                             name="wpum_credentials[<?php echo esc_attr($type); ?>][number]"
                             id="wpum_<?php echo esc_attr($type); ?>_number"
-                            value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>">
+                            value="<?php echo $current_credential ? esc_attr($current_credential->credential_number) : ''; ?>"
+                            placeholder="<?php echo esc_attr($label); ?>...">
 
-                        <label for="wpum_<?php echo esc_attr($type); ?>_file">
+                        <label for="wpum_<?php echo esc_attr($type); ?>_file" style="margin-top: 8px;">
                             <?php _e('PDF Document', 'wp-user-management-plugin'); ?>
                         </label>
                         <input type="file"
