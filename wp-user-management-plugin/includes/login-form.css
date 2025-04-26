@@ -78,3 +78,13 @@
     gap: 15px;
     margin-bottom: 20px;
 }
+
+.wpum-form-row:last-child {
+    align-items: center;
+    text-align: center;
+}
+
+.wpum-form-row:last-child .wpum-form-group {
+    width: 100%;
+    max-width: 200px;
+}
