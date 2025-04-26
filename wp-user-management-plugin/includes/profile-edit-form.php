@@ -239,7 +239,7 @@ function wpum_process_profile_update()
         }
 
         // Redirect to profile page with success message
-        wp_redirect(add_query_arg('profile_updated', 'true', home_url('/user-profile')));
+        wp_redirect(add_query_arg('profile_updated', 'true', home_url('/user-account')));
         exit;
     }
 
@@ -257,7 +257,7 @@ function wpum_process_profile_update()
         }
 
         // Redirect to profile page with success message
-        wp_redirect(add_query_arg('data_saved', 'true', home_url('/user-profile')));
+        wp_redirect(add_query_arg('data_saved', 'true', home_url('/user-account')));
         exit;
     }
 }
