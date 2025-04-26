@@ -64,7 +64,7 @@ function wpum_display_profile_edit_form()
                 </div>
 
                 <input type="hidden" name="wpum_profile_edit_nonce" value="<?php echo wp_create_nonce('wpum_profile_edit_nonce'); ?>">
-                <button type="submit" class="button-primary"><?php _e('Update Profile', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" class="btn-outline-primary"><?php _e('Update Profile', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
         <div id="user-data" class="wpum-tab-content">
@@ -76,7 +76,7 @@ function wpum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
                 <input type="hidden" name="wpum_user_data_nonce" value="<?php echo wp_create_nonce('wpum_user_data_nonce'); ?>">
-                <button type="submit" class="button-primary"><?php _e('Save Data', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" class="btn-outline-primary"><?php _e('Save Data', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
         <div id="change-password" class="wpum-tab-content">
@@ -90,12 +90,12 @@ function wpum_display_profile_edit_form()
                 <div id="password-match-message"></div>
 
                 <input type="hidden" name="wpum_profile_edit_nonce" value="<?php echo wp_create_nonce('wpum_profile_edit_nonce'); ?>">
-                <button type="submit" id="wpum-change-password-button" class="button-primary" disabled><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" id="wpum-change-password-button" class="btn-outline-primary" disabled><?php _e('Change Password', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
         <div id="delete-account" class="wpum-tab-content">
             <h3><?php _e('Delete Account', 'wp-user-management-plugin'); ?></h3>
-            <button type="button" id="wpum-delete-account-button" class="button-primary"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
+            <button type="button" id="wpum-delete-account-button" class="btn-outline-danger"><?php _e('Delete Account', 'wp-user-management-plugin'); ?></button>
         </div>
         <div id="logout" class="wpum-tab-content">
             <h3><?php _e('Logout', 'wp-user-management-plugin'); ?></h3>
@@ -103,7 +103,7 @@ function wpum_display_profile_edit_form()
             <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
                 <input type="hidden" name="action" value="wpum_logout">
                 <input type="hidden" name="wpum_logout_nonce" value="<?php echo wp_create_nonce('wpum_logout_nonce'); ?>">
-                <button type="submit" class="button-primary">
+                <button type="submit" class="btn-outline-danger">
                     <?php _e('Logout', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
@@ -154,7 +154,7 @@ function wpum_display_profile_edit_form()
                     </div>
                 <?php endforeach; ?>
 
-                <button type="submit" class="button-primary">
+                <button type="submit" class="btn-outline-primary">
                     <?php _e('Save Credentials', 'wp-user-management-plugin'); ?>
                 </button>
             </form>
@@ -168,8 +168,8 @@ function wpum_display_profile_edit_form()
             <p><?php _e('Are you sure you want to delete your account?', 'wp-user-management-plugin'); ?></p>
             <form id="wpum-delete-account-form" method="post">
                 <input type="hidden" name="wpum_delete_account_nonce" value="<?php echo wp_create_nonce('wpum_delete_account_nonce'); ?>">
-                <button type="submit" class="button-primary"><?php _e('Yes, Delete My Account', 'wp-user-management-plugin'); ?></button>
-                <button type="button" class="wpum-cancel"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
+                <button type="submit" class="btn-outline-danger"><?php _e('Yes, Delete My Account', 'wp-user-management-plugin'); ?></button>
+                <button type="button" class="wpum-cancel btn-outline-primary"><?php _e('Cancel', 'wp-user-management-plugin'); ?></button>
             </form>
         </div>
     </div>

@@ -279,30 +279,13 @@ body.modal-open {
     padding-right: 15px !important; /* Kompensacja scrollbara */
 }
 
-/* Modern Bootstrap-like button styles for all submit buttons */
+/* Remove all current button styles */
 button[type="submit"],
 .button-primary,
 #wpum-logout-button,
 #wpum-delete-account-button,
 .wpum-modal-content button[type="submit"] {
-    display: inline-block;
-    font-weight: 500;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: 0.375rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    cursor: pointer;
-    color: #fff;
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Remove all styles */
 }
 
 button[type="submit"]:hover,
@@ -310,10 +293,7 @@ button[type="submit"]:hover,
 #wpum-logout-button:hover,
 #wpum-delete-account-button:hover,
 .wpum-modal-content button[type="submit"]:hover {
-    color: #fff;
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    /* Remove all styles */
 }
 
 button[type="submit"]:focus,
@@ -321,11 +301,7 @@ button[type="submit"]:focus,
 #wpum-logout-button:focus,
 #wpum-delete-account-button:focus,
 .wpum-modal-content button[type="submit"]:focus {
-    color: #fff;
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    /* Remove all styles */
 }
 
 /* Special styles for logout and delete account buttons */
@@ -334,8 +310,7 @@ button[type="submit"]:focus,
 #logout button[type="submit"],
 #logout .button-primary,
 .wpum-modal-content button[type="submit"] {
-    background-color: #dc3545;
-    border-color: #dc3545;
+    /* Remove all styles */
 }
 
 #wpum-logout-button:hover,
@@ -343,8 +318,7 @@ button[type="submit"]:focus,
 #logout button[type="submit"]:hover,
 #logout .button-primary:hover,
 .wpum-modal-content button[type="submit"]:hover {
-    background-color: #bb2d3b;
-    border-color: #b02a37;
+    /* Remove all styles */
 }
 
 #wpum-logout-button:focus,
@@ -352,27 +326,20 @@ button[type="submit"]:focus,
 #logout button[type="submit"]:focus,
 #logout .button-primary:focus,
 .wpum-modal-content button[type="submit"]:focus {
-    background-color: #bb2d3b;
-    border-color: #b02a37;
-    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    /* Remove all styles */
 }
 
 /* Cancel button in modal */
 .wpum-modal-content .wpum-cancel {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: #fff;
+    /* Remove all styles */
 }
 
 .wpum-modal-content .wpum-cancel:hover {
-    background-color: #5c636a;
-    border-color: #565e64;
+    /* Remove all styles */
 }
 
 .wpum-modal-content .wpum-cancel:focus {
-    background-color: #5c636a;
-    border-color: #565e64;
-    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.25);
+    /* Remove all styles */
 }
 
 /* Remove old button styles that conflict with the new ones */
@@ -439,8 +406,144 @@ button[type="submit"] {
     /* Remove conflicting styles */
 }
 
-.hidden {
-    display: none !important;
+/* Position submit buttons in the right bottom corner */
+.wpum-tab-content form {
+    /* Remove positioning styles */
+}
+
+.wpum-tab-content form button[type="submit"] {
+    /* Remove positioning styles */
+}
+
+/* Special handling for the delete account button which is not in a form */
+#delete-account {
+    /* Remove positioning styles */
+}
+
+#wpum-delete-account-button {
+    /* Remove positioning styles */
+}
+
+/* Modal button positioning */
+.wpum-modal-content form {
+    /* Remove positioning styles */
+}
+
+.wpum-modal-content form button[type="submit"] {
+    /* Remove positioning styles */
+}
+
+.wpum-modal-content .wpum-cancel {
+    /* Remove positioning styles */
+}
+
+/* New universal Bootstrap-like outline button styles */
+.btn-outline-primary {
+    display: inline-block;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    user-select: none;
+    border: 1px solid #0d6efd;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.375rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+    color: #0d6efd;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary:focus {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-outline-danger {
+    display: inline-block;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    user-select: none;
+    border: 1px solid #dc3545;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.375rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+    color: #dc3545;
+    background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-danger:focus {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* Button positioning */
+.wpum-tab-content form {
+    position: relative;
+    padding-bottom: 60px; /* Add padding to make room for the button */
+}
+
+.wpum-tab-content form button[type="submit"] {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+}
+
+/* Special handling for the delete account button which is not in a form */
+#delete-account {
+    position: relative;
+    padding-bottom: 60px;
+}
+
+#wpum-delete-account-button {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+}
+
+/* Modal button positioning */
+.wpum-modal-content form {
+    position: relative;
+    padding-bottom: 60px;
+}
+
+.wpum-modal-content form button[type="submit"] {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+}
+
+.wpum-modal-content .wpum-cancel {
+    position: absolute;
+    bottom: 20px;
+    right: 150px; /* Position to the left of the submit button */
 }
 
 /* Add these styles to your existing CSS file */
