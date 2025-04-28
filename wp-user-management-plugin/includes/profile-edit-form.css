@@ -472,6 +472,10 @@ body.modal-open {
     margin-bottom: 20px;
     color: #666;
 }
+#logout button {
+    width: 50%;
+}
+
 
 /* Position submit buttons in the right bottom corner */
 .wpum-tab-content form {
@@ -484,6 +488,9 @@ body.modal-open {
     text-align: center;
     position: relative;
     padding-bottom: 60px;
+}
+#delete-account button {
+    width: 50%;
 }
 
 /* Modal button positioning */

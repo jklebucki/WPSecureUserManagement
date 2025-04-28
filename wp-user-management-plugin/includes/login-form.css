@@ -15,7 +15,7 @@
 }
 
 .wpum-login-container label {
-    display: block;
+    display: flex;
     margin-bottom: 5px;
     font-weight: bold;
     font-size: 14px;
@@ -69,7 +69,12 @@
 }
 
 .wpum-form-group {
+    display: block;
     margin-bottom: 15px;
+}
+
+.wpum-form-group label {
+    display: flex !important;
 }
 
 .wpum-form-row {

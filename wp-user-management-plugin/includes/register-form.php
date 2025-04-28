@@ -149,7 +149,7 @@ function wpum_process_registration()
         ]);
 
         // Redirect to login page
-        wp_redirect(home_url('/user-login'));
+        wp_redirect(home_url('/user-account'));
         exit;
     }
 }
