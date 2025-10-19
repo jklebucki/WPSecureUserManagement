@@ -59,23 +59,26 @@
 
 .wpum-captcha-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: stretch;
     width: 100%;
     gap: 0;
 }
 
+/* Pole z kodem CAPTCHA - lewa część */
 .wpum-captcha-code {
-    flex: 0 0 calc(40% - 44px);
-    padding: 10px;
+    flex: 0 0 auto;
+    min-width: 140px;
+    padding: 10px 15px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
     border-right: none;
     text-align: center;
     font-family: monospace;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
+    letter-spacing: 3px;
     transition: opacity 0.3s ease;
     display: flex;
     align-items: center;
@@ -83,8 +86,38 @@
     min-height: 44px;
 }
 
+/* Przycisk odświeżania - środkowa część (doklejony do kodu) */
+.wpum-captcha-refresh {
+    flex: 0 0 44px;
+    width: 44px;
+    min-height: 44px;
+    padding: 10px;
+    background: #46b450;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin: 0;
+}
+
+.wpum-captcha-refresh:hover {
+    background: #399846;
+}
+
+.wpum-captcha-refresh:active {
+    background: #2d7a38;
+}
+
+/* Pole input - prawa część (z odstępem) */
 .wpum-captcha-input {
-    flex: 0 0 40%;
+    flex: 1;
+    min-width: 0;
+    margin-left: 10px;
 }
 
 .wpum-captcha-input input {
@@ -128,27 +161,7 @@
     border-radius: 4px;
 }
 
-.wpum-captcha-refresh {
-    flex: 0 0 44px;
-    width: 44px;
-    min-height: 44px;
-    padding: 10px;
-    background: #46b450;
-    color: #fff;
-    border: 1px solid #ccc;
-    border-left: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.wpum-captcha-refresh:hover {
-    background: #399846;
-}
-
+/* Animacja rotacji przycisku */
 .wpum-captcha-refresh.rotating svg {
     animation: rotate 0.6s linear infinite;
 }

@@ -77,10 +77,6 @@ function wpum_display_registration_form()
                     $captcha = wpum_generate_captcha();
                     echo '<div class="wpum-captcha-code" id="wpum-captcha-display">' . esc_html($captcha['code']) . '</div>';
                     ?>
-                    <div class="wpum-captcha-input">
-                        <input type="text" name="wpum_captcha" id="wpum-captcha" required>
-                        <input type="hidden" name="wpum_captcha_token" id="wpum-captcha-token" value="<?php echo esc_attr($captcha['token']); ?>">
-                    </div>
                     <button type="button" class="wpum-captcha-refresh" id="wpum-captcha-refresh" title="<?php _e('Refresh code', 'wp-user-management-plugin'); ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="23 4 23 10 17 10"></polyline>
@@ -88,10 +84,13 @@ function wpum_display_registration_form()
                             <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
                         </svg>
                     </button>
+                    <div class="wpum-captcha-input">
+                        <input type="text" name="wpum_captcha" id="wpum-captcha" required>
+                        <input type="hidden" name="wpum_captcha_token" id="wpum-captcha-token" value="<?php echo esc_attr($captcha['token']); ?>">
+                    </div>
                 </div>
                 <input type="hidden" name="wpum_register_nonce" value="<?php echo wp_create_nonce('wpum_register_nonce'); ?>">
             </div>
-
             <div class="wpum-form-row">
                 <div class="wpum-form-group">
                     <button type="submit"><?php _e('Register', 'wp-user-management-plugin'); ?></button>
