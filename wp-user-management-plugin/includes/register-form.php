@@ -8,6 +8,13 @@ if (!defined('ABSPATH')) {
 function wpum_enqueue_register_styles() {
     wp_enqueue_style('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.css');
     wp_enqueue_script('wpum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], null, true);
+    wp_enqueue_script('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.js', ['jquery'], null, true);
+    
+    // Przekaż dane AJAX do JavaScript
+    wp_localize_script('wpum-register-form', 'wpumAjax', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('wpum_captcha_nonce')
+    ));
 }
 add_action('wp_enqueue_scripts', 'wpum_enqueue_register_styles');
 
@@ -68,12 +75,19 @@ function wpum_display_registration_form()
                 <div class="wpum-captcha-row">
                     <?php 
                     $captcha = wpum_generate_captcha();
-                    echo '<div class="wpum-captcha-code">' . esc_html($captcha['code']) . '</div>';
+                    echo '<div class="wpum-captcha-code" id="wpum-captcha-display">' . esc_html($captcha['code']) . '</div>';
                     ?>
                     <div class="wpum-captcha-input">
                         <input type="text" name="wpum_captcha" id="wpum-captcha" required>
-                        <input type="hidden" name="wpum_captcha_token" value="<?php echo esc_attr($captcha['token']); ?>">
+                        <input type="hidden" name="wpum_captcha_token" id="wpum-captcha-token" value="<?php echo esc_attr($captcha['token']); ?>">
                     </div>
+                    <button type="button" class="wpum-captcha-refresh" id="wpum-captcha-refresh" title="<?php _e('Refresh code', 'wp-user-management-plugin'); ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
                 </div>
                 <input type="hidden" name="wpum_register_nonce" value="<?php echo wp_create_nonce('wpum_register_nonce'); ?>">
             </div>

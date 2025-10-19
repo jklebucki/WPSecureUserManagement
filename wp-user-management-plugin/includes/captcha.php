@@ -85,4 +85,49 @@ function wpum_check_captcha($user_input) {
         sanitize_text_field($user_input)
     );
 }
+
+// AJAX endpoint do generowania nowego CAPTCHA
+function wpum_ajax_refresh_captcha() {
+    $captcha = wpum_generate_captcha();
+    wp_send_json_success(array(
+        'token' => $captcha['token'],
+        'code' => $captcha['code']
+    ));
+}
+add_action('wp_ajax_wpum_refresh_captcha', 'wpum_ajax_refresh_captcha');
+add_action('wp_ajax_nopriv_wpum_refresh_captcha', 'wpum_ajax_refresh_captcha');
+
+// AJAX endpoint do weryfikacji CAPTCHA
+function wpum_ajax_verify_captcha() {
+    // Sprawdź nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wpum_captcha_nonce')) {
+        wp_send_json_error(array('message' => __('Security check failed', 'wp-user-management-plugin')));
+        return;
+    }
+    
+    // Pobierz dane
+    $token = isset($_POST['token']) ? sanitize_text_field($_POST['token']) : '';
+    $user_input = isset($_POST['code']) ? sanitize_text_field($_POST['code']) : '';
+    
+    // Weryfikuj CAPTCHA
+    if (empty($token) || empty($user_input)) {
+        wp_send_json_error(array('message' => __('Please enter the code', 'wp-user-management-plugin')));
+        return;
+    }
+    
+    $stored_code = get_transient('wpum_captcha_' . $token);
+    if (!$stored_code) {
+        wp_send_json_error(array('message' => __('Code expired. Please refresh', 'wp-user-management-plugin')));
+        return;
+    }
+    
+    // Sprawdź poprawność (bez usuwania transient - zostanie usunięty przy finalnej walidacji)
+    if (strtoupper($user_input) === strtoupper($stored_code)) {
+        wp_send_json_success(array('message' => __('Code is correct', 'wp-user-management-plugin')));
+    } else {
+        wp_send_json_error(array('message' => __('Incorrect code', 'wp-user-management-plugin')));
+    }
+}
+add_action('wp_ajax_wpum_verify_captcha', 'wpum_ajax_verify_captcha');
+add_action('wp_ajax_nopriv_wpum_verify_captcha', 'wpum_ajax_verify_captcha');
 ?>

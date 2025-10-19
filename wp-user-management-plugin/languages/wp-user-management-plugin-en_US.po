@@ -149,6 +149,22 @@ msgstr "If you don't wish to change your password, just ignore this email and no
 msgid "This password reset request will expire in 24 hours."
 msgstr "This password reset request will expire in 24 hours."
 
+msgid "Please enter the code"
+msgstr "Please enter the code"
+
+msgid "Code expired. Please refresh"
+msgstr "Code expired. Please refresh"
+
+msgid "Incorrect code"
+msgstr "Incorrect code"
+
+msgid "Code is correct"
+msgstr "Code is correct"
+
+msgid "Refresh code"
+msgstr "Refresh code"
+
+
 msgid "Thanks, %s"
 msgstr "Thanks, %s"
 

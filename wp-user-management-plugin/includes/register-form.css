@@ -60,11 +60,13 @@
 .wpum-captcha-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
+    gap: 10px;
 }
 
 .wpum-captcha-code {
-    flex: 0 0 48%;
+    flex: 0 0 40%;
     padding: 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
@@ -73,10 +75,11 @@
     font-family: monospace;
     font-size: 16px;
     font-weight: bold;
+    transition: opacity 0.3s ease;
 }
 
 .wpum-captcha-input {
-    flex: 0 0 48%;
+    flex: 0 0 40%;
 }
 
 .wpum-captcha-input input {
@@ -86,6 +89,69 @@
     border-radius: 4px;
     box-sizing: border-box;
     background-color: #f9feff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wpum-captcha-input input.wpum-input-error {
+    border-color: #dc3232;
+    box-shadow: 0 0 5px rgba(220, 50, 50, 0.3);
+}
+
+.wpum-captcha-input input.wpum-input-success {
+    border-color: #46b450;
+    box-shadow: 0 0 5px rgba(70, 180, 80, 0.3);
+}
+
+.wpum-captcha-error {
+    color: #dc3232;
+    font-size: 14px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background-color: #fef7f7;
+    border-left: 3px solid #dc3232;
+    border-radius: 4px;
+}
+
+.wpum-captcha-success {
+    color: #46b450;
+    font-size: 14px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background-color: #f7fef7;
+    border-left: 3px solid #46b450;
+    border-radius: 4px;
+}
+
+.wpum-captcha-refresh {
+    flex: 0 0 40px;
+    height: 40px;
+    padding: 8px;
+    background: #0073aa;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.wpum-captcha-refresh:hover {
+    background: #005177;
+}
+
+.wpum-captcha-refresh.rotating svg {
+    animation: rotate 0.6s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .wpum-registration-container button {

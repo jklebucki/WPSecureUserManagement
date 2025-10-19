@@ -332,3 +332,18 @@ msgstr "Błąd podczas wysyłania emaila z resetowaniem hasła. Spróbuj ponowni
 
 msgid "Reset Password"
 msgstr "Resetuj hasło"
+
+msgid "Please enter the code"
+msgstr "Proszę wprowadzić kod"
+
+msgid "Code expired. Please refresh"
+msgstr "Kod wygasł. Proszę odświeżyć"
+
+msgid "Incorrect code"
+msgstr "Nieprawidłowy kod"
+
+msgid "Code is correct"
+msgstr "Kod jest poprawny"
+
+msgid "Refresh code"
+msgstr "Odśwież kod"
