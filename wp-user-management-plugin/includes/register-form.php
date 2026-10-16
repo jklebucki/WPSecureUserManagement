@@ -4,98 +4,83 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Enqueue styles and scripts
-function wpum_enqueue_register_styles() {
-    wp_enqueue_style('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.css', array(), '2.0.0');
-    wp_enqueue_script('wpum-password-strength', plugin_dir_url(__FILE__) . 'password-strength.js', ['jquery'], '1.0.0', true);
-    wp_enqueue_script('wpum-register-form', plugin_dir_url(__FILE__) . 'register-form.js', ['jquery'], '2.0.0', true);
-    
-    // Przekaż dane AJAX do JavaScript
-    wp_localize_script('wpum-register-form', 'wpumAjax', array(
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('wpum_captcha_nonce')
-    ));
-}
-add_action('wp_enqueue_scripts', 'wpum_enqueue_register_styles');
-
 // Display registration form
 function wpum_display_registration_form()
 {
+    wpum_enqueue_frontend_assets();
+
+    $min_length = wpum_get_min_password_length();
+
     ob_start(); ?>
-    <div class="wpum-registration-container">
-        <form id="wpum-registration-form" method="post">
-            <h2><?php _e('User Registration', 'wp-user-management-plugin'); ?></h2>
+    <div class="wpum-ui wpum-ui--register">
+        <form id="wpum-registration-form" class="wpum-card" method="post">
+            <h2 class="wpum-title"><?php esc_html_e('User Registration', 'wp-user-management-plugin'); ?></h2>
 
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-username"><?php _e('Username', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="text" name="wpum_username" id="wpum-username" required>
-                </div>
-            </div>
+            <?php wpum_flash_render('register'); ?>
+            <?php wpum_form_fields('register'); ?>
 
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-email"><?php _e('Email', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="email" name="wpum_email" id="wpum-email" required>
-                </div>
-            </div>
+            <?php
+            wpum_render_field(array(
+                'id'           => 'wpum-username',
+                'name'         => 'wpum_username',
+                'label'        => __('Username', 'wp-user-management-plugin'),
+                'value'        => wpum_flash_old('register', 'username'),
+                'required'     => true,
+                'autocomplete' => 'username',
+            ));
+            wpum_render_field(array(
+                'id'           => 'wpum-email',
+                'name'         => 'wpum_email',
+                'type'         => 'email',
+                'label'        => __('Email', 'wp-user-management-plugin'),
+                'value'        => wpum_flash_old('register', 'email'),
+                'required'     => true,
+                'autocomplete' => 'email',
+            ));
+            wpum_render_field(array(
+                'id'           => 'wpum-firstname',
+                'name'         => 'wpum_firstname',
+                'label'        => __('First Name', 'wp-user-management-plugin'),
+                'value'        => wpum_flash_old('register', 'firstname'),
+                'required'     => true,
+                'autocomplete' => 'given-name',
+            ));
+            wpum_render_field(array(
+                'id'           => 'wpum-lastname',
+                'name'         => 'wpum_lastname',
+                'label'        => __('Last Name', 'wp-user-management-plugin'),
+                'value'        => wpum_flash_old('register', 'lastname'),
+                'required'     => true,
+                'autocomplete' => 'family-name',
+            ));
+            wpum_render_field(array(
+                'id'           => 'wpum-password',
+                'name'         => 'wpum_password',
+                'type'         => 'password',
+                'label'        => __('Password', 'wp-user-management-plugin'),
+                'required'     => true,
+                'autocomplete' => 'new-password',
+                'attrs'        => array('minlength' => $min_length),
+                'help'         => sprintf(
+                    /* translators: %d: minimum password length */
+                    __('At least %d characters, with upper and lower case letters, a digit and a special character.', 'wp-user-management-plugin'),
+                    $min_length
+                ),
+            ));
+            wpum_render_strength_meter();
+            wpum_render_field(array(
+                'id'           => 'wpum-confirm-password',
+                'name'         => 'wpum_confirm_password',
+                'type'         => 'password',
+                'label'        => __('Confirm Password', 'wp-user-management-plugin'),
+                'required'     => true,
+                'autocomplete' => 'new-password',
+            ));
+            ?>
 
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-firstname"><?php _e('First Name', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="text" name="wpum_firstname" id="wpum-firstname" required>
-                </div>
-            </div>
+            <?php wpum_turnstile_render('register'); ?>
 
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-lastname"><?php _e('Last Name', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="text" name="wpum_lastname" id="wpum-lastname" required>
-                </div>
-            </div>
-
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-password"><?php _e('Password', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="password" name="wpum_password" id="wpum-password" required>
-                </div>
-            </div>
-
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-confirm-password"><?php _e('Confirm Password', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="password" name="wpum_confirm_password" id="wpum-confirm-password" required>
-                </div>
-            </div>
-
-            <div id="password-strength-meter"></div>
-
-            <div class="wpum-captcha-container">
-                <div class="wpum-captcha-label"><?php _e('Enter the code', 'wp-user-management-plugin'); ?> *</div>
-                <div class="wpum-captcha-row">
-                    <?php 
-                    $captcha = wpum_generate_captcha();
-                    echo '<div class="wpum-captcha-code" id="wpum-captcha-display">' . esc_html($captcha['code']) . '</div>';
-                    ?>
-                    <button type="button" class="wpum-captcha-refresh" id="wpum-captcha-refresh" title="<?php _e('Refresh code', 'wp-user-management-plugin'); ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="23 4 23 10 17 10"></polyline>
-                            <polyline points="1 20 1 14 7 14"></polyline>
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                        </svg>
-                    </button>
-                    <div class="wpum-captcha-input">
-                        <input type="text" name="wpum_captcha" id="wpum-captcha" required>
-                        <input type="hidden" name="wpum_captcha_token" id="wpum-captcha-token" value="<?php echo esc_attr($captcha['token']); ?>">
-                    </div>
-                </div>
-                <input type="hidden" name="wpum_register_nonce" value="<?php echo wp_create_nonce('wpum_register_nonce'); ?>">
-            </div>
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <button type="submit"><?php _e('Register', 'wp-user-management-plugin'); ?></button>
-                </div>
-            </div>
+            <button type="submit" class="wpum-btn wpum-btn--primary wpum-btn--block"><?php esc_html_e('Register', 'wp-user-management-plugin'); ?></button>
         </form>
     </div>
 <?php
@@ -105,66 +90,82 @@ function wpum_display_registration_form()
 // Handle user registration
 function wpum_process_registration()
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wpum_register_nonce'])) {
-        if (!wp_verify_nonce($_POST['wpum_register_nonce'], 'wpum_register_nonce')) {
-            wp_die(__('Security check failed!', 'wp-user-management-plugin'));
-        }
-
-        $username = sanitize_user($_POST['wpum_username']);
-        $email = sanitize_email($_POST['wpum_email']);
-        $firstname = sanitize_text_field($_POST['wpum_firstname']);
-        $lastname = sanitize_text_field($_POST['wpum_lastname']);
-        $password = $_POST['wpum_password'];
-        $confirm_password = $_POST['wpum_confirm_password'];
-        $captcha = sanitize_text_field($_POST['wpum_captcha']);
-
-        // Check required fields
-        if (empty($username) || empty($email) || empty($firstname) || empty($lastname) || empty($password) || empty($confirm_password) || empty($captcha)) {
-            wp_die(__('All fields are required.', 'wp-user-management-plugin'));
-        }
-
-        // Validate email address
-        if (!is_email($email)) {
-            wp_die(__('Invalid email format.', 'wp-user-management-plugin'));
-        }
-
-        // Check if user already exists
-        if (username_exists($username) || email_exists($email)) {
-            wp_die(__('Username or email already taken.', 'wp-user-management-plugin'));
-        }
-
-        // Validate passwords
-        if ($password !== $confirm_password) {
-            wp_die(__('Passwords do not match.', 'wp-user-management-plugin'));
-        }
-
-        // Validate password strength
-        if (!wpum_validate_password_strength($password)) {
-            wp_die(__('Password does not meet the strength requirements.', 'wp-user-management-plugin'));
-        }
-
-        // Check CAPTCHA
-        if (!wpum_check_captcha($captcha)) {
-            wp_die(__('Invalid CAPTCHA.', 'wp-user-management-plugin'));
-        }
-
-        // Create user
-        $user_id = wp_create_user($username, $password, $email);
-        if (is_wp_error($user_id)) {
-            wp_die(__('Registration failed. Please try again.', 'wp-user-management-plugin'));
-        }
-
-        // Update user meta
-        wp_update_user([
-            'ID' => $user_id,
-            'first_name' => $firstname,
-            'last_name' => $lastname
-        ]);
-
-        // Redirect to login page
-        wp_redirect(home_url('/user-account'));
-        exit;
+    if (!wpum_is_form_post('register')) {
+        return;
     }
+
+    $return_url = wpum_current_url();
+
+    if (!wpum_verify_form_nonce('register')) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'invalid_nonce');
+    }
+
+    $ip = wpum_get_client_ip();
+    if (wpum_rate_limit_is_blocked('register_ip', $ip)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'rate_limited');
+    }
+    wpum_rate_limit_hit('register_ip', $ip);
+
+    $username  = sanitize_user(wpum_post_text('wpum_username'), true);
+    $email     = sanitize_email(wpum_post_text('wpum_email'));
+    $firstname = wpum_post_text('wpum_firstname');
+    $lastname  = wpum_post_text('wpum_lastname');
+    $password  = wpum_post_raw('wpum_password');
+    $confirm   = wpum_post_raw('wpum_confirm_password');
+
+    // Values we may show again after an error (never the passwords).
+    $old = array(
+        'username'  => $username,
+        'email'     => $email,
+        'firstname' => $firstname,
+        'lastname'  => $lastname,
+    );
+
+    $turnstile = wpum_turnstile_verify('register');
+    if (is_wp_error($turnstile)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', $turnstile->get_error_code(), $old);
+    }
+
+    if ('' === $username || '' === $email || '' === $firstname || '' === $lastname || '' === $password || '' === $confirm) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'fields_required', $old);
+    }
+
+    if (!is_email($email)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'invalid_email', $old);
+    }
+
+    if (!validate_username($username)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'invalid_username', $old);
+    }
+
+    if (username_exists($username) || email_exists($email)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'user_exists', $old);
+    }
+
+    if ($password !== $confirm) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'password_mismatch', $old);
+    }
+
+    if (!wpum_validate_password_strength($password)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'password_weak', $old);
+    }
+
+    // wp_create_user()/wp_update_user() unslash their input (WordPress passes slashed request data to them),
+    // so the password has to be slashed or a backslash in it would be silently dropped.
+    $user_id = wp_create_user($username, wp_slash($password), $email);
+    if (is_wp_error($user_id)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'register_failed', $old);
+    }
+
+    wp_update_user(wp_slash(array(
+        'ID'         => $user_id,
+        'first_name' => $firstname,
+        'last_name'  => $lastname,
+    )));
+
+    // Send the visitor to the login page with a confirmation.
+    wpum_redirect_with_flash(wpum_get_page_url('account'), 'login', 'success', 'registered');
 }
-add_action('init', 'wpum_process_registration');
-?>
+add_action('template_redirect', 'wpum_process_registration');
+
+// Native wp-login.php registration is handled by core; we only add Turnstile there (see turnstile.php).

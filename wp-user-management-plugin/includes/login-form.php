@@ -4,45 +4,52 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-// Include CAPTCHA functions
-require_once plugin_dir_path(__FILE__) . 'captcha.php';
-
-// Enqueue styles
-function wpum_enqueue_login_styles()
-{
-    wp_enqueue_style('wpum-login-form', plugin_dir_url(__FILE__) . 'login-form.css');
-}
-add_action('wp_enqueue_scripts', 'wpum_enqueue_login_styles');
-
 // Display login form
 function wpum_display_login_form()
 {
+    wpum_enqueue_frontend_assets();
+
     ob_start(); ?>
-    <div class="wpum-login-container">
-        <form id="wpum-login-form" method="post">
-            <h2><?php _e('User Login', 'wp-user-management-plugin'); ?></h2>
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <label for="wpum-username-email"><?php _e('Username or Email', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="text" name="wpum_username_email" id="wpum-username-email" required>
-                </div>
-                <div class="wpum-form-group">
-                    <label for="wpum-password"><?php _e('Password', 'wp-user-management-plugin'); ?> *</label>
-                    <input type="password" name="wpum_password" id="wpum-password" required>
-                    <input type="hidden" name="wpum_login_nonce" value="<?php echo wp_create_nonce('wpum_login_nonce'); ?>">
-                </div>
-            </div>
-            <div class="wpum-form-row">
-                <div class="wpum-form-group">
-                    <button type="submit"><?php _e('Login', 'wp-user-management-plugin'); ?></button>
-                </div>
-                <div class="wpum-form-group">
-                    <a href="<?php echo esc_url(home_url('/user-register')); ?>"><?php _e('Register', 'wp-user-management-plugin'); ?></a>
-                </div>
-                <div class="wpum-form-group">
-                    <a href="<?php echo esc_url(home_url('/password-reset')); ?>"><?php _e('Forgot Password?', 'wp-user-management-plugin'); ?></a>
-                </div>
-            </div>
+    <div class="wpum-ui wpum-ui--login">
+        <form id="wpum-login-form" class="wpum-card" method="post">
+            <h2 class="wpum-title"><?php esc_html_e('User Login', 'wp-user-management-plugin'); ?></h2>
+
+            <?php wpum_flash_render('login'); ?>
+            <?php wpum_form_fields('login'); ?>
+
+            <?php
+            wpum_render_field(array(
+                'id'           => 'wpum-username-email',
+                'name'         => 'wpum_username_email',
+                'label'        => __('Username or Email', 'wp-user-management-plugin'),
+                'value'        => wpum_flash_old('login', 'login'),
+                'required'     => true,
+                'autocomplete' => 'username',
+            ));
+            wpum_render_field(array(
+                'id'           => 'wpum-login-password',
+                'name'         => 'wpum_password',
+                'type'         => 'password',
+                'label'        => __('Password', 'wp-user-management-plugin'),
+                'required'     => true,
+                'autocomplete' => 'current-password',
+            ));
+            ?>
+
+            <label class="wpum-check">
+                <input type="checkbox" name="wpum_remember" value="1" checked>
+                <span><?php esc_html_e('Remember me', 'wp-user-management-plugin'); ?></span>
+            </label>
+
+            <?php wpum_turnstile_render('login'); ?>
+
+            <button type="submit" class="wpum-btn wpum-btn--primary wpum-btn--block"><?php esc_html_e('Login', 'wp-user-management-plugin'); ?></button>
+
+            <p class="wpum-links">
+                <a href="<?php echo esc_url(wpum_get_page_url('register')); ?>"><?php esc_html_e('Register', 'wp-user-management-plugin'); ?></a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="<?php echo esc_url(wpum_get_page_url('reset')); ?>"><?php esc_html_e('Forgot Password?', 'wp-user-management-plugin'); ?></a>
+            </p>
         </form>
     </div>
 <?php
@@ -52,34 +59,51 @@ function wpum_display_login_form()
 // Handle user login
 function wpum_process_login()
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wpum_login_nonce'])) {
-        if (! wp_verify_nonce($_POST['wpum_login_nonce'], 'wpum_login_nonce')) {
-            wp_die(__('Security check failed!', 'wp-user-management-plugin'));
-        }
-
-        $username_email = sanitize_text_field($_POST['wpum_username_email']);
-        $password       = $_POST['wpum_password'];
-
-        // Check if username or email exists
-        if (!wpum_user_exists($username_email)) {
-            wp_die(__('Invalid username or email.', 'wp-user-management-plugin'));
-        }
-
-        // Attempt to login
-        $user = wp_signon(array(
-            'user_login' => $username_email,
-            'user_password' => $password,
-            'remember' => true
-        ));
-
-        if (is_wp_error($user)) {
-            wp_die(__('Invalid password.', 'wp-user-management-plugin'));
-        }
-
-        // Redirect to profile page
-        wp_redirect(home_url('/user-account'));
-        exit;
+    if (!wpum_is_form_post('login')) {
+        return;
     }
+
+    $return_url = wpum_current_url();
+
+    if (!wpum_verify_form_nonce('login')) {
+        wpum_redirect_with_flash($return_url, 'login', 'error', 'invalid_nonce');
+    }
+
+    $login    = wpum_post_text('wpum_username_email');
+    $password = wpum_post_raw('wpum_password');
+    $ip       = wpum_get_client_ip();
+    $old      = array('login' => $login);
+
+    if (wpum_rate_limit_is_blocked('login_ip', $ip) || wpum_rate_limit_is_blocked('login', $ip . '|' . $login)) {
+        wpum_redirect_with_flash($return_url, 'login', 'error', 'rate_limited', $old);
+    }
+
+    $turnstile = wpum_turnstile_verify('login');
+    if (is_wp_error($turnstile)) {
+        wpum_redirect_with_flash($return_url, 'login', 'error', $turnstile->get_error_code(), $old);
+    }
+
+    // One generic message for every failure: never reveal whether the account exists.
+    if ('' === $login || '' === $password) {
+        wpum_redirect_with_flash($return_url, 'login', 'error', 'login_failed', $old);
+    }
+
+    $user = wp_signon(array(
+        'user_login'    => $login,
+        'user_password' => $password,
+        'remember'      => !empty($_POST['wpum_remember']),
+    ));
+
+    if (is_wp_error($user)) {
+        wpum_rate_limit_hit('login', $ip . '|' . $login);
+        wpum_rate_limit_hit('login_ip', $ip);
+        wpum_redirect_with_flash($return_url, 'login', 'error', 'login_failed', $old);
+    }
+
+    wpum_rate_limit_clear('login', $ip . '|' . $login);
+
+    // Redirect to profile page
+    wp_safe_redirect(wpum_get_page_url('account'));
+    exit;
 }
-add_action('init', 'wpum_process_login');
-?>
+add_action('template_redirect', 'wpum_process_login');
