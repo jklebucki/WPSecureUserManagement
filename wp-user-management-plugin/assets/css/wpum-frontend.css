@@ -1,0 +1,642 @@
+/**
+ * WP User Management - front-end styles (login, registration, password reset, profile).
+ *
+ * Design: a calm white card, soft shadow, one muted accent colour. Everything is scoped under
+ * ".wpum-ui" and uses class selectors only.
+ *
+ * Why "!important": themes (and page builders) style bare elements such as input, button, label,
+ * h2 or p with high-specificity selectors like ".entry-content input[type=text]". To keep these forms
+ * looking the same on every theme, the visual properties themes usually override are marked
+ * !important. Layout that is not theme-sensitive is left alone. Override the look by changing the
+ * custom properties below, e.g. ".wpum-ui { --wpum-accent: #0f766e !important; }".
+ */
+
+/* ---------- Design tokens ---------- */
+.wpum-ui {
+    --wpum-accent: #3b5bdb;
+    --wpum-accent-hover: #3249c4;
+    --wpum-accent-ring: rgba(59, 91, 219, 0.2);
+    --wpum-text: #1f2937;
+    --wpum-muted: #6b7280;
+    --wpum-border: #e5e7eb;
+    --wpum-surface: #ffffff;
+    --wpum-field: #f9fafb;
+    --wpum-danger: #d92d20;
+    --wpum-danger-hover: #b42318;
+    --wpum-danger-soft: #fef3f2;
+    --wpum-danger-line: #fecdca;
+    --wpum-success: #067647;
+    --wpum-success-soft: #ecfdf3;
+    --wpum-success-line: #abefc6;
+    --wpum-radius: 14px;
+    --wpum-radius-sm: 9px;
+    --wpum-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px rgba(16, 24, 40, 0.07);
+    --wpum-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- Base ---------- */
+.wpum-ui,
+.wpum-ui *,
+.wpum-ui *::before,
+.wpum-ui *::after {
+    box-sizing: border-box !important;
+}
+
+.wpum-ui {
+    display: block;
+    width: 100%;
+    margin: 0 auto 24px;
+    padding: 0;
+    font-family: var(--wpum-font) !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    color: var(--wpum-text) !important;
+    text-align: left;
+    -webkit-font-smoothing: antialiased;
+}
+
+.wpum-ui form,
+.wpum-ui fieldset {
+    margin: 0 !important;
+    padding: 0;
+    border: 0;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.wpum-ui p {
+    margin: 0 0 12px !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+
+.wpum-ui a {
+    color: var(--wpum-accent) !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+}
+
+.wpum-ui a:hover,
+.wpum-ui a:focus {
+    color: var(--wpum-accent-hover) !important;
+    text-decoration: underline !important;
+}
+
+/* ---------- Card ---------- */
+.wpum-ui .wpum-card {
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 32px !important;
+    background: var(--wpum-surface) !important;
+    border: 1px solid var(--wpum-border) !important;
+    border-radius: var(--wpum-radius) !important;
+    box-shadow: var(--wpum-shadow) !important;
+}
+
+.wpum-ui--login .wpum-card,
+.wpum-ui--reset .wpum-card {
+    max-width: 460px;
+}
+
+.wpum-ui--register .wpum-card {
+    max-width: 540px;
+}
+
+.wpum-ui--profile .wpum-card {
+    max-width: 780px;
+}
+
+.wpum-ui .wpum-title {
+    margin: 0 0 22px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 22px !important;
+    font-weight: 650 !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.01em !important;
+    text-align: center !important;
+    text-transform: none !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-subtitle {
+    margin: 0 0 8px !important;
+    padding: 0 !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 17px !important;
+    font-weight: 650 !important;
+    line-height: 1.35 !important;
+    text-transform: none !important;
+    color: var(--wpum-text) !important;
+}
+
+/* ---------- Fields ---------- */
+.wpum-ui .wpum-field {
+    display: block;
+    margin: 0 0 16px !important;
+    padding: 0 !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+.wpum-ui .wpum-label {
+    display: block !important;
+    float: none !important;
+    width: auto !important;
+    margin: 0 0 6px !important;
+    padding: 0 !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0 !important;
+    text-align: left !important;
+    text-transform: none !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-req {
+    color: var(--wpum-danger) !important;
+}
+
+.wpum-ui .wpum-input {
+    display: block !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    padding: 10px 14px !important;
+    background: var(--wpum-field) !important;
+    background-image: none !important;
+    border: 1px solid var(--wpum-border) !important;
+    border-radius: var(--wpum-radius-sm) !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: var(--wpum-text) !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.wpum-ui .wpum-input::placeholder {
+    color: #9ca3af !important;
+    opacity: 1;
+}
+
+.wpum-ui .wpum-input:hover {
+    border-color: #d1d5db !important;
+}
+
+.wpum-ui .wpum-input:focus {
+    background: var(--wpum-surface) !important;
+    border-color: var(--wpum-accent) !important;
+    box-shadow: 0 0 0 3px var(--wpum-accent-ring) !important;
+}
+
+.wpum-ui .wpum-input[readonly] {
+    background: #f3f4f6 !important;
+    color: var(--wpum-muted) !important;
+    cursor: default;
+}
+
+.wpum-ui .wpum-input--file {
+    padding: 8px 10px !important;
+    cursor: pointer;
+}
+
+.wpum-ui .wpum-input--file::file-selector-button {
+    margin-right: 12px;
+    padding: 6px 12px;
+    background: var(--wpum-surface);
+    border: 1px solid var(--wpum-border);
+    border-radius: 7px;
+    font-family: var(--wpum-font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wpum-text);
+    cursor: pointer;
+}
+
+.wpum-ui .wpum-help {
+    margin: 6px 0 0 !important;
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+    color: var(--wpum-muted) !important;
+}
+
+.wpum-ui .wpum-check {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px !important;
+    padding: 0 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: var(--wpum-text) !important;
+    cursor: pointer;
+}
+
+.wpum-ui .wpum-check input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+    appearance: auto !important;
+    width: 16px !important;
+    height: 16px !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    accent-color: var(--wpum-accent);
+    box-shadow: none !important;
+}
+
+.wpum-ui .wpum-fieldset {
+    margin: 0 0 18px !important;
+    padding: 16px 16px 2px !important;
+    border: 1px solid var(--wpum-border) !important;
+    border-radius: var(--wpum-radius-sm) !important;
+    min-width: 0;
+}
+
+.wpum-ui .wpum-fieldset legend {
+    padding: 0 8px !important;
+    font-size: 14px !important;
+    font-weight: 650 !important;
+    color: var(--wpum-text) !important;
+    width: auto;
+}
+
+/* ---------- Buttons ---------- */
+.wpum-ui .wpum-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    min-height: 44px !important;
+    margin: 0 !important;
+    padding: 10px 22px !important;
+    background: var(--wpum-accent) !important;
+    background-image: none !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--wpum-radius-sm) !important;
+    box-shadow: none !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    text-align: center;
+    text-decoration: none !important;
+    text-shadow: none !important;
+    text-transform: none !important;
+    color: #fff !important;
+    cursor: pointer;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.wpum-ui .wpum-btn:hover,
+.wpum-ui .wpum-btn:focus {
+    background: var(--wpum-accent-hover) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.wpum-ui .wpum-btn:focus-visible {
+    outline: 2px solid var(--wpum-accent) !important;
+    outline-offset: 2px !important;
+}
+
+.wpum-ui .wpum-btn--block {
+    display: flex !important;
+    width: 100% !important;
+}
+
+.wpum-ui .wpum-btn--ghost {
+    background: transparent !important;
+    border-color: var(--wpum-border) !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-btn--ghost:hover,
+.wpum-ui .wpum-btn--ghost:focus {
+    background: #f3f4f6 !important;
+    border-color: #d1d5db !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-btn--danger {
+    background: var(--wpum-danger) !important;
+}
+
+.wpum-ui .wpum-btn--danger:hover,
+.wpum-ui .wpum-btn--danger:focus {
+    background: var(--wpum-danger-hover) !important;
+}
+
+.wpum-ui .wpum-btn[disabled],
+.wpum-ui .wpum-btn.is-busy {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.wpum-ui .wpum-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.wpum-ui .wpum-actions--center {
+    justify-content: center;
+}
+
+.wpum-ui .wpum-actions--split {
+    justify-content: space-between;
+}
+
+.wpum-ui .wpum-links {
+    margin: 18px 0 0 !important;
+    font-size: 14px !important;
+    text-align: center;
+    color: var(--wpum-muted) !important;
+}
+
+.wpum-ui .wpum-links a {
+    margin: 0 6px;
+}
+
+/* ---------- Notices ---------- */
+.wpum-ui .wpum-notice {
+    margin: 0 0 18px !important;
+    padding: 12px 14px !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--wpum-radius-sm) !important;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+}
+
+.wpum-ui .wpum-notice[hidden] {
+    display: none !important;
+}
+
+.wpum-ui .wpum-notice--error {
+    background: var(--wpum-danger-soft) !important;
+    border-color: var(--wpum-danger-line) !important;
+    color: var(--wpum-danger-hover) !important;
+}
+
+.wpum-ui .wpum-notice--success {
+    background: var(--wpum-success-soft) !important;
+    border-color: var(--wpum-success-line) !important;
+    color: var(--wpum-success) !important;
+}
+
+/* ---------- Password strength + match ---------- */
+.wpum-ui .wpum-strength {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    margin: -6px 0 16px !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+}
+
+.wpum-ui .wpum-strength__bar {
+    position: relative;
+    display: block;
+    height: 6px;
+    background: #eceff3;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.wpum-ui .wpum-strength__bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    border-radius: inherit;
+    transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.wpum-ui .wpum-strength[data-level="1"] .wpum-strength__bar::after { width: 25%; background: #f04438; }
+.wpum-ui .wpum-strength[data-level="2"] .wpum-strength__bar::after { width: 50%; background: #f79009; }
+.wpum-ui .wpum-strength[data-level="3"] .wpum-strength__bar::after { width: 75%; background: #12b76a; }
+.wpum-ui .wpum-strength[data-level="4"] .wpum-strength__bar::after { width: 100%; background: #12b76a; }
+
+.wpum-ui .wpum-strength__label {
+    min-width: 56px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--wpum-muted);
+}
+
+.wpum-ui .wpum-strength.weak .wpum-strength__label { color: #d92d20; }
+.wpum-ui .wpum-strength.medium .wpum-strength__label { color: #b54708; }
+.wpum-ui .wpum-strength.strong .wpum-strength__label { color: #067647; }
+
+.wpum-ui .wpum-match {
+    margin: -6px 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.wpum-ui .wpum-match:empty {
+    display: none;
+}
+
+.wpum-ui .wpum-match.is-ok { color: var(--wpum-success); }
+.wpum-ui .wpum-match.is-bad { color: var(--wpum-danger); }
+
+/* ---------- Turnstile ---------- */
+.wpum-ui .wpum-turnstile {
+    display: block;
+    width: 100%;
+    margin: 0 0 16px !important;
+}
+
+/* ---------- Profile tabs ---------- */
+.wpum-ui .wpum-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 2px;
+    margin: -8px -8px 24px !important;
+    padding: 0 8px !important;
+    border-bottom: 1px solid var(--wpum-border);
+}
+
+.wpum-ui .wpum-tab {
+    flex: 0 0 auto;
+    margin: 0 0 -1px !important;
+    padding: 12px 14px !important;
+    background: none !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: var(--wpum-muted) !important;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.wpum-ui .wpum-tab:hover,
+.wpum-ui .wpum-tab:focus {
+    background: none !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-tab.is-active {
+    border-bottom-color: var(--wpum-accent) !important;
+    color: var(--wpum-accent) !important;
+}
+
+.wpum-ui .wpum-tab--danger:hover,
+.wpum-ui .wpum-tab--danger.is-active {
+    color: var(--wpum-danger) !important;
+    border-bottom-color: var(--wpum-danger) !important;
+}
+
+.wpum-ui .wpum-tab:focus-visible {
+    outline: 2px solid var(--wpum-accent) !important;
+    outline-offset: -2px !important;
+}
+
+.wpum-ui .wpum-panel {
+    display: none;
+}
+
+.wpum-ui .wpum-panel.is-active {
+    display: block;
+}
+
+/* ---------- Modal (account deletion) ---------- */
+.wpum-ui.wpum-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    margin: 0;
+    padding: 16px;
+    background: rgba(17, 24, 39, 0.5);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    overflow-y: auto;
+}
+
+.wpum-ui.wpum-modal[hidden] {
+    display: none !important;
+}
+
+.wpum-ui .wpum-modal__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 28px !important;
+    background: var(--wpum-surface) !important;
+    border-radius: var(--wpum-radius) !important;
+    box-shadow: 0 20px 60px rgba(16, 24, 40, 0.3) !important;
+}
+
+.wpum-ui .wpum-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px !important;
+    height: 32px !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    color: var(--wpum-muted) !important;
+    cursor: pointer;
+}
+
+.wpum-ui .wpum-modal__close:hover {
+    background: #f3f4f6 !important;
+    color: var(--wpum-text) !important;
+}
+
+body.wpum-modal-open {
+    overflow: hidden;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 600px) {
+    .wpum-ui .wpum-card {
+        padding: 22px 18px !important;
+        border-radius: 12px !important;
+    }
+
+    .wpum-ui .wpum-input {
+        font-size: 16px !important; /* avoids the iOS zoom on focus */
+    }
+
+    .wpum-ui .wpum-actions {
+        flex-direction: column-reverse;
+    }
+
+    .wpum-ui .wpum-actions .wpum-btn {
+        width: 100% !important;
+    }
+
+    .wpum-ui .wpum-actions--center {
+        flex-direction: column;
+    }
+
+    /* On phones the tabs scroll sideways instead of wrapping. */
+    .wpum-ui .wpum-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
+
+    .wpum-ui .wpum-tabs::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wpum-ui * {
+        transition: none !important;
+    }
+}

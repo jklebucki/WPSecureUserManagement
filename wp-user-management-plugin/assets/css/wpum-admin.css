@@ -1,0 +1,385 @@
+/**
+ * WP User Management - admin styles.
+ * Everything is scoped under ".wpum-admin" and only loaded on the plugin's own pages.
+ */
+
+.wpum-admin {
+    --wpum-accent: #2271b1;
+    --wpum-text: #1d2327;
+    --wpum-muted: #646970;
+    --wpum-line: #e0e2e5;
+    --wpum-soft: #f6f7f7;
+    --wpum-danger: #d63638;
+    --wpum-danger-dark: #b32d2e;
+    --wpum-ok: #00793a;
+}
+
+.wpum-admin h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wpum-admin .wpum-lead {
+    max-width: 720px;
+    margin: 4px 0 18px;
+    font-size: 14px;
+    color: var(--wpum-muted);
+}
+
+.wpum-admin .wpum-count {
+    padding: 2px 10px;
+    background: var(--wpum-soft);
+    border: 1px solid var(--wpum-line);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--wpum-muted);
+}
+
+/* ---------- Cards ---------- */
+.wpum-admin .wpum-card {
+    max-width: 880px;
+    margin: 0 0 16px;
+    padding: 18px 22px;
+    background: #fff;
+    border: 1px solid var(--wpum-line);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.wpum-admin .wpum-card--flush {
+    max-width: none;
+    padding: 0;
+    overflow: hidden;
+}
+
+.wpum-admin .wpum-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.wpum-admin .wpum-card__head h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.wpum-admin .wpum-card .description {
+    margin: 6px 0 12px;
+}
+
+.wpum-admin .wpum-card .form-table {
+    margin-top: 0;
+}
+
+.wpum-admin .wpum-card .form-table th {
+    width: 170px;
+    padding-left: 0;
+}
+
+.wpum-admin .wpum-pill {
+    display: inline-block;
+    padding: 3px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.wpum-admin .wpum-pill--ok {
+    background: #e6f4ea;
+    color: var(--wpum-ok);
+}
+
+.wpum-admin .wpum-pill--off {
+    background: var(--wpum-soft);
+    color: var(--wpum-muted);
+}
+
+.wpum-admin .wpum-switch,
+.wpum-admin .wpum-inline-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpum-admin .wpum-switch {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.wpum-admin .wpum-checks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 8px 16px;
+}
+
+.wpum-admin .wpum-checks.wpum-scroll {
+    max-height: 320px;
+    padding: 12px;
+    overflow-y: auto;
+    background: var(--wpum-soft);
+    border: 1px solid var(--wpum-line);
+    border-radius: 8px;
+}
+
+.wpum-admin .wpum-test-result {
+    margin-left: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.wpum-admin .wpum-test-result.is-ok { color: var(--wpum-ok); }
+.wpum-admin .wpum-test-result.is-bad { color: var(--wpum-danger-dark); }
+
+.wpum-admin .wpum-preview {
+    margin-top: 12px;
+}
+
+/* ---------- User list ---------- */
+.wpum-admin .wpum-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--wpum-line);
+}
+
+.wpum-admin .wpum-bulk,
+.wpum-admin .wpum-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.wpum-admin .wpum-selected {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wpum-accent);
+}
+
+.wpum-admin .wpum-pagination {
+    margin-left: auto;
+}
+
+.wpum-admin .wpum-pagination .page-numbers {
+    display: inline-block;
+    min-width: 30px;
+    margin: 0 1px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    text-decoration: none;
+}
+
+.wpum-admin .wpum-pagination a.page-numbers:hover {
+    background: var(--wpum-soft);
+    border-color: var(--wpum-line);
+}
+
+.wpum-admin .wpum-pagination .page-numbers.current {
+    background: var(--wpum-accent);
+    color: #fff;
+}
+
+.wpum-admin .wpum-table-wrap {
+    overflow-x: auto;
+}
+
+.wpum-admin .wpum-table {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    table-layout: auto;
+}
+
+/* The last column holds the "add role" form: keep it on one line. */
+.wpum-admin .wpum-table td:last-child {
+    min-width: 230px;
+    white-space: nowrap;
+}
+
+.wpum-admin .wpum-table th,
+.wpum-admin .wpum-table td {
+    vertical-align: middle;
+}
+
+.wpum-admin .wpum-table thead th,
+.wpum-admin .wpum-table thead td {
+    border-bottom: 1px solid var(--wpum-line);
+    font-weight: 600;
+    color: var(--wpum-muted);
+}
+
+.wpum-admin .wpum-table .check-column {
+    width: 36px;
+    padding-left: 16px;
+}
+
+.wpum-admin .wpum-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 2px 4px 2px 0;
+    padding: 2px 4px 2px 10px;
+    background: var(--wpum-soft);
+    border: 1px solid var(--wpum-line);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #3c434a;
+}
+
+.wpum-admin .wpum-role__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 1;
+    text-decoration: none;
+    color: #8c8f94;
+}
+
+.wpum-admin .wpum-role__remove:hover,
+.wpum-admin .wpum-role__remove:focus {
+    background: #fcf0f1;
+    color: var(--wpum-danger);
+}
+
+.wpum-admin .wpum-doc {
+    margin-left: 4px;
+    text-decoration: none;
+}
+
+.wpum-admin .wpum-doc .dashicons {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    vertical-align: middle;
+    color: var(--wpum-accent);
+}
+
+.wpum-admin .wpum-inline-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 0;
+}
+
+.wpum-admin .wpum-inline-form select {
+    flex: 0 1 140px;
+    min-width: 100px;
+    max-width: 140px;
+}
+
+/* ---------- Buttons / modal ---------- */
+.wpum-admin .button.wpum-button-danger {
+    background: var(--wpum-danger);
+    border-color: var(--wpum-danger);
+    color: #fff;
+}
+
+.wpum-admin .button.wpum-button-danger:hover,
+.wpum-admin .button.wpum-button-danger:focus {
+    background: var(--wpum-danger-dark);
+    border-color: var(--wpum-danger-dark);
+    color: #fff;
+}
+
+.wpum-admin .wpum-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(29, 35, 39, 0.55);
+}
+
+.wpum-admin .wpum-modal[hidden] {
+    display: none;
+}
+
+.wpum-admin .wpum-modal__dialog {
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    padding: 24px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.wpum-admin .wpum-modal__dialog h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.wpum-admin .wpum-bulk-list {
+    max-height: 140px;
+    margin: 8px 0 14px;
+    padding: 8px 12px 8px 28px;
+    overflow-y: auto;
+    list-style: disc;
+    background: var(--wpum-soft);
+    border: 1px solid var(--wpum-line);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.wpum-admin .wpum-content-choice {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+}
+
+.wpum-admin .wpum-content-choice legend {
+    padding: 0;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.wpum-admin .wpum-content-choice label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.wpum-admin .wpum-content-choice select {
+    width: 100%;
+    margin-top: 2px;
+}
+
+.wpum-admin .wpum-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+body.wpum-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 782px) {
+    .wpum-admin .wpum-pagination {
+        margin-left: 0;
+    }
+}
