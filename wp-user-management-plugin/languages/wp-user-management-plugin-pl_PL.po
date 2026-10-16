@@ -1,349 +1,949 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin\n"
-"POT-Creation-Date: 2024-03-21\n"
-"PO-Revision-Date: 2024-03-21\n"
+"Project-Id-Version: WP User Management Plugin 1.2.0\n"
+"POT-Creation-Date: 2026-10-16 21:46+0000\n"
+"PO-Revision-Date: 2026-10-16 21:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-Basepath: ..\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
-"|| n%100>14) ? 1 : 2);\n"
-"X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Domain: wp-user-management-plugin\n"
 
-#: includes/register-form.php:10
-msgid "User Registration"
-msgstr "Rejestracja użytkownika"
-
-#: includes/register-form.php:16
-#: includes/profile-edit-form.php:90
-msgid "Email"
-msgstr "Email"
-
-msgid "Email Address"
-msgstr "Adres email"
-
-#: includes/register-form.php:17
-#: includes/profile-edit-form.php:95
-msgid "First Name"
-msgstr "Imię"
-
-#: includes/register-form.php:18
-#: includes/profile-edit-form.php:100
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: includes/register-form.php:19
-msgid "Password"
-msgstr "Hasło"
-
-#: includes/register-form.php:20
-msgid "Confirm Password"
-msgstr "Potwierdź hasło"
-
-#: includes/captcha.php:5
-msgid "Enter the code"
-msgstr "Wprowadź kod"
-
-#: includes/register-form.php:25
-msgid "Register"
-msgstr "Zarejestruj"
-
-#: includes/login-form.php:5
-msgid "Login"
-msgstr "Zaloguj"
-
-#: includes/register-form.php:30
-msgid "Invalid email format."
-msgstr "Nieprawidłowy format emaila."
-
-#: includes/register-form.php:31
-msgid "All fields are required."
-msgstr "Wszystkie pola są wymagane."
-
-#: includes/register-form.php:32
-msgid "Username or email already taken."
-msgstr "Nazwa użytkownika lub email już zajęty."
-
-#: includes/register-form.php:33
-msgid "Passwords do not match."
-msgstr "Hasła się nie zgadzają."
-
-#: includes/register-form.php:34
-msgid "Password does not meet the strength requirements."
-msgstr "Hasło nie spełnia wymagań dotyczących siły."
-
-#: includes/captcha.php:10
-msgid "Invalid CAPTCHA."
-msgstr "Nieprawidłowy CAPTCHA."
-
-#: includes/register-form.php:35
-msgid "Registration failed. Please try again."
-msgstr "Rejestracja nie powiodła się. Spróbuj ponownie."
-
-#: includes/common.php:5
-#: includes/profile-edit-form.php:135
-msgid "Security check failed!"
-msgstr "Błąd weryfikacji bezpieczeństwa!"
-
-#: includes/profile-edit-form.php:50
-msgid "Profile updated successfully."
-msgstr "Profil zaktualizowany pomyślnie."
-
-#: includes/profile-edit-form.php:55
-#: includes/profile-edit-form.php:85
-msgid "Profile"
-msgstr "Profil"
-
-#: includes/profile-edit-form.php:60
-#: includes/profile-edit-form.php:90
-msgid "User Data"
-msgstr "Dane użytkownika"
-
-#: includes/profile-edit-form.php:65
-msgid "Password changed successfully."
-msgstr "Hasło zmienione pomyślnie."
-
-#: includes/profile-edit-form.php:70
-#: includes/profile-edit-form.php:75
-msgid "Delete Account"
-msgstr "Usuń konto"
-
-#: includes/profile-edit-form.php:75
-#: includes/profile-edit-form.php:95
-msgid "Logout"
-msgstr "Wyloguj się"
-
-#: includes/profile-edit-form.php:80
-msgid "Account deleted successfully."
-msgstr "Konto usunięte pomyślnie."
-
-#: includes/profile-edit-form.php:85
-#: includes/register-form.php:15
-msgid "Username"
-msgstr "Nazwa użytkownika"
-
-#: includes/profile-edit-form.php:105
-#: includes/profile-edit-form.php:60
-msgid "Update Profile"
-msgstr "Zaktualizuj profil"
-
-#: includes/profile-edit-form.php:110
-#: includes/profile-edit-form.php:115
-msgid "Save Data"
-msgstr "Zapisz dane"
-
-#: includes/profile-edit-form.php:115
-msgid "New Password"
-msgstr "Nowe hasło"
-
-#: includes/profile-edit-form.php:120
-msgid "Confirm New Password"
-msgstr "Potwierdź nowe hasło"
-
-#: includes/profile-edit-form.php:130
-#: includes/profile-edit-form.php:100
-msgid "Are you sure you want to delete your account?"
-msgstr "Czy na pewno chcesz usunąć swoje konto?"
-
-#: includes/password-reset-form.php:12
-msgid "Password reset link sent."
-msgstr "Link do resetowania hasła wysłany."
-
-#: includes/common.php:15
-msgid "Invalid request."
-msgstr "Nieprawidłowe żądanie."
-
-#: includes/admin-menu.php:20
+#: includes/admin-menu.php:10 includes/admin-menu.php:11
 msgid "User Management"
 msgstr "Zarządzanie użytkownikami"
 
-#: includes/admin-menu.php:25
-msgid "Search Users"
-msgstr "Szukaj użytkowników"
+#: includes/admin-menu.php:108
+#, php-format
+msgid "%d user deleted."
+msgid_plural "%d users deleted."
+msgstr[0] "Usunięto %d użytkownika."
+msgstr[1] "Usunięto %d użytkowników."
+msgstr[2] "Usunięto %d użytkowników."
 
-#: includes/user-functions.php:10
-msgid "Display Name"
-msgstr "Nazwa wyświetlana"
+#: includes/admin-menu.php:118
+#, php-format
+msgid "%d user was skipped (your own account, the last administrator, or no permission)."
+msgid_plural "%d users were skipped (your own account, the last administrator, or no permission)."
+msgstr[0] "Pominięto %d użytkownika (Twoje konto, ostatni administrator lub brak uprawnień)."
+msgstr[1] "Pominięto %d użytkowników (Twoje konto, ostatni administrator lub brak uprawnień)."
+msgstr[2] "Pominięto %d użytkowników (Twoje konto, ostatni administrator lub brak uprawnień)."
 
-#: includes/user-functions.php:15
-msgid "User Role"
-msgstr "Rola użytkownika"
+#: includes/admin-menu.php:138 includes/admin-menu.php:496
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do tej strony."
 
-#: includes/admin-menu.php:30
-msgid "Actions"
-msgstr "Akcje"
+#: includes/admin-menu.php:170
+msgid "Shooting Patent"
+msgstr "Patent strzelecki"
 
-#: includes/profile-edit-form.php:65
-msgid "Change Password"
-msgstr "Zmień hasło"
+#: includes/admin-menu.php:171
+msgid "Instructor License"
+msgstr "Licencja instruktora"
 
-#: includes/password-reset-form.php:18
-msgid "Password Reset"
-msgstr "Resetowanie hasła"
+#: includes/admin-menu.php:201 includes/admin-menu.php:203
+msgid "Bulk actions"
+msgstr "Akcje zbiorcze"
 
-#: includes/profile-edit-form.php:80
-msgid "Profile Edit"
-msgstr "Edycja profilu"
+#: includes/admin-menu.php:204
+msgid "Delete"
+msgstr "Usuń"
 
-#: includes/admin-menu.php:35
+#: includes/admin-menu.php:206
+msgid "Apply"
+msgstr "Zastosuj"
+
+#: includes/admin-menu.php:21 includes/admin-menu.php:22 includes/admin-menu.php:186
 msgid "User List"
 msgstr "Lista użytkowników"
 
-#: includes/admin-menu.php:40
-msgid "Search"
-msgstr "Szukaj"
+#: includes/admin-menu.php:211
+msgid "Delete selected users"
+msgstr "Usuń zaznaczonych użytkowników"
 
-#: includes/login-form.php:10
-msgid "User Login"
-msgstr "Logowanie użytkownika"
+#: includes/admin-menu.php:216
+msgid "What should happen to the content of these users?"
+msgstr "Co zrobić z treściami tych użytkowników?"
 
-#: includes/login-form.php:15
-msgid "Username or Email"
-msgstr "Nazwa użytkownika lub Email"
+#: includes/admin-menu.php:217
+msgid "Delete all content"
+msgstr "Usuń wszystkie treści"
 
-#: includes/login-form.php:20
-msgid "Forgot Password?"
-msgstr "Zapomniałeś hasła?"
+#: includes/admin-menu.php:219
+msgid "Attribute all content to:"
+msgstr "Przypisz wszystkie treści do:"
 
-#: includes/login-form.php:30
-msgid "Login failed. Please check your credentials."
-msgstr "Logowanie nie powiodło się. Sprawdź swoje dane."
-
-#: includes/profile-edit-form.php:105
-msgid "Yes, Delete My Account"
-msgstr "Tak, usuń moje konto"
-
-#: includes/profile-edit-form.php:110
+#: includes/admin-menu.php:233 includes/profile-edit-form.php:277
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: includes/profile-edit-form.php:130
-msgid "Password Reset Request"
-msgstr "Prośba o zresetowanie hasła"
+#: includes/admin-menu.php:234
+msgid "Delete users"
+msgstr "Usuń użytkowników"
 
-#: includes/profile-edit-form.php:135
-msgid "Someone has requested a password reset for the following account: %s"
-msgstr "Ktoś poprosił o zresetowanie hasła dla następującego konta: %s"
+#: includes/admin-menu.php:242 includes/admin-menu.php:244
+msgid "Search"
+msgstr "Szukaj"
 
-#: includes/profile-edit-form.php:140
-msgid "If this was a mistake, just ignore this email and nothing will happen."
-msgstr "Jeśli to była pomyłka, zignoruj ten email i nic się nie stanie."
+#: includes/admin-menu.php:243
+msgid "Search..."
+msgstr "Szukaj..."
 
-#: includes/profile-edit-form.php:145
-msgid "To reset your password, visit the following address: %s"
-msgstr "Aby zresetować hasło, odwiedź następujący adres: %s"
+#: includes/admin-menu.php:248
+msgid "Pagination"
+msgstr "Paginacja"
 
-msgid "If you don't wish to change your password, just ignore this email and nothing will happen."
-msgstr "Jeśli nie chcesz zmieniać hasła, zignoruj ten email i nic się nie stanie."
+#: includes/admin-menu.php:256
+msgid "Select all users on this page"
+msgstr "Zaznacz wszystkich użytkowników na tej stronie"
 
-msgid "This password reset request will expire in 24 hours."
-msgstr "Ta prośba o zresetowanie hasła wygaśnie za 24 godziny."
+#: includes/admin-menu.php:260
+msgid "Roles"
+msgstr "Role"
 
-msgid "Thanks, %s"
-msgstr "Dziękujemy, %s"
+#: includes/admin-menu.php:264
+msgid "Actions"
+msgstr "Akcje"
 
-msgid "[%s] Password Reset"
-msgstr "[%s] Resetowanie hasła"
+#: includes/admin-menu.php:269
+msgid "No users found."
+msgstr "Nie znaleziono użytkowników."
 
-#: includes/profile-edit-form.php:150
-msgid "Settings saved."
-msgstr "Ustawienia zapisane."
+#: includes/admin-menu.php:282
+#, php-format
+msgid "Select %s"
+msgstr "Zaznacz: %s"
 
-#: includes/profile-edit-form.php:155
-msgid "Minimum Password Length"
-msgstr "Minimalna długość hasła"
-
-#: includes/profile-edit-form.php:160
+#: includes/admin-menu.php:30 includes/admin-menu.php:31 includes/admin-menu.php:550
 msgid "Configuration"
 msgstr "Konfiguracja"
 
-#: includes/profile-edit-form.php:165
+#: includes/admin-menu.php:307
+#, php-format
+msgid "Remove role %s"
+msgstr "Usuń rolę: %s"
+
+#: includes/admin-menu.php:322 includes/admin-menu.php:324
+msgid "View document"
+msgstr "Zobacz dokument"
+
+#: includes/admin-menu.php:336
+msgid "Role"
+msgstr "Rola"
+
+#: includes/admin-menu.php:342
+msgid "Add role"
+msgstr "Dodaj rolę"
+
+#: includes/admin-menu.php:376 includes/admin-menu.php:401
+msgid "You are not allowed to change the roles of this user."
+msgstr "Nie możesz zmieniać ról tego użytkownika."
+
+#: includes/admin-menu.php:428
+msgid "You are not allowed to delete users."
+msgstr "Nie masz uprawnień do usuwania użytkowników."
+
+#: includes/admin-menu.php:501
+msgid "Account page"
+msgstr "Strona konta"
+
+#: includes/admin-menu.php:502
+msgid "Registration page"
+msgstr "Strona rejestracji"
+
+#: includes/admin-menu.php:503
+msgid "Password reset page"
+msgstr "Strona resetowania hasła"
+
+#: includes/admin-menu.php:52
+msgid "Select at least one user."
+msgstr "Zaznacz co najmniej jednego użytkownika."
+
+#: includes/admin-menu.php:53
+#, php-format
+msgid "%d selected"
+msgstr "Zaznaczono: %d"
+
+#: includes/admin-menu.php:530
+msgid "Settings saved."
+msgstr "Ustawienia zapisane."
+
+#: includes/admin-menu.php:54
+msgid "You are about to permanently delete 1 user."
+msgstr "Za chwilę trwale usuniesz 1 użytkownika."
+
+#: includes/admin-menu.php:55
+#, php-format
+msgid "You are about to permanently delete %d users."
+msgstr "Za chwilę trwale usuniesz użytkowników: %d."
+
+#: includes/admin-menu.php:555
 msgid "User List Columns"
 msgstr "Kolumny listy użytkowników"
 
-#: includes/profile-edit-form.php:170
+#: includes/admin-menu.php:56
+#, php-format
+msgid "...and %d more"
+msgstr "...i jeszcze %d"
+
+#: includes/admin-menu.php:567
 msgid "User Profile Metadata"
 msgstr "Metadane profilu użytkownika"
 
-#: includes/profile-edit-form.php:175
+#: includes/admin-menu.php:568
+msgid "Fields the user can edit on the \"User Data\" tab of the profile page. Sensitive internal keys (capabilities, sessions, screen options) are hidden on purpose."
+msgstr "Pola, które użytkownik może edytować na zakładce „Dane użytkownika” strony profilu. Wrażliwe klucze wewnętrzne (uprawnienia, sesje, opcje ekranu) są celowo ukryte."
+
+#: includes/admin-menu.php:580
 msgid "Password Settings"
 msgstr "Ustawienia hasła"
 
-#: includes/profile-edit-form.php:180
+#: includes/admin-menu.php:581
+msgid "Minimum Password Length"
+msgstr "Minimalna długość hasła"
+
+#: includes/admin-menu.php:586
+msgid "Page addresses"
+msgstr "Adresy stron"
+
+#: includes/admin-menu.php:587
+msgid "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
+msgstr "Odnośniki (slugi) stron z shortcode’ami wtyczki. Służą do przekierowań i linków między formularzami."
+
+#: includes/admin-menu.php:601
 msgid "Save Settings"
 msgstr "Zapisz ustawienia"
 
-msgid "Club Number"
-msgstr "Numer klubowy"
+#: includes/admin-menu.php:66
+msgid "ID"
+msgstr "ID"
 
-# Nowe tłumaczenia dla sekcji uprawnień strzeleckich
-msgid "Shooting Credentials"
-msgstr "Uprawnienia strzeleckie"
+#: includes/admin-menu.php:67 includes/profile-edit-form.php:80 includes/register-form.php:26
+msgid "Username"
+msgstr "Nazwa użytkownika"
 
-msgid "Shooting Patent Number"
-msgstr "Numer patentu strzeleckiego"
+#: includes/admin-menu.php:68 includes/profile-edit-form.php:89 includes/register-form.php:35
+msgid "Email"
+msgstr "Email"
 
-msgid "Shooting Instructor License Number"
-msgstr "Numer legitymacji prowadzącego strzelanie"
+#: includes/admin-menu.php:69 includes/profile-edit-form.php:97 includes/register-form.php:43
+msgid "First Name"
+msgstr "Imię"
 
-msgid "PDF Document"
-msgstr "Dokument PDF"
+#: includes/admin-menu.php:70 includes/profile-edit-form.php:105 includes/register-form.php:51
+msgid "Last Name"
+msgstr "Nazwisko"
 
-msgid "Current file:"
-msgstr "Aktualny plik:"
+#: includes/admin-menu.php:71
+msgid "Registered"
+msgstr "Zarejestrowano"
 
-msgid "View Document"
-msgstr "Zobacz dokument"
+#: includes/admin-menu.php:90
+msgid "Deleting users needs to be confirmed in the dialog. Please try again."
+msgstr "Usunięcie użytkowników trzeba potwierdzić w oknie dialogowym. Spróbuj ponownie."
 
-msgid "Save Credentials"
-msgstr "Zapisz uprawnienia"
+#: includes/admin-menu.php:91
+msgid "No users were selected."
+msgstr "Nie zaznaczono żadnych użytkowników."
 
-msgid "File upload failed"
-msgstr "Przesyłanie pliku nie powiodło się"
+#: includes/admin-menu.php:92
+msgid "Choose a valid user to receive the content of the deleted users."
+msgstr "Wybierz prawidłowego użytkownika, który przejmie treści usuwanych kont."
 
-msgid "Only PDF files are allowed"
-msgstr "Dozwolone są tylko pliki PDF"
+#: includes/admin-menu.php:93
+msgid "Role added."
+msgstr "Rola dodana."
 
-msgid "Failed to save file"
-msgstr "Nie udało się zapisać pliku"
+#: includes/admin-menu.php:94
+msgid "Role removed."
+msgstr "Rola usunięta."
 
-msgid "Click the button below to logout from your account."
-msgstr "Kliknij przycisk poniżej, aby się wylogować z swojego konta."
+#: includes/admin-menu.php:95
+msgid "This role cannot be assigned."
+msgstr "Tej roli nie można przypisać."
 
-msgid "No user found with that email address."
-msgstr "Nie znaleziono użytkownika z tym adresem email."
+#: includes/admin-menu.php:96
+msgid "You cannot remove the administrator role from yourself or from the last administrator."
+msgstr "Nie możesz odebrać roli administratora sobie ani ostatniemu administratorowi."
 
-msgid "Error generating password reset key. Please try again."
-msgstr "Błąd podczas generowania klucza resetowania hasła. Spróbuj ponownie."
+#: includes/admin-turnstile.php:106
+msgid "You are not allowed to do this."
+msgstr "Nie masz uprawnień do tej czynności."
 
-msgid "Password reset instructions have been sent to your email address."
-msgstr "Instrukcje resetowania hasła zostały wysłane na Twój adres email."
+#: includes/admin-turnstile.php:116
+msgid "Enter the secret key first."
+msgstr "Najpierw wpisz klucz tajny."
 
-msgid "Error sending password reset email. Please try again."
-msgstr "Błąd podczas wysyłania emaila z resetowaniem hasła. Spróbuj ponownie."
+#: includes/admin-turnstile.php:123
+#, php-format
+msgid "Could not reach Cloudflare: %s"
+msgstr "Nie udało się połączyć z Cloudflare: %s"
 
+#: includes/admin-turnstile.php:130
+msgid "Cloudflare rejected the secret key. Check that you copied it correctly."
+msgstr "Cloudflare odrzucił klucz tajny. Sprawdź, czy został skopiowany poprawnie."
+
+#: includes/admin-turnstile.php:135
+msgid "The secret key is accepted by Cloudflare."
+msgstr "Klucz tajny został zaakceptowany przez Cloudflare."
+
+#: includes/admin-turnstile.php:137
+msgid "Warning: the site key does not look like a Turnstile site key."
+msgstr "Uwaga: klucz witryny nie wygląda na klucz Turnstile."
+
+#: includes/admin-turnstile.php:14 includes/admin-turnstile.php:193 includes/privacy.php:105
+msgid "Cloudflare Turnstile"
+msgstr "Cloudflare Turnstile"
+
+#: includes/admin-turnstile.php:15
+msgid "Turnstile"
+msgstr "Turnstile"
+
+#: includes/admin-turnstile.php:160
+msgid "Cloudflare Turnstile is enabled but the site key or secret key is missing, so the forms are not protected."
+msgstr "Cloudflare Turnstile jest włączony, ale brakuje klucza witryny lub klucza tajnego, więc formularze nie są chronione."
+
+#: includes/admin-turnstile.php:162 includes/admin-turnstile.php:172
+msgid "Open Turnstile settings"
+msgstr "Otwórz ustawienia Turnstile"
+
+#: includes/admin-turnstile.php:170
+msgid "Cloudflare rejected the Turnstile secret key, so the security check is being skipped until you fix it."
+msgstr "Cloudflare odrzucił klucz tajny Turnstile, więc weryfikacja jest pomijana do czasu poprawienia klucza."
+
+#: includes/admin-turnstile.php:194
+msgid "A privacy-friendly CAPTCHA alternative that protects login, registration and password reset forms from bots."
+msgstr "Przyjazna prywatności alternatywa dla CAPTCHA, która chroni formularze logowania, rejestracji i resetowania hasła przed botami."
+
+#: includes/admin-turnstile.php:199
+msgid "Turnstile is switched off by the WPUM_TURNSTILE_DISABLE constant in wp-config.php."
+msgstr "Turnstile jest wyłączony przez stałą WPUM_TURNSTILE_DISABLE w pliku wp-config.php."
+
+#: includes/admin-turnstile.php:207
+msgid "Status"
+msgstr "Status"
+
+#: includes/admin-turnstile.php:209
+msgid "Active"
+msgstr "Aktywny"
+
+#: includes/admin-turnstile.php:209
+msgid "Not active"
+msgstr "Nieaktywny"
+
+#: includes/admin-turnstile.php:214
+msgid "Enable Cloudflare Turnstile"
+msgstr "Włącz Cloudflare Turnstile"
+
+#: includes/admin-turnstile.php:216
+msgid "Forms are protected only when Turnstile is enabled and both keys are filled in."
+msgstr "Formularze są chronione tylko wtedy, gdy Turnstile jest włączony i oba klucze są uzupełnione."
+
+#: includes/admin-turnstile.php:220
+msgid "API keys"
+msgstr "Klucze API"
+
+#: includes/admin-turnstile.php:225
+#, php-format
+msgid "Create a Turnstile widget in the %s and paste its keys here."
+msgstr "Utwórz widżet Turnstile w %s i wklej tutaj jego klucze."
+
+#: includes/admin-turnstile.php:226
+msgid "Cloudflare dashboard"
+msgstr "panelu Cloudflare"
+
+#: includes/admin-turnstile.php:232
+msgid "Site key"
+msgstr "Klucz witryny"
+
+#: includes/admin-turnstile.php:237
+msgid "Defined in wp-config.php (WPUM_TURNSTILE_SITE_KEY)."
+msgstr "Zdefiniowany w wp-config.php (WPUM_TURNSTILE_SITE_KEY)."
+
+#: includes/admin-turnstile.php:242
+msgid "Secret key"
+msgstr "Klucz tajny"
+
+#: includes/admin-turnstile.php:246
+msgid "Saved - leave empty to keep it"
+msgstr "Zapisany – zostaw puste, aby go zachować"
+
+#: includes/admin-turnstile.php:248
+msgid "Defined in wp-config.php (WPUM_TURNSTILE_SECRET_KEY)."
+msgstr "Zdefiniowany w wp-config.php (WPUM_TURNSTILE_SECRET_KEY)."
+
+#: includes/admin-turnstile.php:252
+msgid "Remove the saved secret key"
+msgstr "Usuń zapisany klucz tajny"
+
+#: includes/admin-turnstile.php:258
+msgid "Check the keys"
+msgstr "Sprawdź klucze"
+
+#: includes/admin-turnstile.php:260
+msgid "Test keys"
+msgstr "Testuj klucze"
+
+#: includes/admin-turnstile.php:261
+msgid "Preview widget"
+msgstr "Podgląd widżetu"
+
+#: includes/admin-turnstile.php:265
+msgid "Cloudflare test keys: site key 1x00000000000000000000AA always passes, 2x00000000000000000000AB always blocks. Secrets: 1x0000000000000000000000000000000AA (pass), 2x0000000000000000000000000000000AA (block)."
+msgstr "Klucze testowe Cloudflare: klucz witryny 1x00000000000000000000AA zawsze przepuszcza, 2x00000000000000000000AB zawsze blokuje. Klucze tajne: 1x0000000000000000000000000000000AA (przepuszcza), 2x0000000000000000000000000000000AA (blokuje)."
+
+#: includes/admin-turnstile.php:273
+msgid "Protected forms"
+msgstr "Chronione formularze"
+
+#: includes/admin-turnstile.php:282
+msgid "Tip: run \"Test keys\" before enabling the wp-login.php forms. If you ever get locked out, add define( 'WPUM_TURNSTILE_DISABLE', true ); to wp-config.php."
+msgstr "Wskazówka: przed włączeniem formularzy wp-login.php uruchom „Testuj klucze”. Jeśli kiedykolwiek się zablokujesz, dodaj do wp-config.php: define( 'WPUM_TURNSTILE_DISABLE', true );"
+
+#: includes/admin-turnstile.php:286
+msgid "Widget appearance"
+msgstr "Wygląd widżetu"
+
+#: includes/admin-turnstile.php:289
+msgid "Theme"
+msgstr "Motyw"
+
+#: includes/admin-turnstile.php:292
+msgid "Auto"
+msgstr "Automatyczny"
+
+#: includes/admin-turnstile.php:293
+msgid "Light"
+msgstr "Jasny"
+
+#: includes/admin-turnstile.php:294
+msgid "Dark"
+msgstr "Ciemny"
+
+#: includes/admin-turnstile.php:299
+msgid "Size"
+msgstr "Rozmiar"
+
+#: includes/admin-turnstile.php:302
+msgid "Flexible (full width)"
+msgstr "Elastyczny (pełna szerokość)"
+
+#: includes/admin-turnstile.php:303
+msgid "Normal"
+msgstr "Normalny"
+
+#: includes/admin-turnstile.php:304
+msgid "Compact"
+msgstr "Kompaktowy"
+
+#: includes/admin-turnstile.php:309
+msgid "Appearance"
+msgstr "Widoczność"
+
+#: includes/admin-turnstile.php:312
+msgid "Always visible"
+msgstr "Zawsze widoczny"
+
+#: includes/admin-turnstile.php:313
+msgid "Visible only while verifying"
+msgstr "Widoczny tylko podczas weryfikacji"
+
+#: includes/admin-turnstile.php:314
+msgid "Visible only when interaction is needed"
+msgstr "Widoczny tylko, gdy potrzebna jest interakcja"
+
+#: includes/admin-turnstile.php:319
+msgid "Language"
+msgstr "Język"
+
+#: includes/admin-turnstile.php:322
+msgid "\"auto\" follows the visitor's browser; or a code such as pl, en, de, fr."
+msgstr "„auto” podąża za przeglądarką odwiedzającego albo kod, np. pl, en, de, fr."
+
+#: includes/admin-turnstile.php:329
+msgid "Behaviour"
+msgstr "Zachowanie"
+
+#: includes/admin-turnstile.php:333
+msgid "Let visitors through when Cloudflare cannot be reached (fail open)"
+msgstr "Przepuszczaj odwiedzających, gdy Cloudflare jest nieosiągalny (fail open)"
+
+#: includes/admin-turnstile.php:337
+msgid "This site is behind the Cloudflare proxy - read the visitor IP from CF-Connecting-IP"
+msgstr "Ta witryna działa za proxy Cloudflare – odczytuj IP odwiedzającego z CF-Connecting-IP"
+
+#: includes/admin-turnstile.php:340
+msgid "The IP is used for rate limiting. Enable the second option only if your server accepts connections exclusively from Cloudflare, otherwise the header can be forged."
+msgstr "Adres IP służy do ograniczania liczby prób. Drugą opcję włącz tylko wtedy, gdy serwer przyjmuje połączenia wyłącznie z Cloudflare, w przeciwnym razie nagłówek można sfałszować."
+
+#: includes/admin-turnstile.php:343
+msgid "Save settings"
+msgstr "Zapisz ustawienia"
+
+#: includes/admin-turnstile.php:92
+msgid "Checking..."
+msgstr "Sprawdzanie..."
+
+#: includes/admin-turnstile.php:93
+msgid "Request failed. Please try again."
+msgstr "Żądanie nie powiodło się. Spróbuj ponownie."
+
+#: includes/admin-turnstile.php:94
+msgid "Enter the site key first."
+msgstr "Najpierw wpisz klucz witryny."
+
+#: includes/admin-turnstile.php:95
+msgid "The widget could not be loaded. Check the site key and that this domain is allowed for the key."
+msgstr "Nie udało się wczytać widżetu. Sprawdź klucz witryny i czy ta domena jest dozwolona dla klucza."
+
+#: includes/db-migrations.php:172
+msgid "WP User Management:"
+msgstr "WP User Management:"
+
+#: includes/db-migrations.php:173
+msgid "older plugin versions created copies of the credentials table containing personal data. They are no longer needed and can be dropped manually (e.g. in phpMyAdmin):"
+msgstr "starsze wersje wtyczki tworzyły kopie tabeli uprawnień zawierające dane osobowe. Nie są już potrzebne i można je usunąć ręcznie (np. w phpMyAdmin):"
+
+#: includes/db-migrations.php:175
+msgid "Dismiss"
+msgstr "Ukryj"
+
+#: includes/helpers.php:93
+msgid "Weak"
+msgstr "Słabe"
+
+#: includes/helpers.php:94
+msgid "Medium"
+msgstr "Średnie"
+
+#: includes/helpers.php:95
+msgid "Strong"
+msgstr "Silne"
+
+#: includes/helpers.php:96
+msgid "Passwords match"
+msgstr "Hasła są zgodne"
+
+#: includes/helpers.php:97
+msgid "Passwords do not match"
+msgstr "Hasła nie są zgodne"
+
+#: includes/helpers.php:98
+msgid "Please wait..."
+msgstr "Proszę czekać..."
+
+#: includes/helpers.php:99
+msgid "An error occurred. Please try again."
+msgstr "Wystąpił błąd. Spróbuj ponownie."
+
+#: includes/login-form.php:15
+msgid "User Login"
+msgstr "Logowanie użytkownika"
+
+#: includes/login-form.php:24
+msgid "Username or Email"
+msgstr "Nazwa użytkownika lub Email"
+
+#: includes/login-form.php:33 includes/register-form.php:60
+msgid "Password"
+msgstr "Hasło"
+
+#: includes/login-form.php:41
+msgid "Remember me"
+msgstr "Zapamiętaj mnie"
+
+#: includes/login-form.php:46
+msgid "Login"
+msgstr "Zaloguj się"
+
+#: includes/login-form.php:49 includes/register-form.php:83
+msgid "Register"
+msgstr "Zarejestruj się"
+
+#: includes/login-form.php:51
+msgid "Forgot Password?"
+msgstr "Zapomniałeś hasła?"
+
+#: includes/notices.php:18
+msgid "Your session has expired. Please try again."
+msgstr "Twoja sesja wygasła. Spróbuj ponownie."
+
+#: includes/notices.php:19
+msgid "Too many attempts. Please wait a few minutes and try again."
+msgstr "Zbyt wiele prób. Poczekaj kilka minut i spróbuj ponownie."
+
+#: includes/notices.php:20 includes/turnstile.php:142
+msgid "Please complete the security check and try again."
+msgstr "Ukończ weryfikację bezpieczeństwa i spróbuj ponownie."
+
+#: includes/notices.php:21 includes/turnstile.php:143
+msgid "The security check failed. Please try again."
+msgstr "Weryfikacja bezpieczeństwa nie powiodła się. Spróbuj ponownie."
+
+#: includes/notices.php:22 includes/turnstile.php:144
+msgid "The security check is temporarily unavailable. Please try again later."
+msgstr "Weryfikacja bezpieczeństwa jest chwilowo niedostępna. Spróbuj ponownie później."
+
+#: includes/notices.php:23
+msgid "All fields are required."
+msgstr "Wszystkie pola są wymagane."
+
+#: includes/notices.php:24
+msgid "Invalid email format."
+msgstr "Nieprawidłowy format emaila."
+
+#: includes/notices.php:25
+msgid "Invalid username."
+msgstr "Nieprawidłowa nazwa użytkownika."
+
+#: includes/notices.php:26
+msgid "Username or email already taken."
+msgstr "Nazwa użytkownika lub email już zajęty."
+
+#: includes/notices.php:27
+msgid "Email is already taken."
+msgstr "Ten adres email jest już zajęty."
+
+#: includes/notices.php:28
+msgid "Passwords do not match."
+msgstr "Hasła się nie zgadzają."
+
+#: includes/notices.php:29
+msgid "Password does not meet the strength requirements."
+msgstr "Hasło nie spełnia wymagań dotyczących siły."
+
+#: includes/notices.php:30
+msgid "Your current password is incorrect."
+msgstr "Aktualne hasło jest nieprawidłowe."
+
+#: includes/notices.php:31
+msgid "Registration failed. Please try again."
+msgstr "Rejestracja nie powiodła się. Spróbuj ponownie."
+
+#: includes/notices.php:32
+msgid "Account created. You can now log in."
+msgstr "Konto zostało utworzone. Możesz się teraz zalogować."
+
+#: includes/notices.php:33
+msgid "Invalid username/email or password."
+msgstr "Nieprawidłowa nazwa użytkownika/email lub hasło."
+
+#: includes/notices.php:34
+msgid "If an account with that email address exists, password reset instructions have been sent."
+msgstr "Jeśli konto z tym adresem email istnieje, wysłaliśmy instrukcje resetowania hasła."
+
+#: includes/notices.php:35
+msgid "Profile updated."
+msgstr "Profil zaktualizowany."
+
+#: includes/notices.php:36
+msgid "Your password has been changed."
+msgstr "Hasło zostało zmienione."
+
+#: includes/notices.php:37
+msgid "Data saved."
+msgstr "Dane zapisane."
+
+#: includes/notices.php:38
+msgid "Update failed. Please try again."
+msgstr "Aktualizacja nie powiodła się. Spróbuj ponownie."
+
+#: includes/notices.php:39
+msgid "The last administrator account cannot be deleted."
+msgstr "Nie można usunąć konta ostatniego administratora."
+
+#: includes/notices.php:40
+msgid "Error deleting account. Please try again."
+msgstr "Błąd podczas usuwania konta. Spróbuj ponownie."
+
+#: includes/notices.php:41 includes/shooting-credentials.php:416
+msgid "You must be logged in to perform this action."
+msgstr "Musisz być zalogowany, aby wykonać tę czynność."
+
+#: includes/password-reset-form.php:103
+#, php-format
+msgid "Someone has requested a password reset for the following account: %s"
+msgstr "Ktoś poprosił o zresetowanie hasła dla następującego konta: %s"
+
+#: includes/password-reset-form.php:104
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr "Jeśli to była pomyłka, zignoruj ten email i nic się nie stanie."
+
+#: includes/password-reset-form.php:105
+#, php-format
+msgid "To reset your password, visit the following address: %s"
+msgstr "Aby zresetować hasło, odwiedź następujący adres: %s"
+
+#: includes/password-reset-form.php:106
+msgid "This password reset request will expire in 24 hours."
+msgstr "Ta prośba o zresetowanie hasła wygaśnie za 24 godziny."
+
+#: includes/password-reset-form.php:107
+#, php-format
+msgid "Thanks, %s"
+msgstr "Dziękujemy, %s"
+
+#: includes/password-reset-form.php:110
+#, php-format
+msgid "[%s] Password Reset"
+msgstr "[%s] Resetowanie hasła"
+
+#: includes/password-reset-form.php:17
+msgid "Password Reset"
+msgstr "Resetowanie hasła"
+
+#: includes/password-reset-form.php:30
+msgid "Email Address"
+msgstr "Adres email"
+
+#: includes/password-reset-form.php:39
 msgid "Reset Password"
 msgstr "Resetuj hasło"
 
-msgid "Please enter the code"
-msgstr "Proszę wprowadzić kod"
+#: includes/privacy.php:104
+msgid "If you add a shooting patent or instructor license to your account, we store its number and the PDF document you upload. The document is kept in a protected directory and is visible only to you and the site administrators. It is deleted together with your account."
+msgstr "Jeśli dodasz do konta patent strzelecki lub licencję instruktora, przechowujemy jej numer oraz przesłany dokument PDF. Dokument znajduje się w chronionym katalogu i jest widoczny tylko dla Ciebie oraz administratorów witryny. Jest usuwany razem z kontem."
 
-msgid "Code expired. Please refresh"
-msgstr "Kod wygasł. Proszę odświeżyć"
+#: includes/privacy.php:106
+msgid "The login, registration and password reset forms may be protected by Cloudflare Turnstile. When it is active, your browser contacts Cloudflare and your IP address and browser data are processed by Cloudflare to tell humans from bots."
+msgstr "Formularze logowania, rejestracji i resetowania hasła mogą być chronione przez Cloudflare Turnstile. Gdy jest aktywny, Twoja przeglądarka łączy się z Cloudflare, a adres IP i dane przeglądarki są przetwarzane przez Cloudflare w celu odróżnienia ludzi od botów."
 
-msgid "Incorrect code"
-msgstr "Nieprawidłowy kod"
+#: includes/privacy.php:108
+msgid "WP User Management Plugin"
+msgstr "Wtyczka WP User Management"
 
-msgid "Code is correct"
-msgstr "Kod jest poprawny"
+#: includes/privacy.php:25 includes/privacy.php:42 includes/privacy.php:73
+msgid "Shooting credentials"
+msgstr "Uprawnienia strzeleckie"
 
-msgid "Refresh code"
-msgstr "Odśwież kod"
+#: includes/privacy.php:43
+msgid "Credential numbers and uploaded documents stored by WP User Management Plugin."
+msgstr "Numery uprawnień i przesłane dokumenty przechowywane przez wtyczkę WP User Management."
+
+#: includes/privacy.php:47
+msgid "Type"
+msgstr "Typ"
+
+#: includes/privacy.php:51 includes/profile-edit-form.php:210
+msgid "Number"
+msgstr "Numer"
+
+#: includes/privacy.php:55
+msgid "Document uploaded"
+msgstr "Przesłano dokument"
+
+#: includes/privacy.php:56
+msgid "Yes"
+msgstr "Tak"
+
+#: includes/privacy.php:56
+msgid "No"
+msgstr "Nie"
+
+#: includes/privacy.php:59
+msgid "Last updated"
+msgstr "Ostatnia aktualizacja"
+
+#: includes/profile-edit-form.php:11
+msgid "Club Number"
+msgstr "Numer klubowy"
+
+#: includes/profile-edit-form.php:114 includes/profile-edit-form.php:155
+msgid "Current Password"
+msgstr "Aktualne hasło"
+
+#: includes/profile-edit-form.php:116
+msgid "Required only when you change your email address."
+msgstr "Wymagane tylko przy zmianie adresu email."
+
+#: includes/profile-edit-form.php:120
+msgid "Update Profile"
+msgstr "Zaktualizuj profil"
+
+#: includes/profile-edit-form.php:140
+msgid "Save Data"
+msgstr "Zapisz dane"
+
+#: includes/profile-edit-form.php:163
+msgid "New Password"
+msgstr "Nowe hasło"
+
+#: includes/profile-edit-form.php:173
+msgid "Confirm New Password"
+msgstr "Potwierdź nowe hasło"
+
+#: includes/profile-edit-form.php:215
+msgid "PDF Document"
+msgstr "Dokument PDF"
+
+#: includes/profile-edit-form.php:221
+msgid "Current file:"
+msgstr "Aktualny plik:"
+
+#: includes/profile-edit-form.php:223
+msgid "View Document"
+msgstr "Zobacz dokument"
+
+#: includes/profile-edit-form.php:232
+msgid "Save Credentials"
+msgstr "Zapisz uprawnienia"
+
+#: includes/profile-edit-form.php:240
+msgid "Deleting your account is permanent. Your personal data and uploaded documents will be removed."
+msgstr "Usunięcie konta jest nieodwracalne. Twoje dane osobowe i przesłane dokumenty zostaną usunięte."
+
+#: includes/profile-edit-form.php:248
+msgid "Click the button below to logout from your account."
+msgstr "Kliknij przycisk poniżej, aby się wylogować z swojego konta."
+
+#: includes/profile-edit-form.php:262
+msgid "Close"
+msgstr "Zamknij"
+
+#: includes/profile-edit-form.php:263
+msgid "Are you sure you want to delete your account?"
+msgstr "Czy na pewno chcesz usunąć swoje konto?"
+
+#: includes/profile-edit-form.php:271
+msgid "Confirm with your password"
+msgstr "Potwierdź swoim hasłem"
+
+#: includes/profile-edit-form.php:278
+msgid "Yes, Delete My Account"
+msgstr "Tak, usuń moje konto"
+
+#: includes/profile-edit-form.php:49
+msgid "Profile"
+msgstr "Profil"
+
+#: includes/profile-edit-form.php:50
+msgid "User Data"
+msgstr "Dane użytkownika"
+
+#: includes/profile-edit-form.php:51 includes/profile-edit-form.php:180
+msgid "Change Password"
+msgstr "Zmień hasło"
+
+#: includes/profile-edit-form.php:52
+msgid "Shooting Credentials"
+msgstr "Uprawnienia strzeleckie"
+
+#: includes/profile-edit-form.php:53 includes/profile-edit-form.php:239 includes/profile-edit-form.php:242
+msgid "Delete Account"
+msgstr "Usuń konto"
+
+#: includes/profile-edit-form.php:54 includes/profile-edit-form.php:247 includes/profile-edit-form.php:253
+msgid "Logout"
+msgstr "Wyloguj się"
+
+#: includes/profile-edit-form.php:63
+msgid "Account"
+msgstr "Konto"
+
+#: includes/register-form.php:17
+msgid "User Registration"
+msgstr "Rejestracja użytkownika"
+
+#: includes/register-form.php:66
+#, php-format
+msgid "At least %d characters, with upper and lower case letters, a digit and a special character."
+msgstr "Co najmniej %d znaków, w tym wielkie i małe litery, cyfra i znak specjalny."
+
+#: includes/register-form.php:75
+msgid "Confirm Password"
+msgstr "Potwierdź hasło"
+
+#: includes/shooting-credentials.php:146 includes/shooting-credentials.php:150
+msgid "File upload failed"
+msgstr "Przesyłanie pliku nie powiodło się"
+
+#: includes/shooting-credentials.php:158
+#, php-format
+msgid "The file is too large. Maximum size is %s."
+msgstr "Plik jest za duży. Maksymalny rozmiar to %s."
+
+#: includes/shooting-credentials.php:166 includes/shooting-credentials.php:176 includes/shooting-credentials.php:182
+msgid "Only PDF files are allowed"
+msgstr "Dozwolone są tylko pliki PDF"
+
+#: includes/shooting-credentials.php:188 includes/shooting-credentials.php:193
+msgid "Cannot create upload directory"
+msgstr "Nie można utworzyć katalogu docelowego"
+
+#: includes/shooting-credentials.php:200
+msgid "Failed to save file"
+msgstr "Nie udało się zapisać pliku"
+
+#: includes/shooting-credentials.php:372 includes/shooting-credentials.php:381
+msgid "File not found."
+msgstr "Nie znaleziono pliku."
+
+#: includes/shooting-credentials.php:376
+msgid "You are not allowed to view this file."
+msgstr "Nie masz uprawnień do tego pliku."
+
+#: includes/shooting-credentials.php:409
+msgid "Security check failed."
+msgstr "Weryfikacja bezpieczeństwa nie powiodła się."
+
+#: includes/shooting-credentials.php:437
+#, php-format
+msgid "Enter the number for \"%s\" before uploading a document."
+msgstr "Wpisz numer dla „%s” przed przesłaniem dokumentu."
+
+#: includes/shooting-credentials.php:455
+#, php-format
+msgid "Error uploading file for %1$s: %2$s"
+msgstr "Błąd przesyłania pliku dla %1$s: %2$s"
+
+#: includes/shooting-credentials.php:467
+#, php-format
+msgid "Failed to save %s credential data."
+msgstr "Nie udało się zapisać danych uprawnienia: %s."
+
+#: includes/shooting-credentials.php:473
+msgid "Credentials saved successfully."
+msgstr "Uprawnienia zostały zapisane."
+
+#: includes/shooting-credentials.php:64
+msgid "Shooting Patent Number"
+msgstr "Numer patentu strzeleckiego"
+
+#: includes/shooting-credentials.php:65
+msgid "Shooting Instructor License Number"
+msgstr "Numer legitymacji prowadzącego strzelanie"
+
+#: includes/turnstile.php:133
+msgid "Please enable JavaScript to complete the security check."
+msgstr "Włącz JavaScript, aby ukończyć weryfikację bezpieczeństwa."
+
+#: includes/turnstile.php:20
+msgid "Login form (shortcode)"
+msgstr "Formularz logowania (shortcode)"
+
+#: includes/turnstile.php:21
+msgid "Registration form (shortcode)"
+msgstr "Formularz rejestracji (shortcode)"
+
+#: includes/turnstile.php:22
+msgid "Password reset form (shortcode)"
+msgstr "Formularz resetowania hasła (shortcode)"
+
+#: includes/turnstile.php:23
+msgid "WordPress login (wp-login.php)"
+msgstr "Logowanie WordPress (wp-login.php)"
+
+#: includes/turnstile.php:24
+msgid "WordPress registration (wp-login.php)"
+msgstr "Rejestracja WordPress (wp-login.php)"
+
+#: includes/turnstile.php:25
+msgid "WordPress password reset (wp-login.php)"
+msgstr "Resetowanie hasła WordPress (wp-login.php)"
+
+#: wp-user-management-plugin.php:114
+msgid "Could not create the required database tables. Check database permissions and the error log."
+msgstr "Nie udało się utworzyć wymaganych tabel w bazie danych. Sprawdź uprawnienia bazy danych i logi błędów."
