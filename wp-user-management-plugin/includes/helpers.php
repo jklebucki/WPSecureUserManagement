@@ -194,6 +194,32 @@ function wpum_render_field($args)
     echo '</div>';
 }
 
+// Render a single labelled <select>. $args['options'] is value => label.
+function wpum_render_select($args)
+{
+    $a = wp_parse_args($args, array(
+        'id'       => '',
+        'name'     => '',
+        'label'    => '',
+        'options'  => array(),
+        'selected' => '',
+        'required' => false,
+        'help'     => '',
+    ));
+
+    echo '<div class="wpum-field">';
+    echo '<label class="wpum-label" for="' . esc_attr($a['id']) . '">' . esc_html($a['label']) . '</label>';
+    echo '<select class="wpum-input wpum-select" id="' . esc_attr($a['id']) . '" name="' . esc_attr($a['name']) . '"' . ($a['required'] ? ' required' : '') . '>';
+    foreach ((array) $a['options'] as $value => $label) {
+        echo '<option value="' . esc_attr($value) . '"' . selected((string) $a['selected'], (string) $value, false) . '>' . esc_html($label) . '</option>';
+    }
+    echo '</select>';
+    if ('' !== $a['help']) {
+        echo '<p class="wpum-help">' . esc_html($a['help']) . '</p>';
+    }
+    echo '</div>';
+}
+
 // Password strength meter placeholder (filled by wpum-forms.js).
 function wpum_render_strength_meter()
 {

@@ -229,6 +229,9 @@ if (!function_exists('wpum_create_tables')) {
                 if (!$result) {
                     throw new Exception("Nie udało się utworzyć lub zaktualizować tabeli shooting credentials");
                 }
+                if (function_exists('wpum_create_pending_registrations_table') && !wpum_create_pending_registrations_table()) {
+                    throw new Exception("Nie udało się utworzyć tabeli oczekujących rejestracji");
+                }
                 return true;
             } else {
                 throw new Exception("Funkcja wpum_create_shooting_credentials_table nie jest dostępna");

@@ -200,7 +200,7 @@
 }
 
 .wpum-ui .wpum-input:focus {
-    background: var(--wpum-surface) !important;
+    background-color: var(--wpum-surface) !important;
     border-color: var(--wpum-accent) !important;
     box-shadow: 0 0 0 3px var(--wpum-accent-ring) !important;
 }
@@ -209,6 +209,16 @@
     background: #f3f4f6 !important;
     color: var(--wpum-muted) !important;
     cursor: default;
+}
+
+/* Drop-down: the native arrow is removed with appearance:none, so draw our own. */
+.wpum-ui select.wpum-input {
+    padding-right: 40px !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 12px 8px !important;
+    cursor: pointer;
 }
 
 .wpum-ui .wpum-input--file {

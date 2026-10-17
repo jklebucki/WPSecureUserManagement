@@ -9,8 +9,9 @@ function wpum_run_migrations() {
     $migrations = array(
         '1.0' => 'wpum_migration_1_0',
         '1.1' => 'wpum_migration_1_1',
+        '1.2' => 'wpum_migration_1_2',
         // Dodaj kolejne migracje w przyszłości:
-        // '1.2' => 'wpum_migration_1_2',
+        // '1.3' => 'wpum_migration_1_3',
     );
 
     $current_db_version = get_option('wpum_db_version', '0');
@@ -118,6 +119,11 @@ function wpum_migration_1_1() {
     }
 
     return true;
+}
+
+// Migracja do wersji 1.2 - tabela rejestracji oczekujących na potwierdzenie e-mail
+function wpum_migration_1_2() {
+    return (bool) wpum_create_pending_registrations_table();
 }
 
 // Przenosi rekurencyjnie pozostałe pliki do prywatnego katalogu i usuwa puste foldery.

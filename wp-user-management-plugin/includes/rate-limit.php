@@ -7,7 +7,8 @@ if (!defined('ABSPATH')) {
 /**
  * Simple fixed-window rate limiting on transients.
  *
- * Buckets: login (ip+login), login_ip (ip), reset_ip, reset_email, register_ip, password_check (user id).
+ * Buckets: login (ip+login), login_ip (ip), reset_ip, reset_email, register_ip, register_email, activation_ip,
+ * password_check (user id).
  * Limits can be changed with the "wpum_rate_limit_{bucket}" filter (array: max attempts, window in seconds).
  */
 
@@ -44,6 +45,8 @@ function wpum_rate_limit_config($bucket)
         'reset_ip'       => array(5, HOUR_IN_SECONDS),
         'reset_email'    => array(3, HOUR_IN_SECONDS),
         'register_ip'    => array(5, HOUR_IN_SECONDS),
+        'register_email' => array(3, HOUR_IN_SECONDS),
+        'activation_ip'  => array(20, HOUR_IN_SECONDS),
         'password_check' => array(5, 15 * MINUTE_IN_SECONDS),
     );
     $config = isset($defaults[$bucket]) ? $defaults[$bucket] : array(10, 15 * MINUTE_IN_SECONDS);

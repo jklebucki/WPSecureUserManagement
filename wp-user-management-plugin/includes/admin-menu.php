@@ -527,6 +527,9 @@ function wp_user_management_configuration() {
             update_option('wpum_page_' . $key, wpum_sanitize_page_slug($value, $info[1]));
         }
 
+        $unconfirmed_days = isset($_POST['unconfirmed_days']) ? absint($_POST['unconfirmed_days']) : 2;
+        update_option('wpum_unconfirmed_days', max(1, min(30, $unconfirmed_days)));
+
         echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved.', 'wp-user-management-plugin') . '</p></div>';
     }
 
@@ -580,6 +583,23 @@ function wp_user_management_configuration() {
                 <div class="wpum-card__head"><h2><?php esc_html_e('Password Settings', 'wp-user-management-plugin'); ?></h2></div>
                 <label for="password_length"><?php esc_html_e('Minimum Password Length', 'wp-user-management-plugin'); ?></label>
                 <input type="number" name="password_length" id="password_length" value="<?php echo esc_attr($password_length); ?>" min="8" max="128" class="small-text">
+            </div>
+
+            <div class="wpum-card">
+                <div class="wpum-card__head"><h2><?php esc_html_e('Registration', 'wp-user-management-plugin'); ?></h2></div>
+                <p class="description"><?php esc_html_e('New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email.', 'wp-user-management-plugin'); ?></p>
+                <label for="unconfirmed_days"><?php esc_html_e('Days to keep an unconfirmed registration', 'wp-user-management-plugin'); ?></label>
+                <input type="number" name="unconfirmed_days" id="unconfirmed_days" value="<?php echo esc_attr(wpum_get_unconfirmed_days()); ?>" min="1" max="30" class="small-text">
+                <p class="description">
+                    <?php
+                    $waiting = wpum_count_pending_registrations();
+                    echo esc_html(sprintf(
+                        /* translators: %s: number of registrations */
+                        _n('%s registration is waiting for confirmation right now.', '%s registrations are waiting for confirmation right now.', $waiting, 'wp-user-management-plugin'),
+                        number_format_i18n($waiting)
+                    ));
+                    ?>
+                </p>
             </div>
 
             <div class="wpum-card">

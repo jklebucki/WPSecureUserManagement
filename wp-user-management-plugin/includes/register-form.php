@@ -11,6 +11,36 @@ function wpum_display_registration_form()
 
     $min_length = wpum_get_min_password_length();
 
+    // After a successful submit we only show the "check your email" notice, not the form again.
+    $flash = wpum_flash_get('register');
+    if ($flash && 'success' === $flash['type']) {
+        ob_start(); ?>
+        <div class="wpum-ui wpum-ui--register">
+            <div class="wpum-card">
+                <h2 class="wpum-title"><?php esc_html_e('Check your email', 'wp-user-management-plugin'); ?></h2>
+                <?php wpum_flash_render('register'); ?>
+                <p class="wpum-help">
+                    <?php
+                    $days = wpum_registration_days();
+                    echo esc_html(sprintf(
+                        /* translators: %d: number of days */
+                        _n('Unconfirmed registrations are deleted automatically after %d day.', 'Unconfirmed registrations are deleted automatically after %d days.', $days, 'wp-user-management-plugin'),
+                        $days
+                    ));
+                    ?>
+                    <?php esc_html_e('Nothing in your inbox? Look in the spam folder, or register again after a few minutes to get a new link.', 'wp-user-management-plugin'); ?>
+                </p>
+                <p class="wpum-links">
+                    <a href="<?php echo esc_url(wpum_get_page_url('register')); ?>"><?php esc_html_e('Register again', 'wp-user-management-plugin'); ?></a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a href="<?php echo esc_url(wpum_get_page_url('account')); ?>"><?php esc_html_e('Back to login', 'wp-user-management-plugin'); ?></a>
+                </p>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
     ob_start(); ?>
     <div class="wpum-ui wpum-ui--register">
         <form id="wpum-registration-form" class="wpum-card" method="post">
@@ -76,6 +106,14 @@ function wpum_display_registration_form()
                 'required'     => true,
                 'autocomplete' => 'new-password',
             ));
+            wpum_render_select(array(
+                'id'       => 'wpum-language',
+                'name'     => 'wpum_language',
+                'label'    => __('Preferred language', 'wp-user-management-plugin'),
+                'options'  => wpum_get_available_locales(),
+                'selected' => wpum_flash_old('register', 'locale', wpum_default_locale()),
+                'help'     => __('The confirmation email is sent in this language.', 'wp-user-management-plugin'),
+            ));
             ?>
 
             <?php wpum_turnstile_render('register'); ?>
@@ -87,7 +125,7 @@ function wpum_display_registration_form()
     return ob_get_clean();
 }
 
-// Handle user registration
+// Handle user registration: validate, park the sign-up and email the confirmation link.
 function wpum_process_registration()
 {
     if (!wpum_is_form_post('register')) {
@@ -112,6 +150,7 @@ function wpum_process_registration()
     $lastname  = wpum_post_text('wpum_lastname');
     $password  = wpum_post_raw('wpum_password');
     $confirm   = wpum_post_raw('wpum_confirm_password');
+    $locale    = wpum_sanitize_locale(wpum_post_text('wpum_language'));
 
     // Values we may show again after an error (never the passwords).
     $old = array(
@@ -119,6 +158,7 @@ function wpum_process_registration()
         'email'     => $email,
         'firstname' => $firstname,
         'lastname'  => $lastname,
+        'locale'    => $locale,
     );
 
     $turnstile = wpum_turnstile_verify('register');
@@ -150,21 +190,32 @@ function wpum_process_registration()
         wpum_redirect_with_flash($return_url, 'register', 'error', 'password_weak', $old);
     }
 
-    // wp_create_user()/wp_update_user() unslash their input (WordPress passes slashed request data to them),
-    // so the password has to be slashed or a backslash in it would be silently dropped.
-    $user_id = wp_create_user($username, wp_slash($password), $email);
-    if (is_wp_error($user_id)) {
+    // Protects the mailbox of whoever's address was typed in (also keeps the form from being a mail cannon).
+    if (wpum_rate_limit_is_blocked('register_email', $email)) {
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'rate_limited', $old);
+    }
+    wpum_rate_limit_hit('register_email', $email);
+
+    $data = array(
+        'login'      => $username,
+        'email'      => $email,
+        'first_name' => $firstname,
+        'last_name'  => $lastname,
+        'locale'     => $locale,
+        'password'   => $password,
+    );
+    $pending = wpum_create_pending_registration($data);
+    if (!$pending) {
         wpum_redirect_with_flash($return_url, 'register', 'error', 'register_failed', $old);
     }
 
-    wp_update_user(wp_slash(array(
-        'ID'         => $user_id,
-        'first_name' => $firstname,
-        'last_name'  => $lastname,
-    )));
+    $data['expires'] = $pending['expires'];
+    if (!wpum_send_activation_email($data, $pending['key'])) {
+        wpum_delete_pending_registration($pending['key']);
+        wpum_redirect_with_flash($return_url, 'register', 'error', 'mail_failed', $old);
+    }
 
-    // Send the visitor to the login page with a confirmation.
-    wpum_redirect_with_flash(wpum_get_page_url('account'), 'login', 'success', 'registered');
+    wpum_redirect_with_flash($return_url, 'register', 'success', 'activation_sent', array('email' => $email));
 }
 add_action('template_redirect', 'wpum_process_registration');
 

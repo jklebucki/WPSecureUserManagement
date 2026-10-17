@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP User Management Plugin
  * Description: A plugin for user registration, login, and profile editing with enhanced security and a modern interface.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: Jarosław Kłębucki
  * Text Domain: wp-user-management-plugin
  * Domain Path: /languages
@@ -17,8 +17,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WPUM_VERSION', '1.2.0');
-define('WPUM_DB_VERSION', '1.1'); // Wersja struktury bazy danych
+define('WPUM_VERSION', '1.3.0');
+define('WPUM_DB_VERSION', '1.2'); // Wersja struktury bazy danych
 define('WPUM_PLUGIN_FILE', __FILE__);
 define('WPUM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WPUM_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -45,6 +45,7 @@ require_once WPUM_PLUGIN_DIR . 'includes/rate-limit.php';
 require_once WPUM_PLUGIN_DIR . 'includes/turnstile.php';
 require_once WPUM_PLUGIN_DIR . 'includes/shooting-credentials.php';
 require_once WPUM_PLUGIN_DIR . 'includes/privacy.php';
+require_once WPUM_PLUGIN_DIR . 'includes/registration-confirmation.php';
 require_once WPUM_PLUGIN_DIR . 'includes/register-form.php';
 require_once WPUM_PLUGIN_DIR . 'includes/login-form.php';
 require_once WPUM_PLUGIN_DIR . 'includes/profile-edit-form.php';
@@ -117,6 +118,9 @@ function wp_user_management_activate() {
     // Prywatny katalog na dokumenty musi istnieć przed pierwszym uploadem
     wpum_ensure_private_dir();
 
+    // Zadanie WP-Cron usuwające niepotwierdzone rejestracje
+    wpum_schedule_registration_cleanup();
+
     update_option('wpum_version', WPUM_VERSION);
     update_option('wpum_db_version', WPUM_DB_VERSION);
 }
@@ -124,6 +128,7 @@ register_activation_hook(__FILE__, 'wp_user_management_activate');
 
 // Dezaktywacja wtyczki
 function wp_user_management_deactivate() {
+    wpum_unschedule_registration_cleanup();
     wpum_log('Plugin został deaktywowany');
 }
 register_deactivation_hook(__FILE__, 'wp_user_management_deactivate');

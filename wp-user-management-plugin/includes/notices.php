@@ -29,7 +29,11 @@ function wpum_notice_messages()
         'password_weak'         => __('Password does not meet the strength requirements.', 'wp-user-management-plugin'),
         'wrong_password'        => __('Your current password is incorrect.', 'wp-user-management-plugin'),
         'register_failed'       => __('Registration failed. Please try again.', 'wp-user-management-plugin'),
-        'registered'            => __('Account created. You can now log in.', 'wp-user-management-plugin'),
+        'activation_sent'       => __('We have sent a confirmation email to {email}. Click the link in it to activate your account.', 'wp-user-management-plugin'),
+        'mail_failed'           => __('We could not send the confirmation email. Please try again later or contact the site administrator.', 'wp-user-management-plugin'),
+        'activated'             => __('Your account has been activated. You can now log in.', 'wp-user-management-plugin'),
+        'activation_invalid'    => __('This activation link is invalid, has expired or was already used. If you have already activated your account, just log in; otherwise register again.', 'wp-user-management-plugin'),
+        'activation_conflict'   => __('An account with this username or email already exists. Try logging in or resetting your password.', 'wp-user-management-plugin'),
         'login_failed'          => __('Invalid username/email or password.', 'wp-user-management-plugin'),
         'reset_sent'            => __('If an account with that email address exists, password reset instructions have been sent.', 'wp-user-management-plugin'),
         'profile_updated'       => __('Profile updated.', 'wp-user-management-plugin'),
@@ -117,11 +121,19 @@ function wpum_flash_render($form)
         return;
     }
 
+    // {email} in a message is filled from the values stored with the notice.
+    $text = $messages[$flash['code']];
+    foreach (array('email') as $token) {
+        if (isset($flash['old'][$token]) && is_scalar($flash['old'][$token])) {
+            $text = str_replace('{' . $token . '}', (string) $flash['old'][$token], $text);
+        }
+    }
+
     $is_success = 'success' === $flash['type'];
     printf(
         '<div class="wpum-notice wpum-notice--%1$s" role="%2$s">%3$s</div>',
         $is_success ? 'success' : 'error',
         $is_success ? 'status' : 'alert',
-        esc_html($messages[$flash['code']])
+        esc_html($text)
     );
 }
