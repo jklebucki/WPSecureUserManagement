@@ -170,6 +170,18 @@ Files have random names and are delivered through `admin-post.php?action=wpum_do
 | `wpum_password_reset_email_strings` | the same for the password reset email |
 | `wpum_logout_redirect` | where visitors land after logging out (default: the front page) |
 
+## Development
+`.wp-env.json` in the repository root describes a local test site (needs Docker and Node):
+
+```bash
+npx @wordpress/env start     # http://localhost:8890 (admin / password), debug log on
+npx @wordpress/env stop
+```
+
+- The main site runs the latest stable WordPress on **PHP 8.3** (the version WordPress itself recommends). The "tests" site (`http://localhost:8891`) runs **PHP 7.4**, the oldest version the plugin supports, so both ends can be checked.
+- Another PHP or WordPress version for one session: `WP_ENV_PHP_VERSION=8.5 npx @wordpress/env start --update` (likewise `WP_ENV_CORE`).
+- The plugin is mounted live from `wp-user-management-plugin/`; emails are not delivered locally, capture them with a mu-plugin or a mail catcher.
+
 ## Languages
 English (default), Polish.
 
