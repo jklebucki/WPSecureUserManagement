@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.4.0
+
+### Added
+- **wp-login.php is replaced by the plugin's pages.** A new checkbox *Disable wp-login.php* in Configuration (on by default) sends the login, registration and "lost password" screens to the plugin's pages and makes `login_url`, `register_url` and `lostpassword_url` (and the wp-admin redirect, with a validated `redirect_to`) point there. POSTs to wp-login.php are not processed. Logout, the screens behind password-reset links, password-protected posts and WordPress's internal confirmations stay with WordPress; logged-in visitors are not redirected.
+- Fail-safe: a form is replaced only if its page exists, is published and contains the shortcode; the Configuration page shows the status of each page. Emergency switch: `define( 'WPUM_KEEP_WP_LOGIN', true );`.
+- **Configurable rate limits** (Configuration -> Rate limiting): a switch and, for nine limits, max attempts and window in minutes (clamped, junk falls back to defaults). *Maintenance -> Clear rate-limit counters* forgets all counters instantly (generation counter, works with object caches).
+- **Automatic Cloudflare detection** replaces the manual "behind Cloudflare" checkbox: `CF-Connecting-IP` is trusted only from Cloudflare's edge ranges (built-in list) and from localhost (cloudflared, local reverse proxy), so it cannot be forged. The list is refreshed from cloudflare.com through WP-Cron when a request carries the header from an unknown address (at most once an hour; implausible answers are rejected), or on demand with a button.
+- IPv6 visitors are rate-limited per /64; the Configuration page shows the IP the plugin sees for you and its source.
+- New "flash" limit (30 per minute per IP): invalid form posts can no longer fill `wp_options` with notice records.
+- Notices "You have been logged out." and "Your password has been reset."
+- **Password reset on the plugin's own page:** the emailed link opens `/password-reset/` (key moved into an HttpOnly cookie and out of the URL), which shows a "Choose a new password" form (strength meter, confirmation, minimum length). The password is set with WordPress's `reset_password()` (so its hooks and the admin notification run), all sessions of the account are ended and the visitor is sent to the login page. WordPress's `rp`/`resetpass` links, including those in older emails, are forwarded to this page; a POST to the WordPress reset form is not processed. Expired, forged and reused links are refused; link attempts are rate limited ("reset_link", 10 per hour per IP).
+- **Password reset email as an HTML template** with a plain-text part, written in the account's own language (user locale), in the same layout as the registration email. The layout is now one shared file, `templates/email.php` (was `email-activation.php`); filter `wpum_password_reset_email_strings`.
+- **Logout:** `wp-login.php?action=logout` (admin bar, themes) logs out and redirects to the front page (`wpum_logout_redirect` filter), also for visitors who are not logged in. Without a valid nonce nobody is logged out: the account page opens the Logout tab with a confirmation ("info" notice style). The profile page's own Logout button ends on the front page as well.
+
+### Changed
+- The Turnstile page no longer has the "behind Cloudflare" checkbox (obsolete) and says that its wp-login.php options only matter while wp-login.php is not disabled.
+- The login form honours a validated `redirect_to`.
+- The registration email template file moved to `templates/email.php`; its `details` lines replace the separate `username`/`expiry`/`deletion` slots (the `wpum_activation_email_strings` filter still receives those keys).
+- Translations: 306 strings.
+
+### Upgrade notes
+- Existing sites get the replacement switched **on** by default as soon as the account, registration and password-reset pages exist and contain the shortcodes. Admins then log in on the plugin's login page (also when they open `/wp-admin`). If you prefer WordPress's own screen, untick the option or define `WPUM_KEEP_WP_LOGIN`.
+- If the site is behind Cloudflare, rate limits now count real visitors instead of Cloudflare's edge addresses.
+- Password-reset links in emails sent before the update still work: they are forwarded to the plugin page.
+
 ## 1.3.0
 
 ### Added

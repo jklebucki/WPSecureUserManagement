@@ -11,7 +11,9 @@ User registration, login, password reset and profile editing for WordPress throu
   - **Configuration** - list columns, profile metadata, minimum password length, page slugs, **days to keep an unconfirmed registration** (default 2) and a maintenance card that deletes leftover backup tables of old plugin versions.
   - **Turnstile** - Cloudflare Turnstile settings (keys, protected forms, appearance, key test).
 - Cloudflare Turnstile on the plugin forms and, optionally, on the native `wp-login.php` forms.
-- Security: nonces and capability checks everywhere, generic login/reset messages (no user enumeration), rate limiting, current password required for email/password changes and account deletion.
+- Security: nonces and capability checks everywhere, generic login/reset messages (no user enumeration), configurable rate limiting, current password required for email/password changes and account deletion.
+- **wp-login.php is replaced** by the plugin's pages (login, registration, lost password, **setting a new password**) and **logout** goes straight to the front page, with a checkbox in *Configuration*, on by default.
+- Password reset with an HTML email in the account's language and a "choose a new password" form on the plugin's own page.
 - Shooting credential PDFs are stored in a protected directory and served only to their owner and administrators.
 - Privacy: credentials are erased with the account; personal data exporter/eraser and privacy policy text.
 - One stylesheet scoped to `.wpum-ui` that wins over theme styling; colours can be changed through CSS custom properties.
@@ -45,7 +47,7 @@ Because no account exists before confirmation, unconfirmed sign-ups never reach 
 
 Safeguards: a limit of requests per IP and per email address, Turnstile on the form, newer sign-up for the same address replaces the older one (only the newest link works), the link key is stored only as a SHA-256 hash.
 
-**Email template.** The HTML lives in `templates/email-activation.php` (table layout, inline styles). Point the `wpum_email_template_path` filter at your own file, or change the texts with `wpum_activation_email_strings`. The `wpum_registration_confirmed` action fires after the account is created.
+**Email template.** All plugin emails (registration confirmation, password reset) share the layout `templates/email.php` (table layout, inline styles, a grey box for the details lines). Point the `wpum_email_template_path` filter at your own file, or change the texts with `wpum_activation_email_strings` / `wpum_password_reset_email_strings`. The `wpum_registration_confirmed` action fires after the account is created.
 
 **Adding a language.** Put `wp-user-management-plugin-{locale}.mo` (e.g. `de_DE`) into `languages/`; it appears on the form and the email is sent in it. English is the source language and needs no file.
 
@@ -69,7 +71,47 @@ define( 'WPUM_TURNSTILE_DISABLE', true );
 
 Cloudflare's test keys (always pass / always block) are listed on the settings page. Turnstile loads `challenges.cloudflare.com`; mention it in your privacy policy (the plugin adds suggested text to the WordPress privacy policy guide).
 
-If the site is behind the Cloudflare proxy and you enable rate limiting by IP, tick *"This site is behind the Cloudflare proxy"* on the Turnstile page so the visitor IP is read from `CF-Connecting-IP`. Do it only when the origin accepts connections exclusively from Cloudflare.
+## Replacing wp-login.php
+*User Management -> Configuration -> wp-login.php -> "Disable wp-login.php"* (on by default).
+
+- Opening `wp-login.php` for logging in, registering or "lost password" redirects to the plugin's account, registration and password-reset pages, so everything carries Turnstile, rate limiting and your styling. A POST to `wp-login.php` is never processed (no password guessing against it).
+- WordPress links point to those pages as well (`login_url`, `register_url`, `lostpassword_url`), including the redirect from `/wp-admin`: after logging in on the plugin page you land back where you were (`redirect_to` is validated, foreign hosts are ignored).
+- **Logout** (`wp-login.php?action=logout`, the admin bar, themes) logs out and redirects to the front page (`wpum_logout_redirect` filter). A link without a valid nonce never logs anybody out: the account page opens its Logout tab and asks for confirmation. Not logged in? Straight to the front page.
+- **Reset screens:** WordPress's `rp` / `resetpass` links (also those in older emails) are forwarded to the plugin's password-reset page, and a POST to the WordPress reset form is not processed. See *Password reset* below.
+- **Left to WordPress on purpose:** password-protected posts (`postpass`) and WordPress's internal confirmations. Visitors who are already logged in are not redirected away from `wp-login.php`.
+- **No lock-out:** each form is replaced only when its page exists, is published and contains the shortcode (login: `[wpum_my_account_content]` or `[wpum_user_login]`, registration: `[wpum_user_registration]`, reset: `[wpum_password_reset]`). Otherwise WordPress keeps its own form. The Configuration page shows the status of all three pages.
+- **Emergency switch:** `define( 'WPUM_KEEP_WP_LOGIN', true );` in `wp-config.php` turns the replacement off regardless of the setting.
+- Page builders that keep the shortcode outside `post_content` can confirm a page with the `wpum_page_is_ready` filter; the list of actions left to WordPress is filterable with `wpum_wp_login_allowed_actions`.
+- `xmlrpc.php` is a separate entry point and is not touched by this option.
+
+## Password reset
+1. On the `[wpum_password_reset]` page the visitor enters an email address; the answer is always the same, whether or not an account exists, and requests are limited per IP and per address.
+2. An **HTML email with a plain-text part** (same layout as the registration email) is sent in the **account's own language** (user locale, falling back to the closest available language). It links to the plugin page: `/password-reset/?wpum_reset=KEY&login=LOGIN`, valid for 24 hours (the `password_reset_expiration` filter applies).
+3. Opening the link checks the key, moves it into an HttpOnly cookie and redirects to the clean page URL, so the key does not stay in the address bar, history or referrers (the same technique WordPress uses). If the reset page is not usable the email falls back to WordPress's own link.
+4. The same page now shows **"Choose a new password"** (strength meter, confirmation, minimum length from the settings). Saving it calls WordPress's `reset_password()` (same hooks as wp-login.php, including the admin notification), ends **all** sessions of the account and sends the visitor to the login page with a confirmation. The page is excluded from page caches while the form is shown.
+5. Invalid, expired, forged or reused links show a clear message and the request form; guessing keys is rate limited (10 per hour per IP by default).
+
+A successful login also invalidates outstanding reset links (WordPress behaviour).
+
+## Rate limiting
+*Configuration -> Rate limiting*: a switch and, for each limit, the maximum number of attempts and the time window in minutes.
+
+| Limit | Default |
+|---|---|
+| Failed logins per account and IP | 5 / 15 min |
+| Failed logins per IP (any account) | 20 / 15 min |
+| Password reset requests per IP / per email address | 5 / 60 min, 3 / 60 min |
+| Password reset link attempts per IP | 10 / 60 min |
+| Registrations per IP / per email address | 5 / 60 min, 3 / 60 min |
+| Confirmation link attempts per IP | 20 / 60 min |
+| Wrong current-password attempts per user | 5 / 15 min |
+| Form messages per IP (keeps invalid posts from filling `wp_options`) | 30 / 1 min |
+
+A club registering many people from one connection should raise the registration limit. *Maintenance -> Clear rate-limit counters* releases everyone who has been locked out.
+
+**Visitor IP.** The plugin reads `REMOTE_ADDR` and trusts the `CF-Connecting-IP` header only when the connection comes from Cloudflare's edge network or from the machine itself (cloudflared tunnel, local reverse proxy), so the header cannot be forged by anyone else. IPv6 visitors are grouped by `/64`. The Configuration page shows the IP the plugin sees for your own request and where it came from.
+
+**Cloudflare's list stays current.** A built-in copy of Cloudflare's published ranges is always used. When a request carries `CF-Connecting-IP` from an address that is not in the list (a forged header, or a range Cloudflare added), the plugin asks WP-Cron to download `https://www.cloudflare.com/ips-v4` and `/ips-v6` (at most once an hour, never inside the visitor's request), merges them with the built-in list and keeps the result. An answer with too few ranges, malformed lines or absurdly wide ranges is rejected. *Maintenance -> Refresh Cloudflare IP ranges* does it on demand. Sites without Cloudflare traffic never contact Cloudflare for this. Other trusted proxies can be added with the `wpum_trusted_proxy_ranges` filter.
 
 ## Private credential files
 Documents are stored in `wp-content/uploads/wpum-private/`. The plugin writes an `.htaccess` that denies direct access (Apache). **On nginx** add the equivalent rule yourself:
@@ -84,7 +126,10 @@ Files have random names and are delivered through `admin-post.php?action=wpum_do
 | Filter | Purpose |
 |---|---|
 | `wpum_users_per_page` | page size of the admin user list (default 20) |
-| `wpum_rate_limit_{bucket}` | `array( max attempts, window in seconds )` for `login`, `login_ip`, `reset_ip`, `reset_email`, `register_ip`, `password_check` |
+| `wpum_rate_limit_{bucket}` | final say on a limit: `array( max attempts, window in seconds )` for `login`, `login_ip`, `reset_ip`, `reset_email`, `reset_link`, `register_ip`, `register_email`, `activation_ip`, `password_check`, `flash` |
+| `wpum_trusted_proxy_ranges` | CIDR ranges whose `CF-Connecting-IP` header is trusted (Cloudflare + localhost by default) |
+| `wpum_wp_login_allowed_actions` | `wp-login.php` actions that stay with WordPress when it is disabled |
+| `wpum_page_is_ready` | confirm that a page can replace a `wp-login.php` form (`login`, `register`, `reset`) |
 | `wpum_client_ip` | override the detected client IP |
 | `wpum_credential_max_upload_size` | max PDF size in bytes (default 5 MB) |
 | `wpum_reassign_user_id` | who receives the content of a user who deletes their own account (default: the oldest administrator) |
@@ -94,6 +139,8 @@ Files have random names and are delivered through `admin-post.php?action=wpum_do
 | `wpum_available_locales` | languages offered on the registration form (`locale => label`) |
 | `wpum_email_template_path` | path of the template used for an email |
 | `wpum_activation_email_strings` | texts and URLs passed to the confirmation email template |
+| `wpum_password_reset_email_strings` | the same for the password reset email |
+| `wpum_logout_redirect` | where visitors land after logging out (default: the front page) |
 
 ## Languages
 English (default), Polish.
