@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP User Management Plugin
  * Description: A plugin for user registration, login, and profile editing with enhanced security and a modern interface.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: Jarosław Kłębucki
  * Text Domain: wp-user-management-plugin
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WPUM_VERSION', '1.4.0');
+define('WPUM_VERSION', '1.4.1');
 define('WPUM_DB_VERSION', '1.2'); // Wersja struktury bazy danych
 define('WPUM_PLUGIN_FILE', __FILE__);
 define('WPUM_PLUGIN_DIR', plugin_dir_path(__FILE__));

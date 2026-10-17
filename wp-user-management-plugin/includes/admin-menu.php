@@ -612,24 +612,66 @@ function wp_user_management_configuration() {
                     );
                     $override_features = wpum_override_features();
                     foreach ($override_labels as $feature => $feature_label) :
-                        $feature_ready = wpum_override_page_ready($feature);
-                        $feature_page  = $override_features[$feature][0];
+                        $feature_status = wpum_override_page_status($feature, true);
+
+                        // Content did not show the shortcode: look at the real page now (cached, at most every 10 minutes).
+                        if (!$feature_status['ready'] && 'no_form' === $feature_status['reason'] && false === get_transient('wpum_render_' . $feature)) {
+                            wpum_check_page_render($feature);
+                            $feature_status = wpum_override_page_status($feature, true);
+                        }
+
+                        $feature_page = $feature_status['page'];
                         ?>
-                        <li class="<?php echo $feature_ready ? 'is-ok' : 'is-bad'; ?>">
+                        <li class="<?php echo $feature_status['ready'] ? 'is-ok' : 'is-bad'; ?>">
                             <strong><?php echo esc_html($feature_label); ?></strong> &rarr;
-                            <?php if ($feature_ready) : ?>
-                                <code><?php echo esc_html(wpum_get_page_url($feature_page)); ?></code>
+                            <?php if ($feature_status['ready']) : ?>
+                                <code><?php echo esc_html(wpum_get_page_url($override_features[$feature][0])); ?></code>
+                                <span class="description">
+                                    <?php
+                                    if ('content' === $feature_status['via']) {
+                                        esc_html_e('the shortcode was found on the page (content, reusable block or page builder data)', 'wp-user-management-plugin');
+                                    } elseif ('render' === $feature_status['via']) {
+                                        esc_html_e('the page shows the form to visitors (checked by loading it)', 'wp-user-management-plugin');
+                                    } else {
+                                        esc_html_e('confirmed by the wpum_page_is_ready filter', 'wp-user-management-plugin');
+                                    }
+                                    ?>
+                                </span>
+                            <?php elseif ('unpublished' === $feature_status['reason'] && $feature_page) : ?>
+                                <?php
+                                echo esc_html(sprintf(
+                                    /* translators: 1: page title, 2: page status */
+                                    __('the page "%1$s" exists but is not published (status: %2$s): WordPress keeps its own form here', 'wp-user-management-plugin'),
+                                    get_the_title($feature_page),
+                                    $feature_page->post_status
+                                ));
+                                ?>
+                            <?php elseif ('no_form' === $feature_status['reason'] && $feature_page) : ?>
+                                <?php
+                                echo esc_html(sprintf(
+                                    /* translators: %s: page title */
+                                    __('the page "%s" is published, but neither its content nor the page as visitors see it contains the form: WordPress keeps its own form here', 'wp-user-management-plugin'),
+                                    get_the_title($feature_page)
+                                ));
+                                $edit_link = get_edit_post_link($feature_page->ID);
+                                if ($edit_link) {
+                                    echo ' <a href="' . esc_url($edit_link) . '">' . esc_html__('Edit page', 'wp-user-management-plugin') . '</a>';
+                                }
+                                ?>
                             <?php else : ?>
                                 <?php
                                 echo esc_html(sprintf(
                                     /* translators: %s: page slug */
-                                    __('page "%s" not found, not published or without the shortcode: WordPress keeps its own form here', 'wp-user-management-plugin'),
-                                    wpum_get_page_slug($feature_page)
+                                    __('no published page with the slug "%s": WordPress keeps its own form here', 'wp-user-management-plugin'),
+                                    $feature_status['slug']
                                 ));
                                 ?>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
+                    <li class="wpum-status__action">
+                        <a class="button" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=wpum_recheck_pages'), 'wpum_recheck_pages')); ?>"><?php esc_html_e('Check the pages again', 'wp-user-management-plugin'); ?></a>
+                    </li>
                 </ul>
             </div>
 

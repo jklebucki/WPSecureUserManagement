@@ -423,3 +423,9 @@ body.wpum-modal-open {
 .wpum-admin .wpum-rl-table input.small-text {
     width: 90px;
 }
+
+.wpum-admin .wpum-status li.wpum-status__action {
+    padding: 0;
+    background: none;
+    border: 0;
+}
