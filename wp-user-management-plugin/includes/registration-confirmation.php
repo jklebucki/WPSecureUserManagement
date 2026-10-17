@@ -70,9 +70,11 @@ function wpum_get_available_locales() {
 }
 
 // The language pre-selected on the form: the page's own language when we have it, otherwise English.
-function wpum_default_locale() {
+function wpum_default_locale($current = null) {
     $available = wpum_get_available_locales();
-    $current   = function_exists('determine_locale') ? determine_locale() : get_locale();
+    if (null === $current) {
+        $current = function_exists('determine_locale') ? determine_locale() : get_locale();
+    }
 
     if (isset($available[$current])) {
         return $current;
@@ -86,6 +88,11 @@ function wpum_default_locale() {
     }
 
     return isset($available['en_US']) ? 'en_US' : (string) key($available);
+}
+
+// The language to write to an existing user in: their own locale when we offer it, otherwise the closest match.
+function wpum_locale_for_user($user) {
+    return wpum_default_locale(get_user_locale($user));
 }
 
 // Accept only a language we offer; anything else falls back to the default.
@@ -377,6 +384,19 @@ function wpum_render_email_template($template, $s) {
     return (string) ob_get_clean();
 }
 
+// Plain-text twin of the HTML email, built from the same strings.
+function wpum_compose_email_text($s) {
+    $text  = $s['title'] . "\n\n";
+    $text .= $s['greeting'] . "\n\n";
+    $text .= $s['intro'] . "\n\n";
+    $text .= $s['button'] . ":\n" . $s['url'] . "\n\n";
+    $text .= implode("\n", (array) $s['details']) . "\n\n";
+    $text .= $s['ignore'] . "\n\n";
+    $text .= "--\n" . $s['footer'] . "\n";
+
+    return $text;
+}
+
 /**
  * Build the confirmation email in the visitor's language.
  *
@@ -415,23 +435,14 @@ function wpum_build_activation_email($data, $url) {
         'footer'    => sprintf(wpum_t('This message was sent by %s. Please do not reply to it.', $locale), $site),
     );
 
-    $s = (array) apply_filters('wpum_activation_email_strings', $s, $data);
-
-    $text  = $s['title'] . "\n\n";
-    $text .= $s['greeting'] . "\n\n";
-    $text .= $s['intro'] . "\n\n";
-    $text .= $s['button'] . ":\n" . $url . "\n\n";
-    $text .= $s['username'] . "\n";
-    $text .= $s['expiry'] . "\n";
-    $text .= $s['deletion'] . "\n\n";
-    $text .= $s['ignore'] . "\n\n";
-    $text .= "--\n" . $s['footer'] . "\n";
+    $s            = (array) apply_filters('wpum_activation_email_strings', $s, $data);
+    $s['details'] = array($s['username'], $s['expiry'], $s['deletion']);
 
     return array(
         /* translators: %s: site name */
         'subject' => sprintf(wpum_t('[%s] Confirm your registration', $locale), $site),
-        'html'    => wpum_render_email_template('email-activation', $s),
-        'text'    => $text,
+        'html'    => wpum_render_email_template('email', $s),
+        'text'    => wpum_compose_email_text($s),
     );
 }
 

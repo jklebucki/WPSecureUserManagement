@@ -14,8 +14,11 @@ if (!defined('ABSPATH')) {
  * Safety: a form is replaced only when its page exists, is published and contains the shortcode, so a missing page can never
  * lock anybody out. Emergency switch: define( 'WPUM_KEEP_WP_LOGIN', true ); in wp-config.php.
  *
- * Left to WordPress on purpose: logout, the screens behind a password-reset email link (rp / resetpass), password-protected
- * posts (postpass) and WordPress's internal confirmations.
+ * Also handled here: logout (straight to the front page; without a valid nonce the visitor is asked to confirm on the account
+ * page, never logged out by a bare link) and the screens behind a password-reset link (rp / resetpass), which move to the
+ * plugin's reset page together with the key.
+ *
+ * Left to WordPress on purpose: password-protected posts (postpass) and WordPress's internal confirmations.
  */
 
 // Is the replacement switched on (the option, unless the emergency constant is set)?
@@ -118,14 +121,71 @@ add_filter('lostpassword_url', 'wpum_filter_lostpassword_url');
 /* Visits to wp-login.php itself                                       */
 /* ------------------------------------------------------------------ */
 
+// Where visitors land after logging out: the front page.
+function wpum_logout_redirect_url() {
+    return (string) apply_filters('wpum_logout_redirect', home_url('/'));
+}
+
+// wp-login.php?action=logout&_wpnonce=...: log out and go to the front page.
+function wpum_override_logout() {
+    if (!wpum_wp_login_override_enabled()) {
+        return; // WordPress handles it
+    }
+
+    $home = wpum_logout_redirect_url();
+
+    if (!is_user_logged_in()) {
+        wp_safe_redirect($home);
+        exit;
+    }
+
+    $nonce = isset($_REQUEST['_wpnonce']) && is_string($_REQUEST['_wpnonce']) ? sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])) : '';
+    if (wp_verify_nonce($nonce, 'log-out')) {
+        wp_logout();
+        wp_safe_redirect($home);
+        exit;
+    }
+
+    // A link without a valid nonce could be a forged request: ask first, on the account page.
+    $target = wpum_override_target('login');
+    if ('' !== $target) {
+        wpum_redirect_with_flash($target, 'logout', 'info', 'logout_confirm');
+    }
+}
+
 function wpum_override_wp_login() {
     $action = isset($_REQUEST['action']) && is_string($_REQUEST['action']) ? sanitize_key(wp_unslash($_REQUEST['action'])) : 'login';
 
     $left_to_core = (array) apply_filters('wpum_wp_login_allowed_actions', array(
-        'logout', 'rp', 'resetpass', 'postpass', 'confirmaction', 'confirm_admin_email', 'entered_recovery_mode',
+        'postpass', 'confirmaction', 'confirm_admin_email', 'entered_recovery_mode',
     ));
     if (in_array($action, $left_to_core, true)) {
         return;
+    }
+
+    if ('logout' === $action) {
+        wpum_override_logout();
+        return;
+    }
+
+    $status = isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] ? 303 : 302;
+
+    // The screens behind a password-reset link move to the plugin's reset page; the key travels along and is moved out of
+    // the address bar there.
+    if (in_array($action, array('rp', 'resetpass'), true)) {
+        $target = wpum_override_target('reset');
+        if ('' === $target) {
+            return;
+        }
+
+        $args = array();
+        if (isset($_GET['key'], $_GET['login']) && is_string($_GET['key']) && is_string($_GET['login'])) {
+            $args['wpum_reset'] = rawurlencode(preg_replace('/[^A-Za-z0-9]/', '', wp_unslash($_GET['key'])));
+            $args['login']      = rawurlencode(wp_unslash($_GET['login']));
+        }
+
+        wp_safe_redirect($args ? add_query_arg($args, $target) : $target, $status);
+        exit;
     }
 
     if ('register' === $action) {
@@ -143,6 +203,10 @@ function wpum_override_wp_login() {
     $target = wpum_override_target($feature);
     if ('' === $target) {
         return; // no usable replacement page: leave WordPress's own form alone
+    }
+
+    if ('reset' === $feature && isset($_GET['error']) && in_array($_GET['error'], array('invalidkey', 'expiredkey'), true)) {
+        wpum_redirect_with_flash($target, 'reset', 'error', 'reset_link_invalid');
     }
 
     if ('login' === $feature) {
@@ -170,7 +234,6 @@ function wpum_override_wp_login() {
     }
 
     // A POST is never processed here (no password guessing against wp-login.php): 303 sends it to the page as a GET.
-    $status = isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] ? 303 : 302;
     wp_safe_redirect($target, $status);
     exit;
 }

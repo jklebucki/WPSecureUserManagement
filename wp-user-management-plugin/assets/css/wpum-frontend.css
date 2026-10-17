@@ -246,6 +246,11 @@
     color: var(--wpum-muted) !important;
 }
 
+/* A short note placed directly in a form, above the first field. */
+.wpum-ui form > .wpum-help {
+    margin: 0 0 16px !important;
+}
+
 .wpum-ui .wpum-check {
     display: flex !important;
     align-items: center;
@@ -407,6 +412,12 @@
     background: var(--wpum-danger-soft) !important;
     border-color: var(--wpum-danger-line) !important;
     color: var(--wpum-danger-hover) !important;
+}
+
+.wpum-ui .wpum-notice--info {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+    color: #1e40af !important;
 }
 
 .wpum-ui .wpum-notice--success {

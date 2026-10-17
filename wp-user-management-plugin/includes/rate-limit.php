@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 /**
  * Rate limiting: fixed-window counters on transients, with limits editable under User Management -> Configuration.
  *
- * Buckets: login (ip+login), login_ip, reset_ip, reset_email, register_ip, register_email, activation_ip,
+ * Buckets: login (ip+login), login_ip, reset_ip, reset_email, reset_link, register_ip, register_email, activation_ip,
  * password_check (user id), flash (ip; protects the database from junk written by invalid form posts).
  * Filter "wpum_rate_limit_{bucket}" can still override a limit: array( max attempts, window in seconds ).
  */
@@ -240,6 +240,7 @@ function wpum_rate_limit_buckets() {
         'login_ip'       => array(20, 15),
         'reset_ip'       => array(5, 60),
         'reset_email'    => array(3, 60),
+        'reset_link'     => array(10, 60),
         'register_ip'    => array(5, 60),
         'register_email' => array(3, 60),
         'activation_ip'  => array(20, 60),
@@ -254,6 +255,7 @@ function wpum_rate_limit_labels() {
         'login_ip'       => __('Failed logins per IP (any account)', 'wp-user-management-plugin'),
         'reset_ip'       => __('Password reset requests per IP', 'wp-user-management-plugin'),
         'reset_email'    => __('Password reset requests per email address', 'wp-user-management-plugin'),
+        'reset_link'     => __('Password reset link attempts per IP', 'wp-user-management-plugin'),
         'register_ip'    => __('Registrations per IP', 'wp-user-management-plugin'),
         'register_email' => __('Registrations per email address', 'wp-user-management-plugin'),
         'activation_ip'  => __('Confirmation link attempts per IP', 'wp-user-management-plugin'),

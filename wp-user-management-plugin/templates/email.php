@@ -1,13 +1,13 @@
 <?php
 /**
- * Registration confirmation email (HTML).
+ * Layout of the plugin's emails (registration confirmation, password reset).
  *
  * Email clients ignore most modern CSS, so the layout is table based with inline styles. All text arrives already
- * translated in $s (see wpum_build_activation_email()). To use your own markup, point the "wpum_email_template_path"
- * filter at another file.
+ * translated in $s (see wpum_build_activation_email() and wpum_build_password_reset_email()). To use your own markup,
+ * point the "wpum_email_template_path" filter at another file.
  *
  * @var array $s Strings and URLs: lang, site, site_url, url, preheader, title, greeting, intro, button, fallback,
- *               username, expiry, deletion, ignore, footer.
+ *               details (array of short lines shown in the grey box), ignore, footer.
  */
 
 if (!defined('ABSPATH')) {
@@ -59,9 +59,7 @@ $accent = '#3b5bdb';
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px;">
                                 <tr>
                                     <td style="padding:14px 16px;background-color:#f9fafb;border:1px solid #e5e7eb;border-radius:9px;font-size:13px;line-height:1.6;color:#4b5563;">
-                                        <?php echo esc_html($s['username']); ?><br>
-                                        <?php echo esc_html($s['expiry']); ?><br>
-                                        <?php echo esc_html($s['deletion']); ?>
+                                        <?php echo implode('<br>', array_map('esc_html', (array) $s['details'])); ?>
                                     </td>
                                 </tr>
                             </table>

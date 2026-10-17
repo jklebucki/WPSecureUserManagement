@@ -26,6 +26,7 @@ function wpum_profile_active_tab()
         'userdata' => 'user-data',
         'password' => 'change-password',
         'delete'   => 'delete-account',
+        'logout'   => 'logout',
     );
 
     return isset($map[$flash['form']]) ? $map[$flash['form']] : 'profile';
@@ -243,7 +244,8 @@ function wpum_display_profile_edit_form()
                 </div>
             </div>
 
-            <div id="logout" class="wpum-panel" role="tabpanel" aria-labelledby="wpum-tab-logout">
+            <div id="logout" class="wpum-panel<?php echo 'logout' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="wpum-tab-logout">
+                <?php wpum_flash_render('logout'); ?>
                 <h3 class="wpum-subtitle"><?php esc_html_e('Logout', 'wp-user-management-plugin'); ?></h3>
                 <p><?php esc_html_e('Click the button below to logout from your account.', 'wp-user-management-plugin'); ?></p>
                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -469,7 +471,7 @@ function wpum_process_logout()
         wp_logout();
     }
 
-    wp_safe_redirect(home_url('/'));
+    wp_safe_redirect(wpum_logout_redirect_url());
     exit;
 }
 add_action('admin_post_wpum_logout', 'wpum_process_logout');

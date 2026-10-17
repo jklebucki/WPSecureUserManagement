@@ -33,6 +33,8 @@ function wpum_notice_messages()
         'mail_failed'           => __('We could not send the confirmation email. Please try again later or contact the site administrator.', 'wp-user-management-plugin'),
         'activated'             => __('Your account has been activated. You can now log in.', 'wp-user-management-plugin'),
         'activation_invalid'    => __('This activation link is invalid, has expired or was already used. If you have already activated your account, just log in; otherwise register again.', 'wp-user-management-plugin'),
+        'reset_link_invalid'    => __('This password reset link is invalid or has expired. Request a new one below.', 'wp-user-management-plugin'),
+        'logout_confirm'        => __('Please confirm that you want to log out.', 'wp-user-management-plugin'),
         'password_reset_done'   => __('Your password has been reset. You can now log in.', 'wp-user-management-plugin'),
         'activation_conflict'   => __('An account with this username or email already exists. Try logging in or resetting your password.', 'wp-user-management-plugin'),
         'login_failed'          => __('Invalid username/email or password.', 'wp-user-management-plugin'),
@@ -60,7 +62,7 @@ function wpum_flash_set($form, $type, $code, $old = array())
     $token = wp_generate_password(20, false);
     set_transient('wpum_flash_' . $token, array(
         'form' => (string) $form,
-        'type' => 'success' === $type ? 'success' : 'error',
+        'type' => in_array($type, array('success', 'info'), true) ? $type : 'error',
         'code' => (string) $code,
         'old'  => is_array($old) ? $old : array(),
     ), 2 * MINUTE_IN_SECONDS);
@@ -137,11 +139,11 @@ function wpum_flash_render($form)
         }
     }
 
-    $is_success = 'success' === $flash['type'];
+    $is_error = 'error' === $flash['type'];
     printf(
         '<div class="wpum-notice wpum-notice--%1$s" role="%2$s">%3$s</div>',
-        $is_success ? 'success' : 'error',
-        $is_success ? 'status' : 'alert',
+        esc_attr($flash['type']),
+        $is_error ? 'alert' : 'status',
         esc_html($text)
     );
 }
