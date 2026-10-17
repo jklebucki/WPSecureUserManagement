@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin 1.4.1\n"
-"POT-Creation-Date: 2026-10-17 11:23+0000\n"
-"PO-Revision-Date: 2026-10-17 11:23+0000\n"
+"Project-Id-Version: WP User Management Plugin 1.5.0\n"
+"POT-Creation-Date: 2026-10-17 12:08+0000\n"
+"PO-Revision-Date: 2026-10-17 12:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Select %s"
 msgstr ""
 
-#: includes/admin-menu.php:30 includes/admin-menu.php:31 includes/admin-menu.php:561
+#: includes/admin-menu.php:30 includes/admin-menu.php:31 includes/admin-menu.php:564
 msgid "Configuration"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "You are about to permanently delete 1 user."
 msgstr ""
 
-#: includes/admin-menu.php:541
+#: includes/admin-menu.php:544
 msgid "Settings saved."
 msgstr ""
 
@@ -182,85 +182,85 @@ msgstr ""
 msgid "...and %d more"
 msgstr ""
 
-#: includes/admin-menu.php:566
+#: includes/admin-menu.php:569
 msgid "User List Columns"
 msgstr ""
 
-#: includes/admin-menu.php:578
+#: includes/admin-menu.php:581
 msgid "User Profile Metadata"
 msgstr ""
 
-#: includes/admin-menu.php:579
+#: includes/admin-menu.php:582
 msgid "Fields the user can edit on the \"User Data\" tab of the profile page. Sensitive internal keys (capabilities, sessions, screen options) are hidden on purpose."
 msgstr ""
 
-#: includes/admin-menu.php:591
+#: includes/admin-menu.php:594
 msgid "Password Settings"
 msgstr ""
 
-#: includes/admin-menu.php:592
+#: includes/admin-menu.php:595
 msgid "Minimum Password Length"
 msgstr ""
 
-#: includes/admin-menu.php:597
+#: includes/admin-menu.php:600
 msgid "wp-login.php"
 msgstr ""
 
-#: includes/admin-menu.php:600
+#: includes/admin-menu.php:603
 msgid "Disable wp-login.php (log in and register only through the plugin pages)"
 msgstr ""
 
-#: includes/admin-menu.php:602
+#: includes/admin-menu.php:605
 msgid "When this is on, wp-login.php no longer shows WordPress's own login, registration and \"lost password\" forms. Visitors are sent to the pages below instead, which carry Turnstile, rate limiting and the plugin's styling, and WordPress links point there too (including the redirect from wp-admin). Logout, the screens behind password-reset email links and password-protected posts keep using WordPress. A form is replaced only when its page exists and contains the shortcode, so you cannot lock yourself out."
 msgstr ""
 
-#: includes/admin-menu.php:604
+#: includes/admin-menu.php:607
 msgid "WPUM_KEEP_WP_LOGIN is set in wp-config.php, so wp-login.php stays active whatever this setting says."
 msgstr ""
 
-#: includes/admin-menu.php:609 includes/login-form.php:49
+#: includes/admin-menu.php:612 includes/login-form.php:49
 msgid "Login"
 msgstr ""
 
-#: includes/admin-menu.php:610 includes/admin-menu.php:733
+#: includes/admin-menu.php:613 includes/admin-menu.php:757
 msgid "Registration"
 msgstr ""
 
-#: includes/admin-menu.php:611
+#: includes/admin-menu.php:614
 msgid "Password reset"
 msgstr ""
 
-#: includes/admin-menu.php:632
+#: includes/admin-menu.php:635
 msgid "the shortcode was found on the page (content, reusable block or page builder data)"
 msgstr ""
 
-#: includes/admin-menu.php:634
+#: includes/admin-menu.php:637
 msgid "the page shows the form to visitors (checked by loading it)"
 msgstr ""
 
-#: includes/admin-menu.php:636
+#: includes/admin-menu.php:639
 msgid "confirmed by the wpum_page_is_ready filter"
 msgstr ""
 
-#: includes/admin-menu.php:644
+#: includes/admin-menu.php:647
 #, php-format
 msgid "the page \"%1$s\" exists but is not published (status: %2$s): WordPress keeps its own form here"
 msgstr ""
 
-#: includes/admin-menu.php:653
+#: includes/admin-menu.php:656
 #, php-format
 msgid "the page \"%s\" is published, but neither its content nor the page as visitors see it contains the form: WordPress keeps its own form here"
-msgstr ""
-
-#: includes/admin-menu.php:658
-msgid "Edit page"
 msgstr ""
 
 #: includes/admin-menu.php:66
 msgid "ID"
 msgstr ""
 
-#: includes/admin-menu.php:665
+#: includes/admin-menu.php:661
+msgid "Edit page"
+msgstr ""
+
+#: includes/admin-menu.php:668
 #, php-format
 msgid "no published page with the slug \"%s\": WordPress keeps its own form here"
 msgstr ""
@@ -269,12 +269,8 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: includes/admin-menu.php:673
+#: includes/admin-menu.php:676
 msgid "Check the pages again"
-msgstr ""
-
-#: includes/admin-menu.php:679
-msgid "Rate limiting"
 msgstr ""
 
 #: includes/admin-menu.php:68 includes/profile-edit-form.php:90 includes/register-form.php:65
@@ -282,110 +278,126 @@ msgid "Email"
 msgstr ""
 
 #: includes/admin-menu.php:682
-msgid "Enable rate limiting"
+msgid "XML-RPC"
 msgstr ""
 
-#: includes/admin-menu.php:684
-msgid "Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address."
+#: includes/admin-menu.php:685
+msgid "Block xmlrpc.php (recommended)"
 msgstr ""
 
 #: includes/admin-menu.php:687
-msgid "Your IP as the plugin sees it:"
+msgid "xmlrpc.php is a second way to guess passwords and to abuse pingbacks, and replacing wp-login.php does not cover it. On Apache the plugin adds a marked block to the .htaccess in the WordPress folder (it checks that the site still works and removes the block again if not, when you switch this off, or when the plugin is deactivated). Everywhere else, and as a second layer, WordPress itself refuses XML-RPC requests. Apps that need XML-RPC (the WordPress mobile app, Jetpack, some publishing tools) stop working while this is on. Emergency switch: define( 'WPUM_ALLOW_XMLRPC', true ); in wp-config.php."
 msgstr ""
 
 #: includes/admin-menu.php:69 includes/privacy.php:49 includes/profile-edit-form.php:98
 msgid "First Name"
 msgstr ""
 
-#: includes/admin-menu.php:690
-msgid "read from Cloudflare (CF-Connecting-IP of a trusted proxy)"
-msgstr ""
-
-#: includes/admin-menu.php:691
-msgid "direct connection"
-msgstr ""
-
-#: includes/admin-menu.php:695
-msgid "Cloudflare IP ranges:"
-msgstr ""
-
 #: includes/admin-menu.php:70 includes/privacy.php:50 includes/profile-edit-form.php:106
 msgid "Last Name"
 msgstr ""
 
-#: includes/admin-menu.php:700
-#, php-format
-msgid "updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)"
+#: includes/admin-menu.php:703
+msgid "Rate limiting"
 msgstr ""
 
 #: includes/admin-menu.php:706
-msgid "built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)"
+msgid "Enable rate limiting"
+msgstr ""
+
+#: includes/admin-menu.php:708
+msgid "Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address."
 msgstr ""
 
 #: includes/admin-menu.php:71
 msgid "Registered"
 msgstr ""
 
-#: includes/admin-menu.php:713
-msgid "Limit"
+#: includes/admin-menu.php:711
+msgid "Your IP as the plugin sees it:"
 msgstr ""
 
 #: includes/admin-menu.php:714
-msgid "Max attempts"
+msgid "read from Cloudflare (CF-Connecting-IP of a trusted proxy)"
 msgstr ""
 
 #: includes/admin-menu.php:715
+msgid "direct connection"
+msgstr ""
+
+#: includes/admin-menu.php:719
+msgid "Cloudflare IP ranges:"
+msgstr ""
+
+#: includes/admin-menu.php:724
+#, php-format
+msgid "updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)"
+msgstr ""
+
+#: includes/admin-menu.php:730
+msgid "built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)"
+msgstr ""
+
+#: includes/admin-menu.php:737
+msgid "Limit"
+msgstr ""
+
+#: includes/admin-menu.php:738
+msgid "Max attempts"
+msgstr ""
+
+#: includes/admin-menu.php:739
 msgid "Within (minutes)"
 msgstr ""
 
-#: includes/admin-menu.php:734
+#: includes/admin-menu.php:758
 msgid "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
 msgstr ""
 
-#: includes/admin-menu.php:735
+#: includes/admin-menu.php:759
 msgid "Days to keep an unconfirmed registration"
 msgstr ""
 
-#: includes/admin-menu.php:742
+#: includes/admin-menu.php:766
 #, php-format
 msgid "%s registration is waiting for confirmation right now."
 msgid_plural "%s registrations are waiting for confirmation right now."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin-menu.php:750
+#: includes/admin-menu.php:774
 msgid "Page addresses"
 msgstr ""
 
-#: includes/admin-menu.php:751
+#: includes/admin-menu.php:775
 msgid "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
 msgstr ""
 
-#: includes/admin-menu.php:765
+#: includes/admin-menu.php:789
 msgid "Save Settings"
 msgstr ""
 
-#: includes/admin-menu.php:770
+#: includes/admin-menu.php:794
 msgid "Maintenance"
 msgstr ""
 
-#: includes/admin-menu.php:772
+#: includes/admin-menu.php:796
 msgid "No leftover backup tables from older plugin versions were found."
 msgstr ""
 
-#: includes/admin-menu.php:780
+#: includes/admin-menu.php:804
 msgid "Use this when someone has been locked out by the rate limits."
 msgstr ""
 
-#: includes/admin-menu.php:784
+#: includes/admin-menu.php:808
 msgid "Clear rate-limit counters"
 msgstr ""
 
-#: includes/admin-menu.php:787
+#: includes/admin-menu.php:811
 msgid "Downloads Cloudflare's published IP list now (this also happens automatically, at most once an hour, when it is needed)."
 msgstr ""
 
-#: includes/admin-menu.php:791
+#: includes/admin-menu.php:815
 msgid "Refresh Cloudflare IP ranges"
 msgstr ""
 
@@ -696,6 +708,46 @@ msgstr ""
 
 #: includes/helpers.php:99
 msgid "Please wait..."
+msgstr ""
+
+#: includes/htaccess.php:219
+msgid "The block is in .htaccess and Apache refuses xmlrpc.php (verified)."
+msgstr ""
+
+#: includes/htaccess.php:220
+msgid "XML-RPC blocking is switched off."
+msgstr ""
+
+#: includes/htaccess.php:221
+msgid "WPUM_ALLOW_XMLRPC is set in wp-config.php, so XML-RPC is allowed."
+msgstr ""
+
+#: includes/htaccess.php:222
+msgid "This server does not read .htaccess files: XML-RPC is refused by WordPress itself."
+msgstr ""
+
+#: includes/htaccess.php:223
+msgid "The .htaccess file is not writable, so only WordPress refuses XML-RPC. To block it in Apache as well, add the lines below to .htaccess yourself."
+msgstr ""
+
+#: includes/htaccess.php:224
+msgid "Writing .htaccess failed, so only WordPress refuses XML-RPC."
+msgstr ""
+
+#: includes/htaccess.php:225
+msgid "Apache rejected the block (the site answered with an error), so it was removed again. WordPress itself still refuses XML-RPC."
+msgstr ""
+
+#: includes/htaccess.php:226
+msgid "This server ignores .htaccess here (AllowOverride), so the block was not kept. WordPress itself still refuses XML-RPC."
+msgstr ""
+
+#: includes/htaccess.php:227
+msgid "The block could not be verified (the site could not call itself), so it was not kept. WordPress itself still refuses XML-RPC."
+msgstr ""
+
+#: includes/htaccess.php:228
+msgid "Not applied yet. Save the settings to apply it."
 msgstr ""
 
 #: includes/login-form.php:15
@@ -1314,6 +1366,6 @@ msgstr ""
 msgid "WordPress password reset (wp-login.php)"
 msgstr ""
 
-#: wp-user-management-plugin.php:116
+#: wp-user-management-plugin.php:122
 msgid "Could not create the required database tables. Check database permissions and the error log."
 msgstr ""
