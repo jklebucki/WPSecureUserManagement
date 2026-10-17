@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP User Management Plugin
  * Description: A plugin for user registration, login, and profile editing with enhanced security and a modern interface.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: Jarosław Kłębucki
  * Text Domain: wp-user-management-plugin
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WPUM_VERSION', '1.3.0');
+define('WPUM_VERSION', '1.4.0');
 define('WPUM_DB_VERSION', '1.2'); // Wersja struktury bazy danych
 define('WPUM_PLUGIN_FILE', __FILE__);
 define('WPUM_PLUGIN_DIR', plugin_dir_path(__FILE__));
@@ -53,6 +53,7 @@ require_once WPUM_PLUGIN_DIR . 'includes/password-reset-form.php';
 require_once WPUM_PLUGIN_DIR . 'includes/admin-menu.php';
 require_once WPUM_PLUGIN_DIR . 'includes/admin-turnstile.php';
 require_once WPUM_PLUGIN_DIR . 'includes/my-account.php';
+require_once WPUM_PLUGIN_DIR . 'includes/login-override.php';
 require_once WPUM_PLUGIN_DIR . 'includes/db-migrations.php';
 
 // Load text domain for translations

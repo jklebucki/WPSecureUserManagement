@@ -138,7 +138,7 @@ function wpum_process_registration()
         wpum_redirect_with_flash($return_url, 'register', 'error', 'invalid_nonce');
     }
 
-    $ip = wpum_get_client_ip();
+    $ip = wpum_get_rate_limit_ip();
     if (wpum_rate_limit_is_blocked('register_ip', $ip)) {
         wpum_redirect_with_flash($return_url, 'register', 'error', 'rate_limited');
     }

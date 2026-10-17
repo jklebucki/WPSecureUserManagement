@@ -465,7 +465,7 @@ function wpum_process_activation() {
     }
 
     $return_url = wpum_get_page_url('account');
-    $ip         = wpum_get_client_ip();
+    $ip         = wpum_get_rate_limit_ip();
 
     if (wpum_rate_limit_is_blocked('activation_ip', $ip)) {
         wpum_redirect_with_flash($return_url, 'login', 'error', 'rate_limited');

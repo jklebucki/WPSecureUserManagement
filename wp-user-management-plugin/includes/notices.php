@@ -33,6 +33,7 @@ function wpum_notice_messages()
         'mail_failed'           => __('We could not send the confirmation email. Please try again later or contact the site administrator.', 'wp-user-management-plugin'),
         'activated'             => __('Your account has been activated. You can now log in.', 'wp-user-management-plugin'),
         'activation_invalid'    => __('This activation link is invalid, has expired or was already used. If you have already activated your account, just log in; otherwise register again.', 'wp-user-management-plugin'),
+        'password_reset_done'   => __('Your password has been reset. You can now log in.', 'wp-user-management-plugin'),
         'activation_conflict'   => __('An account with this username or email already exists. Try logging in or resetting your password.', 'wp-user-management-plugin'),
         'login_failed'          => __('Invalid username/email or password.', 'wp-user-management-plugin'),
         'reset_sent'            => __('If an account with that email address exists, password reset instructions have been sent.', 'wp-user-management-plugin'),
@@ -49,6 +50,13 @@ function wpum_notice_messages()
 // Store a notice and return its token.
 function wpum_flash_set($form, $type, $code, $old = array())
 {
+    // Invalid or abusive posts end up here too, so the number of stored notices is limited per IP (no junk in wp_options).
+    $ip = wpum_get_rate_limit_ip();
+    if (wpum_rate_limit_is_blocked('flash', $ip)) {
+        return '';
+    }
+    wpum_rate_limit_hit('flash', $ip);
+
     $token = wp_generate_password(20, false);
     set_transient('wpum_flash_' . $token, array(
         'form' => (string) $form,
@@ -64,7 +72,7 @@ function wpum_flash_set($form, $type, $code, $old = array())
 function wpum_redirect_with_flash($url, $form, $type, $code, $old = array())
 {
     $token = wpum_flash_set($form, $type, $code, $old);
-    wp_safe_redirect(add_query_arg('wpum_t', $token, $url));
+    wp_safe_redirect('' !== $token ? add_query_arg('wpum_t', $token, $url) : $url);
     exit;
 }
 

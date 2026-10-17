@@ -15,6 +15,9 @@ function wpum_display_login_form()
             <h2 class="wpum-title"><?php esc_html_e('User Login', 'wp-user-management-plugin'); ?></h2>
 
             <?php wpum_flash_render('login'); ?>
+            <?php if (isset($_GET['loggedout'])) : ?>
+                <div class="wpum-notice wpum-notice--success" role="status"><?php esc_html_e('You have been logged out.', 'wp-user-management-plugin'); ?></div>
+            <?php endif; ?>
             <?php wpum_form_fields('login'); ?>
 
             <?php
@@ -71,7 +74,7 @@ function wpum_process_login()
 
     $login    = wpum_post_text('wpum_username_email');
     $password = wpum_post_raw('wpum_password');
-    $ip       = wpum_get_client_ip();
+    $ip       = wpum_get_rate_limit_ip();
     $old      = array('login' => $login);
 
     if (wpum_rate_limit_is_blocked('login_ip', $ip) || wpum_rate_limit_is_blocked('login', $ip . '|' . $login)) {
@@ -102,8 +105,13 @@ function wpum_process_login()
 
     wpum_rate_limit_clear('login', $ip . '|' . $login);
 
-    // Redirect to profile page
-    wp_safe_redirect(wpum_get_page_url('account'));
+    // Back to where the visitor came from (for instance wp-admin) when that is a safe address, otherwise the account page.
+    $target = '';
+    if (isset($_GET['redirect_to']) && is_string($_GET['redirect_to'])) {
+        $target = wp_validate_redirect(esc_url_raw(wp_unslash($_GET['redirect_to'])), '');
+    }
+
+    wp_safe_redirect('' !== $target ? $target : wpum_get_page_url('account'));
     exit;
 }
 add_action('template_redirect', 'wpum_process_login');

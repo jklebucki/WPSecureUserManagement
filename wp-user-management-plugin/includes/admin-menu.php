@@ -530,6 +530,14 @@ function wp_user_management_configuration() {
         $unconfirmed_days = isset($_POST['unconfirmed_days']) ? absint($_POST['unconfirmed_days']) : 2;
         update_option('wpum_unconfirmed_days', max(1, min(30, $unconfirmed_days)));
 
+        update_option('wpum_disable_wp_login', !empty($_POST['disable_wp_login']) ? 1 : 0);
+
+        wpum_save_rate_limit_settings(
+            !empty($_POST['rl_enabled']),
+            isset($_POST['rl_max']) && is_array($_POST['rl_max']) ? wp_unslash($_POST['rl_max']) : array(),
+            isset($_POST['rl_minutes']) && is_array($_POST['rl_minutes']) ? wp_unslash($_POST['rl_minutes']) : array()
+        );
+
         echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved.', 'wp-user-management-plugin') . '</p></div>';
     }
 
@@ -586,6 +594,100 @@ function wp_user_management_configuration() {
             </div>
 
             <div class="wpum-card">
+                <div class="wpum-card__head"><h2><?php esc_html_e('wp-login.php', 'wp-user-management-plugin'); ?></h2></div>
+                <label class="wpum-switch">
+                    <input type="checkbox" name="disable_wp_login" value="1" <?php checked((bool) get_option('wpum_disable_wp_login', 1)); ?>>
+                    <span><?php esc_html_e('Disable wp-login.php (log in and register only through the plugin pages)', 'wp-user-management-plugin'); ?></span>
+                </label>
+                <p class="description"><?php esc_html_e('When this is on, wp-login.php no longer shows WordPress\'s own login, registration and "lost password" forms. Visitors are sent to the pages below instead, which carry Turnstile, rate limiting and the plugin\'s styling, and WordPress links point there too (including the redirect from wp-admin). Logout, the screens behind password-reset email links and password-protected posts keep using WordPress. A form is replaced only when its page exists and contains the shortcode, so you cannot lock yourself out.', 'wp-user-management-plugin'); ?></p>
+                <?php if (defined('WPUM_KEEP_WP_LOGIN') && WPUM_KEEP_WP_LOGIN) : ?>
+                    <div class="notice notice-warning inline"><p><?php esc_html_e('WPUM_KEEP_WP_LOGIN is set in wp-config.php, so wp-login.php stays active whatever this setting says.', 'wp-user-management-plugin'); ?></p></div>
+                <?php endif; ?>
+                <ul class="wpum-status">
+                    <?php
+                    $override_labels = array(
+                        'login'    => __('Login', 'wp-user-management-plugin'),
+                        'register' => __('Registration', 'wp-user-management-plugin'),
+                        'reset'    => __('Password reset', 'wp-user-management-plugin'),
+                    );
+                    $override_features = wpum_override_features();
+                    foreach ($override_labels as $feature => $feature_label) :
+                        $feature_ready = wpum_override_page_ready($feature);
+                        $feature_page  = $override_features[$feature][0];
+                        ?>
+                        <li class="<?php echo $feature_ready ? 'is-ok' : 'is-bad'; ?>">
+                            <strong><?php echo esc_html($feature_label); ?></strong> &rarr;
+                            <?php if ($feature_ready) : ?>
+                                <code><?php echo esc_html(wpum_get_page_url($feature_page)); ?></code>
+                            <?php else : ?>
+                                <?php
+                                echo esc_html(sprintf(
+                                    /* translators: %s: page slug */
+                                    __('page "%s" not found, not published or without the shortcode: WordPress keeps its own form here', 'wp-user-management-plugin'),
+                                    wpum_get_page_slug($feature_page)
+                                ));
+                                ?>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+            <div class="wpum-card">
+                <div class="wpum-card__head"><h2><?php esc_html_e('Rate limiting', 'wp-user-management-plugin'); ?></h2></div>
+                <label class="wpum-switch">
+                    <input type="checkbox" name="rl_enabled" value="1" <?php checked(wpum_rate_limit_enabled()); ?>>
+                    <span><?php esc_html_e('Enable rate limiting', 'wp-user-management-plugin'); ?></span>
+                </label>
+                <p class="description"><?php esc_html_e('Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address.', 'wp-user-management-plugin'); ?></p>
+                <?php $ip_details = wpum_client_ip_details(); ?>
+                <p class="description">
+                    <?php esc_html_e('Your IP as the plugin sees it:', 'wp-user-management-plugin'); ?>
+                    <code><?php echo esc_html($ip_details[0]); ?></code>
+                    (<?php echo 'cloudflare' === $ip_details[1]
+                        ? esc_html__('read from Cloudflare (CF-Connecting-IP of a trusted proxy)', 'wp-user-management-plugin')
+                        : esc_html__('direct connection', 'wp-user-management-plugin'); ?>)
+                </p>
+                <?php $cloudflare = wpum_fetched_cloudflare_data(); ?>
+                <p class="description">
+                    <?php esc_html_e('Cloudflare IP ranges:', 'wp-user-management-plugin'); ?>
+                    <?php
+                    if (!empty($cloudflare['fetched'])) {
+                        echo esc_html(sprintf(
+                            /* translators: 1: date and time, 2: number of IPv4 ranges, 3: number of IPv6 ranges */
+                            __('updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)', 'wp-user-management-plugin'),
+                            wp_date(get_option('date_format') . ' ' . get_option('time_format'), (int) $cloudflare['fetched']),
+                            (int) $cloudflare['v4'],
+                            (int) $cloudflare['v6']
+                        ));
+                    } else {
+                        esc_html_e('built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)', 'wp-user-management-plugin');
+                    }
+                    ?>
+                </p>
+                <table class="widefat striped wpum-rl-table">
+                    <thead>
+                        <tr>
+                            <th><?php esc_html_e('Limit', 'wp-user-management-plugin'); ?></th>
+                            <th><?php esc_html_e('Max attempts', 'wp-user-management-plugin'); ?></th>
+                            <th><?php esc_html_e('Within (minutes)', 'wp-user-management-plugin'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach (wpum_rate_limit_labels() as $bucket => $bucket_label) :
+                            $bucket_config = wpum_rate_limit_config($bucket);
+                            ?>
+                            <tr>
+                                <td><?php echo esc_html($bucket_label); ?></td>
+                                <td><input type="number" class="small-text" name="rl_max[<?php echo esc_attr($bucket); ?>]" value="<?php echo esc_attr((int) $bucket_config[0]); ?>" min="1" max="1000"></td>
+                                <td><input type="number" class="small-text" name="rl_minutes[<?php echo esc_attr($bucket); ?>]" value="<?php echo esc_attr(max(1, (int) round($bucket_config[1] / MINUTE_IN_SECONDS))); ?>" min="1" max="1440"></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="wpum-card">
                 <div class="wpum-card__head"><h2><?php esc_html_e('Registration', 'wp-user-management-plugin'); ?></h2></div>
                 <p class="description"><?php esc_html_e('New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email.', 'wp-user-management-plugin'); ?></p>
                 <label for="unconfirmed_days"><?php esc_html_e('Days to keep an unconfirmed registration', 'wp-user-management-plugin'); ?></label>
@@ -631,6 +733,21 @@ function wp_user_management_configuration() {
                 <p><code><?php echo esc_html(implode(', ', $legacy_tables)); ?></code></p>
                 <?php wpum_render_legacy_tables_form(); ?>
             <?php endif; ?>
+
+            <hr>
+            <p class="description"><?php esc_html_e('Use this when someone has been locked out by the rate limits.', 'wp-user-management-plugin'); ?></p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin:0 0 12px;">
+                <input type="hidden" name="action" value="wpum_reset_rate_limits">
+                <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('wpum_reset_rate_limits')); ?>">
+                <button type="submit" class="button"><?php esc_html_e('Clear rate-limit counters', 'wp-user-management-plugin'); ?></button>
+            </form>
+
+            <p class="description"><?php esc_html_e('Downloads Cloudflare\'s published IP list now (this also happens automatically, at most once an hour, when it is needed).', 'wp-user-management-plugin'); ?></p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin:0;">
+                <input type="hidden" name="action" value="wpum_refresh_cloudflare_ranges">
+                <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('wpum_refresh_cloudflare_ranges')); ?>">
+                <button type="submit" class="button"><?php esc_html_e('Refresh Cloudflare IP ranges', 'wp-user-management-plugin'); ?></button>
+            </form>
         </div>
     </div>
     <?php

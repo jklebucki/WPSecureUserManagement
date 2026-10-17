@@ -67,8 +67,7 @@ function wpum_turnstile_sanitize_options($input) {
     $language = isset($input['language']) ? strtolower(trim((string) $input['language'])) : 'auto';
     $out['language'] = preg_match('/^(auto|[a-z]{2}(-[a-z]{2})?)$/', $language) ? $language : 'auto';
 
-    $out['fail_open']         = !empty($input['fail_open']) ? 1 : 0;
-    $out['behind_cloudflare'] = !empty($input['behind_cloudflare']) ? 1 : 0;
+    $out['fail_open'] = !empty($input['fail_open']) ? 1 : 0;
 
     delete_transient('wpum_turnstile_config_error');
 
@@ -279,6 +278,7 @@ function wpum_turnstile_settings_page() {
                         </label>
                     <?php endforeach; ?>
                 </div>
+                <p class="description"><?php esc_html_e('The wp-login.php options above only matter while wp-login.php is not disabled under Configuration.', 'wp-user-management-plugin'); ?></p>
                 <p class="description"><?php esc_html_e('Tip: run "Test keys" before enabling the wp-login.php forms. If you ever get locked out, add define( \'WPUM_TURNSTILE_DISABLE\', true ); to wp-config.php.', 'wp-user-management-plugin'); ?></p>
             </div>
 
@@ -332,12 +332,7 @@ function wpum_turnstile_settings_page() {
                         <input type="checkbox" name="wpum_turnstile[fail_open]" value="1" <?php checked(!empty($o['fail_open'])); ?>>
                         <?php esc_html_e('Let visitors through when Cloudflare cannot be reached (fail open)', 'wp-user-management-plugin'); ?>
                     </label>
-                    <label class="wpum-inline-check">
-                        <input type="checkbox" name="wpum_turnstile[behind_cloudflare]" value="1" <?php checked(!empty($o['behind_cloudflare'])); ?>>
-                        <?php esc_html_e('This site is behind the Cloudflare proxy - read the visitor IP from CF-Connecting-IP', 'wp-user-management-plugin'); ?>
-                    </label>
                 </div>
-                <p class="description"><?php esc_html_e('The IP is used for rate limiting. Enable the second option only if your server accepts connections exclusively from Cloudflare, otherwise the header can be forged.', 'wp-user-management-plugin'); ?></p>
             </div>
 
             <?php submit_button(__('Save settings', 'wp-user-management-plugin')); ?>

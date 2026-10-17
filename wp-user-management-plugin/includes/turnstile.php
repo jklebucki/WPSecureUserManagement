@@ -43,7 +43,6 @@ function wpum_turnstile_defaults() {
         'appearance'        => 'always',
         'language'          => 'auto',
         'fail_open'         => 0,
-        'behind_cloudflare' => 0,
     );
 }
 

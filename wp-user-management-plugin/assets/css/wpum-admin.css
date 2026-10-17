@@ -383,3 +383,43 @@ body.wpum-modal-open {
         margin-left: 0;
     }
 }
+
+/* ---------- Configuration: wp-login.php status and rate limits ---------- */
+.wpum-admin .wpum-status {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wpum-admin .wpum-status li {
+    margin: 0 0 6px;
+    padding: 8px 12px;
+    background: var(--wpum-soft);
+    border: 1px solid var(--wpum-line);
+    border-left-width: 4px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.wpum-admin .wpum-status li.is-ok {
+    border-left-color: var(--wpum-ok);
+}
+
+.wpum-admin .wpum-status li.is-bad {
+    border-left-color: var(--wpum-danger);
+}
+
+.wpum-admin .wpum-rl-table {
+    margin-top: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.wpum-admin .wpum-rl-table th,
+.wpum-admin .wpum-rl-table td {
+    vertical-align: middle;
+}
+
+.wpum-admin .wpum-rl-table input.small-text {
+    width: 90px;
+}
