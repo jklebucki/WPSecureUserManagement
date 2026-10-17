@@ -620,6 +620,18 @@ function wp_user_management_configuration() {
 
             <?php submit_button(__('Save Settings', 'wp-user-management-plugin')); ?>
         </form>
+
+        <?php $legacy_tables = wpum_find_legacy_backup_tables(); ?>
+        <div class="wpum-card">
+            <div class="wpum-card__head"><h2><?php esc_html_e('Maintenance', 'wp-user-management-plugin'); ?></h2></div>
+            <?php if (empty($legacy_tables)) : ?>
+                <p class="description"><?php esc_html_e('No leftover backup tables from older plugin versions were found.', 'wp-user-management-plugin'); ?></p>
+            <?php else : ?>
+                <p class="description"><?php echo esc_html(wpum_legacy_tables_intro()); ?></p>
+                <p><code><?php echo esc_html(implode(', ', $legacy_tables)); ?></code></p>
+                <?php wpum_render_legacy_tables_form(); ?>
+            <?php endif; ?>
+        </div>
     </div>
     <?php
 }

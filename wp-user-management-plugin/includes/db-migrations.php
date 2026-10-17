@@ -160,14 +160,45 @@ function wpum_migrate_legacy_tree($source_root, $dest_root) {
     @rmdir($source_root);
 }
 
-// Ostrzeżenie o kopiach zapasowych tabeli z danymi osobowymi (tworzonych przez wersje < 1.2.0).
+// Tabele kopii zapasowych tworzone przez wersje < 1.2.0: {prefix}wpum_shooting_credentials_backup_YYYYMMDDHHMMSS.
+function wpum_find_legacy_backup_tables() {
+    global $wpdb;
+
+    $prefix = $wpdb->prefix . 'wpum_shooting_credentials_backup_';
+    $found  = $wpdb->get_col($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($prefix) . '%'));
+
+    // Strict name check: only the exact pattern the old plugin used is ever listed or dropped.
+    return array_values(array_filter((array) $found, function ($name) use ($prefix) {
+        return 1 === preg_match('/^' . preg_quote($prefix, '/') . '[0-9]{14}$/', $name);
+    }));
+}
+
+function wpum_legacy_tables_intro() {
+    return __('Older plugin versions created copies of the credentials table. They contain personal data and are no longer used.', 'wp-user-management-plugin');
+}
+
+// The "delete these tables" form, shared by the admin notice and the Configuration page.
+function wpum_render_legacy_tables_form() {
+    $confirm = __('Permanently delete these database tables? This cannot be undone.', 'wp-user-management-plugin');
+    ?>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin:0 12px 0 0;"
+          onsubmit="return confirm(<?php echo esc_attr(wp_json_encode($confirm)); ?>);">
+        <input type="hidden" name="action" value="wpum_drop_legacy_tables">
+        <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('wpum_drop_legacy_tables')); ?>">
+        <button type="submit" class="button button-primary"><?php esc_html_e('Delete these tables', 'wp-user-management-plugin'); ?></button>
+    </form>
+    <?php
+}
+
+// Ostrzeżenie o kopiach zapasowych tabeli z danymi osobowymi (tworzonych przez wersje < 1.2.0) z przyciskiem usuwania.
 function wpum_legacy_backup_notice() {
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('manage_options') || !get_option('wpum_legacy_backup_tables')) {
         return;
     }
 
-    $tables = get_option('wpum_legacy_backup_tables', array());
-    if (empty($tables) || !is_array($tables)) {
+    $tables = wpum_find_legacy_backup_tables();
+    if (empty($tables)) {
+        delete_option('wpum_legacy_backup_tables'); // already gone (dropped by hand)
         return;
     }
 
@@ -176,8 +207,11 @@ function wpum_legacy_backup_notice() {
     <div class="notice notice-warning">
         <p>
             <strong><?php esc_html_e('WP User Management:', 'wp-user-management-plugin'); ?></strong>
-            <?php esc_html_e('older plugin versions created copies of the credentials table containing personal data. They are no longer needed and can be dropped manually (e.g. in phpMyAdmin):', 'wp-user-management-plugin'); ?>
-            <code><?php echo esc_html(implode(', ', $tables)); ?></code>
+            <?php echo esc_html(wpum_legacy_tables_intro()); ?>
+        </p>
+        <p><code><?php echo esc_html(implode(', ', $tables)); ?></code></p>
+        <p>
+            <?php wpum_render_legacy_tables_form(); ?>
             <a href="<?php echo esc_url($dismiss_url); ?>"><?php esc_html_e('Dismiss', 'wp-user-management-plugin'); ?></a>
         </p>
     </div>
@@ -194,3 +228,44 @@ function wpum_dismiss_backup_notice() {
     exit;
 }
 add_action('admin_post_wpum_dismiss_backup_notice', 'wpum_dismiss_backup_notice');
+
+// Drop the leftover backup tables (nonce + capability; the table list is recomputed here, never taken from the request).
+function wpum_handle_drop_legacy_tables() {
+    check_admin_referer('wpum_drop_legacy_tables');
+
+    if (!current_user_can('manage_options')) {
+        wp_die(esc_html__('You are not allowed to do this.', 'wp-user-management-plugin'), '', array('response' => 403));
+    }
+
+    global $wpdb;
+    $dropped = 0;
+    foreach (wpum_find_legacy_backup_tables() as $table) {
+        // $table matched /^{prefix}wpum_shooting_credentials_backup_[0-9]{14}$/, so it is safe to quote as an identifier.
+        if (false !== $wpdb->query("DROP TABLE IF EXISTS `{$table}`")) {
+            $dropped++;
+        }
+    }
+    delete_option('wpum_legacy_backup_tables');
+
+    $back = wp_get_referer() ? wp_get_referer() : admin_url();
+    wp_safe_redirect(add_query_arg('wpum_dropped', $dropped, remove_query_arg('wpum_dropped', $back)));
+    exit;
+}
+add_action('admin_post_wpum_drop_legacy_tables', 'wpum_handle_drop_legacy_tables');
+
+function wpum_legacy_tables_result_notice() {
+    if (!isset($_GET['wpum_dropped']) || !current_user_can('manage_options')) {
+        return;
+    }
+
+    $count = absint($_GET['wpum_dropped']);
+    printf(
+        '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+        esc_html(sprintf(
+            /* translators: %d: number of tables */
+            _n('%d old backup table deleted.', '%d old backup tables deleted.', $count, 'wp-user-management-plugin'),
+            $count
+        ))
+    );
+}
+add_action('admin_notices', 'wpum_legacy_tables_result_notice');
