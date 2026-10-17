@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP User Management Plugin
  * Description: A plugin for user registration, login, and profile editing with enhanced security and a modern interface.
- * Version: 1.4.1
+ * Version: 1.5.0
  * Author: Jarosław Kłębucki
  * Text Domain: wp-user-management-plugin
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WPUM_VERSION', '1.4.1');
+define('WPUM_VERSION', '1.5.0');
 define('WPUM_DB_VERSION', '1.2'); // Wersja struktury bazy danych
 define('WPUM_PLUGIN_FILE', __FILE__);
 define('WPUM_PLUGIN_DIR', plugin_dir_path(__FILE__));
@@ -54,6 +54,7 @@ require_once WPUM_PLUGIN_DIR . 'includes/admin-menu.php';
 require_once WPUM_PLUGIN_DIR . 'includes/admin-turnstile.php';
 require_once WPUM_PLUGIN_DIR . 'includes/my-account.php';
 require_once WPUM_PLUGIN_DIR . 'includes/login-override.php';
+require_once WPUM_PLUGIN_DIR . 'includes/htaccess.php';
 require_once WPUM_PLUGIN_DIR . 'includes/db-migrations.php';
 
 // Load text domain for translations
@@ -94,6 +95,11 @@ function wpum_check_version() {
             update_option('wpum_version', WPUM_VERSION);
             update_option('wpum_db_version', WPUM_DB_VERSION);
 
+            // Wpis w .htaccess (blokada xmlrpc.php) po aktualizacji: w tle, żeby nikt nie czekał na testy
+            if (!wp_next_scheduled('wpum_cron_sync_htaccess')) {
+                wp_schedule_single_event(time() + 5, 'wpum_cron_sync_htaccess');
+            }
+
             wpum_log("Aktualizacja pluginu zakończona pomyślnie");
         }
 
@@ -122,6 +128,9 @@ function wp_user_management_activate() {
     // Zadanie WP-Cron usuwające niepotwierdzone rejestracje
     wpum_schedule_registration_cleanup();
 
+    // Blokada xmlrpc.php (wpis w .htaccess na Apache)
+    wpum_sync_htaccess();
+
     update_option('wpum_version', WPUM_VERSION);
     update_option('wpum_db_version', WPUM_DB_VERSION);
 }
@@ -130,6 +139,12 @@ register_activation_hook(__FILE__, 'wp_user_management_activate');
 // Dezaktywacja wtyczki
 function wp_user_management_deactivate() {
     wpum_unschedule_registration_cleanup();
+    wp_clear_scheduled_hook('wpum_cron_sync_htaccess');
+
+    // Strona ma wyglądać po dezaktywacji tak jak przed instalacją: zdejmujemy własny blok z .htaccess
+    if (wpum_htaccess_has_block()) {
+        wpum_remove_htaccess_block();
+    }
     wpum_log('Plugin został deaktywowany');
 }
 register_deactivation_hook(__FILE__, 'wp_user_management_deactivate');

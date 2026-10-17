@@ -429,3 +429,14 @@ body.wpum-modal-open {
     background: none;
     border: 0;
 }
+
+.wpum-admin .wpum-snippet {
+    margin: 8px 0 0;
+    padding: 12px 14px;
+    overflow-x: auto;
+    background: var(--wpum-soft);
+    border: 1px solid var(--wpum-line);
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+}

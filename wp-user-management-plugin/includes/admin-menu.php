@@ -532,6 +532,9 @@ function wp_user_management_configuration() {
 
         update_option('wpum_disable_wp_login', !empty($_POST['disable_wp_login']) ? 1 : 0);
 
+        update_option('wpum_block_xmlrpc', !empty($_POST['block_xmlrpc']) ? 1 : 0);
+        wpum_sync_htaccess();
+
         wpum_save_rate_limit_settings(
             !empty($_POST['rl_enabled']),
             isset($_POST['rl_max']) && is_array($_POST['rl_max']) ? wp_unslash($_POST['rl_max']) : array(),
@@ -673,6 +676,27 @@ function wp_user_management_configuration() {
                         <a class="button" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=wpum_recheck_pages'), 'wpum_recheck_pages')); ?>"><?php esc_html_e('Check the pages again', 'wp-user-management-plugin'); ?></a>
                     </li>
                 </ul>
+            </div>
+
+            <div class="wpum-card">
+                <div class="wpum-card__head"><h2><?php esc_html_e('XML-RPC', 'wp-user-management-plugin'); ?></h2></div>
+                <label class="wpum-switch">
+                    <input type="checkbox" name="block_xmlrpc" value="1" <?php checked((bool) get_option('wpum_block_xmlrpc', 1)); ?>>
+                    <span><?php esc_html_e('Block xmlrpc.php (recommended)', 'wp-user-management-plugin'); ?></span>
+                </label>
+                <p class="description"><?php esc_html_e('xmlrpc.php is a second way to guess passwords and to abuse pingbacks, and replacing wp-login.php does not cover it. On Apache the plugin adds a marked block to the .htaccess in the WordPress folder (it checks that the site still works and removes the block again if not, when you switch this off, or when the plugin is deactivated). Everywhere else, and as a second layer, WordPress itself refuses XML-RPC requests. Apps that need XML-RPC (the WordPress mobile app, Jetpack, some publishing tools) stop working while this is on. Emergency switch: define( \'WPUM_ALLOW_XMLRPC\', true ); in wp-config.php.', 'wp-user-management-plugin'); ?></p>
+                <?php
+                $htaccess_state = wpum_get_htaccess_status();
+                $htaccess_ok    = in_array($htaccess_state, array('active', 'off', 'allowed', 'not_apache'), true);
+                ?>
+                <ul class="wpum-status">
+                    <li class="<?php echo $htaccess_ok ? 'is-ok' : 'is-bad'; ?>">
+                        <strong>.htaccess</strong> &rarr; <?php echo esc_html(wpum_htaccess_status_text($htaccess_state)); ?>
+                    </li>
+                </ul>
+                <?php if (in_array($htaccess_state, array('not_writable', 'write_failed'), true)) : ?>
+                    <pre class="wpum-snippet"><?php echo esc_html('# BEGIN ' . wpum_htaccess_marker() . "\n" . implode("\n", wpum_xmlrpc_htaccess_rules()) . "\n# END " . wpum_htaccess_marker()); ?></pre>
+                <?php endif; ?>
             </div>
 
             <div class="wpum-card">
