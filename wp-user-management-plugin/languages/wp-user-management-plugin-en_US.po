@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin 1.4.0\n"
-"POT-Creation-Date: 2026-10-17 10:03+0000\n"
-"PO-Revision-Date: 2026-10-17 10:03+0000\n"
+"Project-Id-Version: WP User Management Plugin 1.4.1\n"
+"POT-Creation-Date: 2026-10-17 11:23+0000\n"
+"PO-Revision-Date: 2026-10-17 11:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -223,7 +223,7 @@ msgstr "WPUM_KEEP_WP_LOGIN is set in wp-config.php, so wp-login.php stays active
 msgid "Login"
 msgstr "Login"
 
-#: includes/admin-menu.php:610 includes/admin-menu.php:691
+#: includes/admin-menu.php:610 includes/admin-menu.php:733
 msgid "Registration"
 msgstr "Registration"
 
@@ -231,83 +231,84 @@ msgstr "Registration"
 msgid "Password reset"
 msgstr "Password reset"
 
-#: includes/admin-menu.php:626
+#: includes/admin-menu.php:632
+msgid "the shortcode was found on the page (content, reusable block or page builder data)"
+msgstr "the shortcode was found on the page (content, reusable block or page builder data)"
+
+#: includes/admin-menu.php:634
+msgid "the page shows the form to visitors (checked by loading it)"
+msgstr "the page shows the form to visitors (checked by loading it)"
+
+#: includes/admin-menu.php:636
+msgid "confirmed by the wpum_page_is_ready filter"
+msgstr "confirmed by the wpum_page_is_ready filter"
+
+#: includes/admin-menu.php:644
 #, php-format
-msgid "page \"%s\" not found, not published or without the shortcode: WordPress keeps its own form here"
-msgstr "page \"%s\" not found, not published or without the shortcode: WordPress keeps its own form here"
-
-#: includes/admin-menu.php:637
-msgid "Rate limiting"
-msgstr "Rate limiting"
-
-#: includes/admin-menu.php:640
-msgid "Enable rate limiting"
-msgstr "Enable rate limiting"
-
-#: includes/admin-menu.php:642
-msgid "Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address."
-msgstr "Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address."
-
-#: includes/admin-menu.php:645
-msgid "Your IP as the plugin sees it:"
-msgstr "Your IP as the plugin sees it:"
-
-#: includes/admin-menu.php:648
-msgid "read from Cloudflare (CF-Connecting-IP of a trusted proxy)"
-msgstr "read from Cloudflare (CF-Connecting-IP of a trusted proxy)"
-
-#: includes/admin-menu.php:649
-msgid "direct connection"
-msgstr "direct connection"
+msgid "the page \"%1$s\" exists but is not published (status: %2$s): WordPress keeps its own form here"
+msgstr "the page \"%1$s\" exists but is not published (status: %2$s): WordPress keeps its own form here"
 
 #: includes/admin-menu.php:653
-msgid "Cloudflare IP ranges:"
-msgstr "Cloudflare IP ranges:"
+#, php-format
+msgid "the page \"%s\" is published, but neither its content nor the page as visitors see it contains the form: WordPress keeps its own form here"
+msgstr "the page \"%s\" is published, but neither its content nor the page as visitors see it contains the form: WordPress keeps its own form here"
 
 #: includes/admin-menu.php:658
-#, php-format
-msgid "updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)"
-msgstr "updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)"
+msgid "Edit page"
+msgstr "Edit page"
 
 #: includes/admin-menu.php:66
 msgid "ID"
 msgstr "ID"
 
-#: includes/admin-menu.php:664
-msgid "built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)"
-msgstr "built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)"
+#: includes/admin-menu.php:665
+#, php-format
+msgid "no published page with the slug \"%s\": WordPress keeps its own form here"
+msgstr "no published page with the slug \"%s\": WordPress keeps its own form here"
 
 #: includes/admin-menu.php:67 includes/privacy.php:48 includes/profile-edit-form.php:81
 msgid "Username"
 msgstr "Username"
 
-#: includes/admin-menu.php:671
-msgid "Limit"
-msgstr "Limit"
-
-#: includes/admin-menu.php:672
-msgid "Max attempts"
-msgstr "Max attempts"
-
 #: includes/admin-menu.php:673
-msgid "Within (minutes)"
-msgstr "Within (minutes)"
+msgid "Check the pages again"
+msgstr "Check the pages again"
+
+#: includes/admin-menu.php:679
+msgid "Rate limiting"
+msgstr "Rate limiting"
 
 #: includes/admin-menu.php:68 includes/profile-edit-form.php:90 includes/register-form.php:65
 msgid "Email"
 msgstr "Email"
 
+#: includes/admin-menu.php:682
+msgid "Enable rate limiting"
+msgstr "Enable rate limiting"
+
+#: includes/admin-menu.php:684
+msgid "Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address."
+msgstr "Attempts above a limit are refused until its time window has passed. Counters are kept per IP address (IPv6 visitors are grouped by /64) and, where it matters, per account or email address."
+
+#: includes/admin-menu.php:687
+msgid "Your IP as the plugin sees it:"
+msgstr "Your IP as the plugin sees it:"
+
 #: includes/admin-menu.php:69 includes/privacy.php:49 includes/profile-edit-form.php:98
 msgid "First Name"
 msgstr "First Name"
 
-#: includes/admin-menu.php:692
-msgid "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
-msgstr "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
+#: includes/admin-menu.php:690
+msgid "read from Cloudflare (CF-Connecting-IP of a trusted proxy)"
+msgstr "read from Cloudflare (CF-Connecting-IP of a trusted proxy)"
 
-#: includes/admin-menu.php:693
-msgid "Days to keep an unconfirmed registration"
-msgstr "Days to keep an unconfirmed registration"
+#: includes/admin-menu.php:691
+msgid "direct connection"
+msgstr "direct connection"
+
+#: includes/admin-menu.php:695
+msgid "Cloudflare IP ranges:"
+msgstr "Cloudflare IP ranges:"
 
 #: includes/admin-menu.php:70 includes/privacy.php:50 includes/profile-edit-form.php:106
 msgid "Last Name"
@@ -315,48 +316,77 @@ msgstr "Last Name"
 
 #: includes/admin-menu.php:700
 #, php-format
-msgid "%s registration is waiting for confirmation right now."
-msgid_plural "%s registrations are waiting for confirmation right now."
-msgstr[0] "%s registration is waiting for confirmation right now."
-msgstr[1] "%s registrations are waiting for confirmation right now."
+msgid "updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)"
+msgstr "updated %1$s (%2$d IPv4 and %3$d IPv6 ranges)"
 
-#: includes/admin-menu.php:708
-msgid "Page addresses"
-msgstr "Page addresses"
-
-#: includes/admin-menu.php:709
-msgid "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
-msgstr "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
+#: includes/admin-menu.php:706
+msgid "built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)"
+msgstr "built-in list only (refreshed automatically the first time a request carries CF-Connecting-IP from an unknown address)"
 
 #: includes/admin-menu.php:71
 msgid "Registered"
 msgstr "Registered"
 
-#: includes/admin-menu.php:723
+#: includes/admin-menu.php:713
+msgid "Limit"
+msgstr "Limit"
+
+#: includes/admin-menu.php:714
+msgid "Max attempts"
+msgstr "Max attempts"
+
+#: includes/admin-menu.php:715
+msgid "Within (minutes)"
+msgstr "Within (minutes)"
+
+#: includes/admin-menu.php:734
+msgid "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
+msgstr "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
+
+#: includes/admin-menu.php:735
+msgid "Days to keep an unconfirmed registration"
+msgstr "Days to keep an unconfirmed registration"
+
+#: includes/admin-menu.php:742
+#, php-format
+msgid "%s registration is waiting for confirmation right now."
+msgid_plural "%s registrations are waiting for confirmation right now."
+msgstr[0] "%s registration is waiting for confirmation right now."
+msgstr[1] "%s registrations are waiting for confirmation right now."
+
+#: includes/admin-menu.php:750
+msgid "Page addresses"
+msgstr "Page addresses"
+
+#: includes/admin-menu.php:751
+msgid "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
+msgstr "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
+
+#: includes/admin-menu.php:765
 msgid "Save Settings"
 msgstr "Save Settings"
 
-#: includes/admin-menu.php:728
+#: includes/admin-menu.php:770
 msgid "Maintenance"
 msgstr "Maintenance"
 
-#: includes/admin-menu.php:730
+#: includes/admin-menu.php:772
 msgid "No leftover backup tables from older plugin versions were found."
 msgstr "No leftover backup tables from older plugin versions were found."
 
-#: includes/admin-menu.php:738
+#: includes/admin-menu.php:780
 msgid "Use this when someone has been locked out by the rate limits."
 msgstr "Use this when someone has been locked out by the rate limits."
 
-#: includes/admin-menu.php:742
+#: includes/admin-menu.php:784
 msgid "Clear rate-limit counters"
 msgstr "Clear rate-limit counters"
 
-#: includes/admin-menu.php:745
+#: includes/admin-menu.php:787
 msgid "Downloads Cloudflare's published IP list now (this also happens automatically, at most once an hour, when it is needed)."
 msgstr "Downloads Cloudflare's published IP list now (this also happens automatically, at most once an hour, when it is needed)."
 
-#: includes/admin-menu.php:749
+#: includes/admin-menu.php:791
 msgid "Refresh Cloudflare IP ranges"
 msgstr "Refresh Cloudflare IP ranges"
 
@@ -388,7 +418,7 @@ msgstr "This role cannot be assigned."
 msgid "You cannot remove the administrator role from yourself or from the last administrator."
 msgstr "You cannot remove the administrator role from yourself or from the last administrator."
 
-#: includes/admin-turnstile.php:105 includes/db-migrations.php:237 includes/rate-limit.php:376
+#: includes/admin-turnstile.php:105 includes/db-migrations.php:237 includes/login-override.php:263
 msgid "You are not allowed to do this."
 msgstr "You are not allowed to do this."
 
@@ -696,6 +726,10 @@ msgstr "Register"
 #: includes/login-form.php:54
 msgid "Forgot Password?"
 msgstr "Forgot Password?"
+
+#: includes/login-override.php:282
+msgid "The pages were checked again."
+msgstr "The pages were checked again."
 
 #: includes/notices.php:18
 msgid "Your session has expired. Please try again."
