@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin 1.2.0\n"
-"POT-Creation-Date: 2026-10-16 21:46+0000\n"
-"PO-Revision-Date: 2026-10-16 21:46+0000\n"
+"Project-Id-Version: WP User Management Plugin 1.3.0\n"
+"POT-Creation-Date: 2026-10-17 08:17+0000\n"
+"PO-Revision-Date: 2026-10-17 08:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -115,7 +115,7 @@ msgstr "No users found."
 msgid "Select %s"
 msgstr "Select %s"
 
-#: includes/admin-menu.php:30 includes/admin-menu.php:31 includes/admin-menu.php:550
+#: includes/admin-menu.php:30 includes/admin-menu.php:31 includes/admin-menu.php:553
 msgid "Configuration"
 msgstr "Configuration"
 
@@ -165,7 +165,7 @@ msgstr "Select at least one user."
 msgid "%d selected"
 msgstr "%d selected"
 
-#: includes/admin-menu.php:530
+#: includes/admin-menu.php:533
 msgid "Settings saved."
 msgstr "Settings saved."
 
@@ -178,7 +178,7 @@ msgstr "You are about to permanently delete 1 user."
 msgid "You are about to permanently delete %d users."
 msgstr "You are about to permanently delete %d users."
 
-#: includes/admin-menu.php:555
+#: includes/admin-menu.php:558
 msgid "User List Columns"
 msgstr "User List Columns"
 
@@ -187,51 +187,78 @@ msgstr "User List Columns"
 msgid "...and %d more"
 msgstr "...and %d more"
 
-#: includes/admin-menu.php:567
+#: includes/admin-menu.php:570
 msgid "User Profile Metadata"
 msgstr "User Profile Metadata"
 
-#: includes/admin-menu.php:568
+#: includes/admin-menu.php:571
 msgid "Fields the user can edit on the \"User Data\" tab of the profile page. Sensitive internal keys (capabilities, sessions, screen options) are hidden on purpose."
 msgstr "Fields the user can edit on the \"User Data\" tab of the profile page. Sensitive internal keys (capabilities, sessions, screen options) are hidden on purpose."
 
-#: includes/admin-menu.php:580
+#: includes/admin-menu.php:583
 msgid "Password Settings"
 msgstr "Password Settings"
 
-#: includes/admin-menu.php:581
+#: includes/admin-menu.php:584
 msgid "Minimum Password Length"
 msgstr "Minimum Password Length"
 
-#: includes/admin-menu.php:586
+#: includes/admin-menu.php:589
+msgid "Registration"
+msgstr "Registration"
+
+#: includes/admin-menu.php:590
+msgid "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
+msgstr "New users confirm their email address before an account is created. A registration that is not confirmed in time is deleted automatically (checked twice a day by WP-Cron) and its link stops working. The number of days is also stated in the confirmation email."
+
+#: includes/admin-menu.php:591
+msgid "Days to keep an unconfirmed registration"
+msgstr "Days to keep an unconfirmed registration"
+
+#: includes/admin-menu.php:598
+#, php-format
+msgid "%s registration is waiting for confirmation right now."
+msgid_plural "%s registrations are waiting for confirmation right now."
+msgstr[0] "%s registration is waiting for confirmation right now."
+msgstr[1] "%s registrations are waiting for confirmation right now."
+
+#: includes/admin-menu.php:606
 msgid "Page addresses"
 msgstr "Page addresses"
 
-#: includes/admin-menu.php:587
+#: includes/admin-menu.php:607
 msgid "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
 msgstr "Slugs of the pages that contain the plugin shortcodes. They are used for redirects and links between the forms."
 
-#: includes/admin-menu.php:601
+#: includes/admin-menu.php:621
 msgid "Save Settings"
 msgstr "Save Settings"
+
+#: includes/admin-menu.php:626
+msgid "Maintenance"
+msgstr "Maintenance"
+
+#: includes/admin-menu.php:628
+msgid "No leftover backup tables from older plugin versions were found."
+msgstr "No leftover backup tables from older plugin versions were found."
 
 #: includes/admin-menu.php:66
 msgid "ID"
 msgstr "ID"
 
-#: includes/admin-menu.php:67 includes/profile-edit-form.php:80 includes/register-form.php:26
+#: includes/admin-menu.php:67 includes/privacy.php:48 includes/profile-edit-form.php:80
 msgid "Username"
 msgstr "Username"
 
-#: includes/admin-menu.php:68 includes/profile-edit-form.php:89 includes/register-form.php:35
+#: includes/admin-menu.php:68 includes/profile-edit-form.php:89 includes/register-form.php:65
 msgid "Email"
 msgstr "Email"
 
-#: includes/admin-menu.php:69 includes/profile-edit-form.php:97 includes/register-form.php:43
+#: includes/admin-menu.php:69 includes/privacy.php:49 includes/profile-edit-form.php:97
 msgid "First Name"
 msgstr "First Name"
 
-#: includes/admin-menu.php:70 includes/profile-edit-form.php:105 includes/register-form.php:51
+#: includes/admin-menu.php:70 includes/privacy.php:50 includes/profile-edit-form.php:105
 msgid "Last Name"
 msgstr "Last Name"
 
@@ -267,7 +294,7 @@ msgstr "This role cannot be assigned."
 msgid "You cannot remove the administrator role from yourself or from the last administrator."
 msgstr "You cannot remove the administrator role from yourself or from the last administrator."
 
-#: includes/admin-turnstile.php:106
+#: includes/admin-turnstile.php:106 includes/db-migrations.php:237
 msgid "You are not allowed to do this."
 msgstr "You are not allowed to do this."
 
@@ -292,7 +319,7 @@ msgstr "The secret key is accepted by Cloudflare."
 msgid "Warning: the site key does not look like a Turnstile site key."
 msgstr "Warning: the site key does not look like a Turnstile site key."
 
-#: includes/admin-turnstile.php:14 includes/admin-turnstile.php:193 includes/privacy.php:105
+#: includes/admin-turnstile.php:14 includes/admin-turnstile.php:193 includes/privacy.php:133
 msgid "Cloudflare Turnstile"
 msgstr "Cloudflare Turnstile"
 
@@ -497,45 +524,60 @@ msgstr "Enter the site key first."
 msgid "The widget could not be loaded. Check the site key and that this domain is allowed for the key."
 msgstr "The widget could not be loaded. Check the site key and that this domain is allowed for the key."
 
-#: includes/db-migrations.php:172
+#: includes/db-migrations.php:177
+msgid "Older plugin versions created copies of the credentials table. They contain personal data and are no longer used."
+msgstr "Older plugin versions created copies of the credentials table. They contain personal data and are no longer used."
+
+#: includes/db-migrations.php:182
+msgid "Permanently delete these database tables? This cannot be undone."
+msgstr "Permanently delete these database tables? This cannot be undone."
+
+#: includes/db-migrations.php:188
+msgid "Delete these tables"
+msgstr "Delete these tables"
+
+#: includes/db-migrations.php:209
 msgid "WP User Management:"
 msgstr "WP User Management:"
 
-#: includes/db-migrations.php:173
-msgid "older plugin versions created copies of the credentials table containing personal data. They are no longer needed and can be dropped manually (e.g. in phpMyAdmin):"
-msgstr "older plugin versions created copies of the credentials table containing personal data. They are no longer needed and can be dropped manually (e.g. in phpMyAdmin):"
-
-#: includes/db-migrations.php:175
+#: includes/db-migrations.php:215
 msgid "Dismiss"
 msgstr "Dismiss"
 
-#: includes/helpers.php:93
+#: includes/db-migrations.php:266
+#, php-format
+msgid "%d old backup table deleted."
+msgid_plural "%d old backup tables deleted."
+msgstr[0] "%d old backup table deleted."
+msgstr[1] "%d old backup tables deleted."
+
+#: includes/helpers.php:100
+msgid "An error occurred. Please try again."
+msgstr "An error occurred. Please try again."
+
+#: includes/helpers.php:94
 msgid "Weak"
 msgstr "Weak"
 
-#: includes/helpers.php:94
+#: includes/helpers.php:95
 msgid "Medium"
 msgstr "Medium"
 
-#: includes/helpers.php:95
+#: includes/helpers.php:96
 msgid "Strong"
 msgstr "Strong"
 
-#: includes/helpers.php:96
+#: includes/helpers.php:97
 msgid "Passwords match"
 msgstr "Passwords match"
 
-#: includes/helpers.php:97
+#: includes/helpers.php:98
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
-#: includes/helpers.php:98
+#: includes/helpers.php:99
 msgid "Please wait..."
 msgstr "Please wait..."
-
-#: includes/helpers.php:99
-msgid "An error occurred. Please try again."
-msgstr "An error occurred. Please try again."
 
 #: includes/login-form.php:15
 msgid "User Login"
@@ -545,7 +587,7 @@ msgstr "User Login"
 msgid "Username or Email"
 msgstr "Username or Email"
 
-#: includes/login-form.php:33 includes/register-form.php:60
+#: includes/login-form.php:33 includes/register-form.php:90
 msgid "Password"
 msgstr "Password"
 
@@ -557,7 +599,7 @@ msgstr "Remember me"
 msgid "Login"
 msgstr "Login"
 
-#: includes/login-form.php:49 includes/register-form.php:83
+#: includes/login-form.php:49 includes/register-form.php:121
 msgid "Register"
 msgstr "Register"
 
@@ -622,42 +664,58 @@ msgid "Registration failed. Please try again."
 msgstr "Registration failed. Please try again."
 
 #: includes/notices.php:32
-msgid "Account created. You can now log in."
-msgstr "Account created. You can now log in."
+msgid "We have sent a confirmation email to {email}. Click the link in it to activate your account."
+msgstr "We have sent a confirmation email to {email}. Click the link in it to activate your account."
 
 #: includes/notices.php:33
+msgid "We could not send the confirmation email. Please try again later or contact the site administrator."
+msgstr "We could not send the confirmation email. Please try again later or contact the site administrator."
+
+#: includes/notices.php:34
+msgid "Your account has been activated. You can now log in."
+msgstr "Your account has been activated. You can now log in."
+
+#: includes/notices.php:35
+msgid "This activation link is invalid, has expired or was already used. If you have already activated your account, just log in; otherwise register again."
+msgstr "This activation link is invalid, has expired or was already used. If you have already activated your account, just log in; otherwise register again."
+
+#: includes/notices.php:36
+msgid "An account with this username or email already exists. Try logging in or resetting your password."
+msgstr "An account with this username or email already exists. Try logging in or resetting your password."
+
+#: includes/notices.php:37
 msgid "Invalid username/email or password."
 msgstr "Invalid username/email or password."
 
-#: includes/notices.php:34
+#: includes/notices.php:38
 msgid "If an account with that email address exists, password reset instructions have been sent."
 msgstr "If an account with that email address exists, password reset instructions have been sent."
 
-#: includes/notices.php:35
+#: includes/notices.php:39
 msgid "Profile updated."
 msgstr "Profile updated."
 
-#: includes/notices.php:36
+#: includes/notices.php:40
 msgid "Your password has been changed."
 msgstr "Your password has been changed."
 
-#: includes/notices.php:37
+#: includes/notices.php:41
 msgid "Data saved."
 msgstr "Data saved."
 
-#: includes/notices.php:38
+#: includes/notices.php:42
 msgid "Update failed. Please try again."
 msgstr "Update failed. Please try again."
 
-#: includes/notices.php:39
+#: includes/notices.php:43
 msgid "The last administrator account cannot be deleted."
 msgstr "The last administrator account cannot be deleted."
 
-#: includes/notices.php:40
+#: includes/notices.php:44
 msgid "Error deleting account. Please try again."
 msgstr "Error deleting account. Please try again."
 
-#: includes/notices.php:41 includes/shooting-credentials.php:416
+#: includes/notices.php:45 includes/shooting-credentials.php:416
 msgid "You must be logged in to perform this action."
 msgstr "You must be logged in to perform this action."
 
@@ -701,47 +759,74 @@ msgstr "Email Address"
 msgid "Reset Password"
 msgstr "Reset Password"
 
-#: includes/privacy.php:104
+#: includes/privacy.php:125
 msgid "If you add a shooting patent or instructor license to your account, we store its number and the PDF document you upload. The document is kept in a protected directory and is visible only to you and the site administrators. It is deleted together with your account."
 msgstr "If you add a shooting patent or instructor license to your account, we store its number and the PDF document you upload. The document is kept in a protected directory and is visible only to you and the site administrators. It is deleted together with your account."
 
-#: includes/privacy.php:106
+#: includes/privacy.php:127
+msgid "Registration confirmation"
+msgstr "Registration confirmation"
+
+#: includes/privacy.php:130
+#, php-format
+msgid "When you register, we keep your name, email address, username, language and a hash of your password until you confirm your email address, but no longer than %d day. Unconfirmed registrations are then deleted automatically."
+msgid_plural "When you register, we keep your name, email address, username, language and a hash of your password until you confirm your email address, but no longer than %d days. Unconfirmed registrations are then deleted automatically."
+msgstr[0] "When you register, we keep your name, email address, username, language and a hash of your password until you confirm your email address, but no longer than %d day. Unconfirmed registrations are then deleted automatically."
+msgstr[1] "When you register, we keep your name, email address, username, language and a hash of your password until you confirm your email address, but no longer than %d days. Unconfirmed registrations are then deleted automatically."
+
+#: includes/privacy.php:134
 msgid "The login, registration and password reset forms may be protected by Cloudflare Turnstile. When it is active, your browser contacts Cloudflare and your IP address and browser data are processed by Cloudflare to tell humans from bots."
 msgstr "The login, registration and password reset forms may be protected by Cloudflare Turnstile. When it is active, your browser contacts Cloudflare and your IP address and browser data are processed by Cloudflare to tell humans from bots."
 
-#: includes/privacy.php:108
+#: includes/privacy.php:136
 msgid "WP User Management Plugin"
 msgstr "WP User Management Plugin"
 
-#: includes/privacy.php:25 includes/privacy.php:42 includes/privacy.php:73
+#: includes/privacy.php:25 includes/privacy.php:62 includes/privacy.php:93
 msgid "Shooting credentials"
 msgstr "Shooting credentials"
 
-#: includes/privacy.php:43
+#: includes/privacy.php:44
+msgid "Registration awaiting confirmation"
+msgstr "Registration awaiting confirmation"
+
+#: includes/privacy.php:45
+msgid "Data of a registration that has not been confirmed by email yet. It is deleted automatically."
+msgstr "Data of a registration that has not been confirmed by email yet. It is deleted automatically."
+
+#: includes/privacy.php:51 includes/register-form.php:112
+msgid "Preferred language"
+msgstr "Preferred language"
+
+#: includes/privacy.php:52
+msgid "Registration deleted after"
+msgstr "Registration deleted after"
+
+#: includes/privacy.php:63
 msgid "Credential numbers and uploaded documents stored by WP User Management Plugin."
 msgstr "Credential numbers and uploaded documents stored by WP User Management Plugin."
 
-#: includes/privacy.php:47
+#: includes/privacy.php:67
 msgid "Type"
 msgstr "Type"
 
-#: includes/privacy.php:51 includes/profile-edit-form.php:210
+#: includes/privacy.php:71 includes/profile-edit-form.php:210
 msgid "Number"
 msgstr "Number"
 
-#: includes/privacy.php:55
+#: includes/privacy.php:75
 msgid "Document uploaded"
 msgstr "Document uploaded"
 
-#: includes/privacy.php:56
+#: includes/privacy.php:76
 msgid "Yes"
 msgstr "Yes"
 
-#: includes/privacy.php:56
+#: includes/privacy.php:76
 msgid "No"
 msgstr "No"
 
-#: includes/privacy.php:59
+#: includes/privacy.php:79
 msgid "Last updated"
 msgstr "Last updated"
 
@@ -841,18 +926,104 @@ msgstr "Logout"
 msgid "Account"
 msgstr "Account"
 
-#: includes/register-form.php:17
+#: includes/register-form.php:105
+msgid "Confirm Password"
+msgstr "Confirm Password"
+
+#: includes/register-form.php:115
+msgid "The confirmation email is sent in this language."
+msgstr "The confirmation email is sent in this language."
+
+#: includes/register-form.php:20
+msgid "Check your email"
+msgstr "Check your email"
+
+#: includes/register-form.php:27
+#, php-format
+msgid "Unconfirmed registrations are deleted automatically after %d day."
+msgid_plural "Unconfirmed registrations are deleted automatically after %d days."
+msgstr[0] "Unconfirmed registrations are deleted automatically after %d day."
+msgstr[1] "Unconfirmed registrations are deleted automatically after %d days."
+
+#: includes/register-form.php:31
+msgid "Nothing in your inbox? Look in the spam folder, or register again after a few minutes to get a new link."
+msgstr "Nothing in your inbox? Look in the spam folder, or register again after a few minutes to get a new link."
+
+#: includes/register-form.php:34
+msgid "Register again"
+msgstr "Register again"
+
+#: includes/register-form.php:36
+msgid "Back to login"
+msgstr "Back to login"
+
+#: includes/register-form.php:47
 msgid "User Registration"
 msgstr "User Registration"
 
-#: includes/register-form.php:66
+#: includes/register-form.php:96
 #, php-format
 msgid "At least %d characters, with upper and lower case letters, a digit and a special character."
 msgstr "At least %d characters, with upper and lower case letters, a digit and a special character."
 
-#: includes/register-form.php:75
-msgid "Confirm Password"
-msgstr "Confirm Password"
+#: includes/registration-confirmation.php:399
+msgid "Confirm your email address to activate your account."
+msgstr "Confirm your email address to activate your account."
+
+#: includes/registration-confirmation.php:400
+msgid "Confirm your registration"
+msgstr "Confirm your registration"
+
+#: includes/registration-confirmation.php:402
+#, php-format
+msgid "Hi %s,"
+msgstr "Hi %s,"
+
+#: includes/registration-confirmation.php:404
+#, php-format
+msgid "Thanks for signing up at %s. Please confirm your email address to activate your account."
+msgstr "Thanks for signing up at %s. Please confirm your email address to activate your account."
+
+#: includes/registration-confirmation.php:405
+msgid "Confirm registration"
+msgstr "Confirm registration"
+
+#: includes/registration-confirmation.php:406
+msgid "If the button does not work, copy and paste this link into your browser:"
+msgstr "If the button does not work, copy and paste this link into your browser:"
+
+#: includes/registration-confirmation.php:408
+#, php-format
+msgid "Your username: %s"
+msgstr "Your username: %s"
+
+#: includes/registration-confirmation.php:410
+#, php-format
+msgid "This link is valid for %1$d day (until %2$s)."
+msgid_plural "This link is valid for %1$d days (until %2$s)."
+msgstr[0] "This link is valid for %1$d day (until %2$s)."
+msgstr[1] "This link is valid for %1$d days (until %2$s)."
+
+#: includes/registration-confirmation.php:412
+#, php-format
+msgid "If you do not confirm within %d day, your registration is deleted automatically."
+msgid_plural "If you do not confirm within %d days, your registration is deleted automatically."
+msgstr[0] "If you do not confirm within %d day, your registration is deleted automatically."
+msgstr[1] "If you do not confirm within %d days, your registration is deleted automatically."
+
+#: includes/registration-confirmation.php:413
+msgid "If you did not sign up, you can safely ignore this email. No account will be created."
+msgstr "If you did not sign up, you can safely ignore this email. No account will be created."
+
+#: includes/registration-confirmation.php:415
+#, php-format
+msgid "This message was sent by %s. Please do not reply to it."
+msgstr "This message was sent by %s. Please do not reply to it."
+
+#: includes/registration-confirmation.php:432
+#, php-format
+msgid "[%s] Confirm your registration"
+msgstr "[%s] Confirm your registration"
 
 #: includes/shooting-credentials.php:146 includes/shooting-credentials.php:150
 msgid "File upload failed"
@@ -942,6 +1113,6 @@ msgstr "WordPress registration (wp-login.php)"
 msgid "WordPress password reset (wp-login.php)"
 msgstr "WordPress password reset (wp-login.php)"
 
-#: wp-user-management-plugin.php:114
+#: wp-user-management-plugin.php:115
 msgid "Could not create the required database tables. Check database permissions and the error log."
 msgstr "Could not create the required database tables. Check database permissions and the error log."
