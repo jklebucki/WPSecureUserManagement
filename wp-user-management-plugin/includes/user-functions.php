@@ -209,7 +209,8 @@ function wpum_verify_current_password($user_id, $password) {
     }
 
     $user = get_userdata($user_id);
-    if ('' === $password || !$user || !wp_check_password($password, $user->user_pass, $user->ID)) {
+    // Passwords are stored hashed in the slashed form WordPress receives them in (see wpum_create_pending_registration).
+    if ('' === $password || !$user || !wp_check_password(wp_slash($password), $user->user_pass, $user->ID)) {
         wpum_rate_limit_hit('password_check', $user_id);
         return new WP_Error('wrong_password', 'wrong_password');
     }

@@ -382,7 +382,7 @@ function wpum_process_password_change()
     }
 
     // wp_update_user keeps the current session alive (re-issues the auth cookie) and sends the change notice.
-    // It unslashes its input, hence wp_slash() (otherwise backslashes in the password would be dropped).
+    // The slashed form is what WordPress hashes and what wp-login.php later compares against.
     $result = wp_update_user(array('ID' => $user->ID, 'user_pass' => wp_slash($password)));
     if (is_wp_error($result)) {
         wpum_redirect_with_flash($return_url, 'password', 'error', 'update_failed');

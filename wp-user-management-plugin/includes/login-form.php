@@ -90,7 +90,7 @@ function wpum_process_login()
 
     $user = wp_signon(array(
         'user_login'    => $login,
-        'user_password' => $password,
+        'user_password' => wp_slash($password), // the slashed form, exactly as wp-login.php passes it
         'remember'      => !empty($_POST['wpum_remember']),
     ));
 
