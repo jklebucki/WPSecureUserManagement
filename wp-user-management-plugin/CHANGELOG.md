@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.1
+
+### Fixed
+- **wp-login.php was not replaced for logging in on some sites** (the Configuration page said the account page was "not found, not published or without the shortcode" although it was fine). Cause: when another plugin (security, captcha, ...) asks for `wp_login_url()` before WordPress's `init`, the plugin's shortcodes are not registered yet, `has_shortcode()` answered "no" and that answer was remembered for the whole request. Only the login screen was affected, because `register_url` and `lostpassword_url` are not requested that early. The check no longer relies on registered shortcodes and nothing is remembered before `init`.
+
+### Improved
+- Page detection also finds the shortcode in reusable blocks (synced patterns) and Elementor data, ignores a draft that shares the slug with the live page, and - if the content does not show the shortcode - loads the page like a visitor and looks for the form (background WP-Cron check, cached; `wpum_page_content_sources` and `wpum_page_is_ready` filters for other setups).
+- The Configuration page explains for each page why it is accepted or not (no such page, not published with its status, published but no form), links to the editor and has a *Check the pages again* button.
+- Translations: 314 strings.
+
 ## 1.4.0
 
 ### Added

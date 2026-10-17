@@ -79,9 +79,9 @@ Cloudflare's test keys (always pass / always block) are listed on the settings p
 - **Logout** (`wp-login.php?action=logout`, the admin bar, themes) logs out and redirects to the front page (`wpum_logout_redirect` filter). A link without a valid nonce never logs anybody out: the account page opens its Logout tab and asks for confirmation. Not logged in? Straight to the front page.
 - **Reset screens:** WordPress's `rp` / `resetpass` links (also those in older emails) are forwarded to the plugin's password-reset page, and a POST to the WordPress reset form is not processed. See *Password reset* below.
 - **Left to WordPress on purpose:** password-protected posts (`postpass`) and WordPress's internal confirmations. Visitors who are already logged in are not redirected away from `wp-login.php`.
-- **No lock-out:** each form is replaced only when its page exists, is published and contains the shortcode (login: `[wpum_my_account_content]` or `[wpum_user_login]`, registration: `[wpum_user_registration]`, reset: `[wpum_password_reset]`). Otherwise WordPress keeps its own form. The Configuration page shows the status of all three pages.
+- **No lock-out:** each form is replaced only when its page exists, is published and really shows the form. The shortcode may be in the page content (also in a Gutenberg *Shortcode* block), in a reusable block (synced pattern) the page uses or in Elementor data; if it is not found there, the page is loaded like a visitor would and checked for the form (in the background, cached for 12 hours, 10 minutes when it failed). A draft that shares the slug never counts. Login: `[wpum_my_account_content]` or `[wpum_user_login]`, registration: `[wpum_user_registration]`, reset: `[wpum_password_reset]`. Otherwise WordPress keeps its own form. The Configuration page shows for each page why it is (not) accepted, links to the editor and has a *Check the pages again* button.
 - **Emergency switch:** `define( 'WPUM_KEEP_WP_LOGIN', true );` in `wp-config.php` turns the replacement off regardless of the setting.
-- Page builders that keep the shortcode outside `post_content` can confirm a page with the `wpum_page_is_ready` filter; the list of actions left to WordPress is filterable with `wpum_wp_login_allowed_actions`.
+- Other builders can add the text they keep the shortcode in with the `wpum_page_content_sources` filter, or confirm a page with `wpum_page_is_ready`; the list of actions left to WordPress is filterable with `wpum_wp_login_allowed_actions`.
 - `xmlrpc.php` is a separate entry point and is not touched by this option.
 
 ## Password reset
@@ -130,6 +130,7 @@ Files have random names and are delivered through `admin-post.php?action=wpum_do
 | `wpum_trusted_proxy_ranges` | CIDR ranges whose `CF-Connecting-IP` header is trusted (Cloudflare + localhost by default) |
 | `wpum_wp_login_allowed_actions` | `wp-login.php` actions that stay with WordPress when it is disabled |
 | `wpum_page_is_ready` | confirm that a page can replace a `wp-login.php` form (`login`, `register`, `reset`) |
+| `wpum_page_content_sources` | extra text to search for the plugin's shortcodes (page builder data) |
 | `wpum_client_ip` | override the detected client IP |
 | `wpum_credential_max_upload_size` | max PDF size in bytes (default 5 MB) |
 | `wpum_reassign_user_id` | who receives the content of a user who deletes their own account (default: the oldest administrator) |
