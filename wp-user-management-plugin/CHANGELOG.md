@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.0
+
+### Added
+- **Blocking `xmlrpc.php`** (Configuration -> XML-RPC, on by default). WordPress layer for every server: authenticated XML-RPC is refused, pingback methods and the `X-Pingback` header are removed. On Apache and LiteSpeed the plugin also writes a marked block into `.htaccess` (with `insert_with_markers()`, the rest of the file untouched) so the web server refuses the file before PHP starts.
+- The block is **verified right after writing** (the site must still answer, `xmlrpc.php` must return 403) and taken out again if the site answers with an error, if `.htaccess` is ignored or if the check cannot run; the Configuration page reports the result (verified, not writable with the lines to add by hand, rejected, ignored, unknown). It is removed when the option is switched off and on deactivation, and re-applied in the background after an update.
+- Emergency/opt-out constants: `WPUM_ALLOW_XMLRPC` (allow XML-RPC, removes the block) and `WPUM_NO_HTACCESS` (never touch `.htaccess`). Filter `wpum_xmlrpc_htaccess_rules`.
+- Translations: 327 strings.
+
+### Upgrade notes
+- XML-RPC blocking is **on by default**. Apps that need it (the WordPress mobile app, Jetpack, some publishing tools) stop working: untick the option or define `WPUM_ALLOW_XMLRPC`.
+- The private credentials folder already got its own `.htaccess` in 1.2.0; the README now explains how to verify it works (`/wp-content/uploads/wpum-private/index.php` must answer 403).
+
 ## 1.4.1
 
 ### Fixed

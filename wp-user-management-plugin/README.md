@@ -12,6 +12,7 @@ User registration, login, password reset and profile editing for WordPress throu
   - **Turnstile** - Cloudflare Turnstile settings (keys, protected forms, appearance, key test).
 - Cloudflare Turnstile on the plugin forms and, optionally, on the native `wp-login.php` forms.
 - Security: nonces and capability checks everywhere, generic login/reset messages (no user enumeration), configurable rate limiting, current password required for email/password changes and account deletion.
+- **xmlrpc.php is blocked** (checkbox, on by default): on Apache the plugin writes a verified, marked block into `.htaccess`, everywhere else WordPress itself refuses XML-RPC.
 - **wp-login.php is replaced** by the plugin's pages (login, registration, lost password, **setting a new password**) and **logout** goes straight to the front page, with a checkbox in *Configuration*, on by default.
 - Password reset with an HTML email in the account's language and a "choose a new password" form on the plugin's own page.
 - Shooting credential PDFs are stored in a protected directory and served only to their owner and administrators.
@@ -84,6 +85,29 @@ Cloudflare's test keys (always pass / always block) are listed on the settings p
 - Other builders can add the text they keep the shortcode in with the `wpum_page_content_sources` filter, or confirm a page with `wpum_page_is_ready`; the list of actions left to WordPress is filterable with `wpum_wp_login_allowed_actions`.
 - `xmlrpc.php` is a separate entry point and is not touched by this option.
 
+## Blocking xmlrpc.php
+*Configuration -> XML-RPC -> "Block xmlrpc.php"* (on by default). `xmlrpc.php` is a second entry for guessing passwords (one request can try many) and for pingback abuse, and replacing wp-login.php does not touch it.
+
+- **WordPress layer (any server):** authenticated XML-RPC calls are refused, the pingback methods and the `X-Pingback` header are removed.
+- **Apache / LiteSpeed layer:** the plugin adds this block to the `.htaccess` in the WordPress folder, between its own markers, with WordPress's `insert_with_markers()`; everything else in the file is left alone:
+  ```apache
+  # BEGIN WP User Management
+  <Files xmlrpc.php>
+  <IfModule mod_authz_core.c>
+  Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+  Order deny,allow
+  Deny from all
+  </IfModule>
+  </Files>
+  # END WP User Management
+  ```
+- **A bad `.htaccess` line takes a whole site down, so the block is checked right after it is written**: the home page must still answer and `xmlrpc.php` must now return 403. If the site answers with an error, if `.htaccess` is ignored (`AllowOverride None`) or if the site cannot call itself, the block is removed again and the Configuration page says which of these happened. If the file is not writable the page shows the lines to add by hand.
+- The block is removed when you switch the option off and when the plugin is deactivated. After a plugin update it is (re)applied in the background through WP-Cron.
+- **This breaks apps that need XML-RPC** (the WordPress mobile app, Jetpack, some desktop publishing tools). Switch the option off for them, or put `define( 'WPUM_ALLOW_XMLRPC', true );` in `wp-config.php` (also removes the block). `define( 'WPUM_NO_HTACCESS', true );` keeps the plugin away from `.htaccess` but leaves the WordPress layer on.
+- `wpum_xmlrpc_htaccess_rules` filters the lines of the block.
+
 ## Password reset
 1. On the `[wpum_password_reset]` page the visitor enters an email address; the answer is always the same, whether or not an account exists, and requests are limited per IP and per address.
 2. An **HTML email with a plain-text part** (same layout as the registration email) is sent in the **account's own language** (user locale, falling back to the closest available language). It links to the plugin page: `/password-reset/?wpum_reset=KEY&login=LOGIN`, valid for 24 hours (the `password_reset_expiration` filter applies).
@@ -120,6 +144,8 @@ Documents are stored in `wp-content/uploads/wpum-private/`. The plugin writes an
 location ^~ /wp-content/uploads/wpum-private/ { deny all; return 404; }
 ```
 
+On Apache/LiteSpeed the plugin creates this rule itself (an `.htaccess` inside the folder, plus an empty `index.php`); the Apache `.htaccess` is only honoured where `AllowOverride` permits it, which you can check by opening `/wp-content/uploads/wpum-private/index.php`: it must answer 403.
+
 Files have random names and are delivered through `admin-post.php?action=wpum_download_credential` only to their owner and to administrators.
 
 ## Filters
@@ -131,6 +157,7 @@ Files have random names and are delivered through `admin-post.php?action=wpum_do
 | `wpum_wp_login_allowed_actions` | `wp-login.php` actions that stay with WordPress when it is disabled |
 | `wpum_page_is_ready` | confirm that a page can replace a `wp-login.php` form (`login`, `register`, `reset`) |
 | `wpum_page_content_sources` | extra text to search for the plugin's shortcodes (page builder data) |
+| `wpum_xmlrpc_htaccess_rules` | the lines the plugin writes into `.htaccess` to block `xmlrpc.php` |
 | `wpum_client_ip` | override the detected client IP |
 | `wpum_credential_max_upload_size` | max PDF size in bytes (default 5 MB) |
 | `wpum_reassign_user_id` | who receives the content of a user who deletes their own account (default: the oldest administrator) |
