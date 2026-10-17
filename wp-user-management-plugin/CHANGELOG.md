@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.3.0
+
+### Added
+- **Registration with email confirmation.** The form has a *Preferred language* field (English plus every language with a compiled `.mo`). The visitor receives a branded HTML email with a plain-text part in that language; the WordPress account is created only when the single-use link is opened. The language is stored as the user's locale.
+- Unconfirmed registrations are kept in `{prefix}wpum_pending_registrations` (password already hashed, link key stored only as a SHA-256 hash) and removed by a **WP-Cron** event (`wpum_cron_purge_registrations`, twice daily). The number of days is set under *Configuration* (default 2, 1-30), is stated in the email and on the "check your email" page, and is part of the suggested privacy policy text. Expired links are refused immediately.
+- Limits per email address and per IP for sign-ups and activation attempts; a newer sign-up for the same address replaces the older one.
+- Privacy exporter/eraser also cover registrations awaiting confirmation.
+- **Maintenance:** the notice about leftover `..._wpum_shooting_credentials_backup_...` tables now has a *Delete these tables* button (confirmation, nonce, `manage_options`; only names matching the exact old pattern are ever dropped), and *Configuration* has a Maintenance card with the same button.
+- `wpum_t()`/`wpum_tn()` translate strings into a specific locale (emails use the recipient's language, not the page's).
+- Translations: 265 strings, Polish and English catalogues recompiled.
+
+### Fixed
+- Regression in 1.2.0: logging in through the plugin's own login form, and the current-password check on the profile page, failed for passwords containing `'`, `"` or `\`. WordPress hashes and compares passwords in the slashed form in which they arrive in `$_POST`; the plugin now does the same everywhere (the 1.2.0 note about "unslashing" passwords was wrong, the 1.1.x code was consistent with core).
+
+### Changed
+- New database table (migration 1.2) and DB version 1.2.
+- The "Account created" message is replaced by the confirmation flow ("check your email" page and activation notice).
+
 ## 1.2.0
 
 ### Security
@@ -9,7 +27,6 @@
 - Credential PDFs moved from the public `uploads/shooting-credentials/` to a protected directory with random file names, content (`%PDF-`) and size validation, and an authenticated download endpoint. Existing files are migrated; orphaned old files are moved to `wpum-private/legacy/`.
 - Login and password reset no longer reveal whether an account exists; rate limiting added for login, reset, registration and password checks.
 - The custom CAPTCHA printed the answer in the page and in the AJAX response, so it protected nothing. It is replaced by Cloudflare Turnstile (login, registration, password reset and optionally `wp-login.php`).
-- Passwords are handled consistently with WordPress core: the login form compared a slashed password (so passwords containing `'`, `"` or `\` could not log in) and the profile password change stored a slashed hash. Request data is now unslashed on input and slashed where WordPress APIs expect it.
 - Email change, password change and account deletion require the current password. Account deletion no longer destroys the user's content (reassigned to an administrator) and cannot remove the last administrator.
 - Configuration saves are whitelisted (no more `TypeError` on empty selection, no arbitrary columns such as `user_pass`).
 - Credential types from the browser are validated; error messages are rendered as text.
@@ -41,4 +58,4 @@
 ### Upgrade notes
 - Pages with the shortcodes keep working. Enable Turnstile under **User Management -> Turnstile**.
 - On nginx add the `deny` rule from the README for `wp-content/uploads/wpum-private/`.
-- Older versions created tables named `..._wpum_shooting_credentials_backup_...`; the plugin shows a notice listing them. Drop them if you do not need them.
+- Older versions created tables named `..._wpum_shooting_credentials_backup_...`; the plugin shows a notice listing them with a *Delete these tables* button (also available under *Configuration -> Maintenance*).
