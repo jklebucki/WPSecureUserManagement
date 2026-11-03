@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.1
+
+### Fixed
+- **The emailed password-reset link led back to the "enter your email" form on sites with a page cache or CDN** (seen with LiteSpeed Cache and Hostinger's CDN). Cause: the link moved the key into a cookie and redirected to the plain page URL, but the cache answered that URL with its stored copy of the request form before PHP ran, whatever the cookie said. The page was only excluded from caches while the "new password" form was being shown, which never happened. The reset page now sends no-cache headers on every visit (`nocache_headers()`, `DONOTCACHEPAGE`, `litespeed_control_set_nocache`), and the link redirects to a one-off address (`?wpum_rp=...`), so a copy left in a cache cannot be served in its place.
+- Coming back from the link without a usable cookie now shows the "invalid or expired link" notice instead of silently showing the request form again.
+- **The registration page is no longer stored by page caches and CDNs either.** A cached copy keeps an old nonce, so a form older than about a day could be refused with "Your session has expired".
+
+### Upgrade notes
+- The link works right after the update. Purge the page cache and the CDN once anyway, so the stored copies of the reset and registration pages disappear (the registration page needs this: until then its old copy keeps being served).
+
 ## 1.5.0
 
 ### Added

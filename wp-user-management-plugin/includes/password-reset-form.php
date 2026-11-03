@@ -78,10 +78,19 @@ function wpum_process_reset_link() {
     }
 
     setcookie(wpum_reset_cookie_name(), $login . ':' . $key, 0, wpum_reset_cookie_path(), COOKIE_DOMAIN, is_ssl(), true);
-    wp_safe_redirect($reset_url);
+    // A one-off address: a copy of the plain page left in a cache can never be served instead of the new password form.
+    wp_safe_redirect(add_query_arg('wpum_rp', wp_generate_password(12, false), $reset_url));
     exit;
 }
 add_action('template_redirect', 'wpum_process_reset_link', 5);
+
+// Back from the emailed link without a usable cookie: say so instead of silently showing the request form again.
+function wpum_process_reset_landing() {
+    if (isset($_GET['wpum_rp']) && is_page(wpum_get_page_slug('reset')) && !wpum_get_reset_session()) {
+        wpum_redirect_with_flash(wpum_get_page_url('reset'), 'reset', 'error', 'reset_link_invalid');
+    }
+}
+add_action('template_redirect', 'wpum_process_reset_landing', 6);
 
 /* ------------------------------------------------------------------ */
 /* The page                                                            */
@@ -93,11 +102,6 @@ function wpum_display_password_reset_form() {
 
     $session = wpum_get_reset_session();
     if ($session) {
-        // The page depends on a cookie: page caches must not store it.
-        if (!defined('DONOTCACHEPAGE')) {
-            define('DONOTCACHEPAGE', true);
-        }
-
         return wpum_render_new_password_form($session['user']);
     }
 

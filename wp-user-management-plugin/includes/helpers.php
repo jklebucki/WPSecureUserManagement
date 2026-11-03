@@ -76,6 +76,22 @@ function wpum_get_page_url($key)
     return user_trailingslashit(home_url('/' . wpum_get_page_slug($key)));
 }
 
+// The reset and registration pages carry a nonce (the reset page also depends on a cookie): page caches and CDNs must never
+// store them, for anybody. A cached copy answers before PHP runs, so this has to hold for every visit.
+function wpum_form_pages_no_cache()
+{
+    if (!is_page(array(wpum_get_page_slug('reset'), wpum_get_page_slug('register')))) {
+        return;
+    }
+
+    if (!defined('DONOTCACHEPAGE')) {
+        define('DONOTCACHEPAGE', true);
+    }
+    do_action('litespeed_control_set_nocache', 'wpum form page');
+    nocache_headers();
+}
+add_action('template_redirect', 'wpum_form_pages_no_cache', 1);
+
 // Enqueue the front-end stylesheet + shared script (idempotent).
 function wpum_enqueue_frontend_assets()
 {

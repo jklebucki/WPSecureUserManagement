@@ -111,9 +111,9 @@ Cloudflare's test keys (always pass / always block) are listed on the settings p
 ## Password reset
 1. On the `[wpum_password_reset]` page the visitor enters an email address; the answer is always the same, whether or not an account exists, and requests are limited per IP and per address.
 2. An **HTML email with a plain-text part** (same layout as the registration email) is sent in the **account's own language** (user locale, falling back to the closest available language). It links to the plugin page: `/password-reset/?wpum_reset=KEY&login=LOGIN`, valid for 24 hours (the `password_reset_expiration` filter applies).
-3. Opening the link checks the key, moves it into an HttpOnly cookie and redirects to the clean page URL, so the key does not stay in the address bar, history or referrers (the same technique WordPress uses). If the reset page is not usable the email falls back to WordPress's own link.
-4. The same page now shows **"Choose a new password"** (strength meter, confirmation, minimum length from the settings). Saving it calls WordPress's `reset_password()` (same hooks as wp-login.php, including the admin notification), ends **all** sessions of the account and sends the visitor to the login page with a confirmation. The page is excluded from page caches while the form is shown.
-5. Invalid, expired, forged or reused links show a clear message and the request form; guessing keys is rate limited (10 per hour per IP by default).
+3. Opening the link checks the key, moves it into an HttpOnly cookie and redirects to the page with a one-off `wpum_rp` token, so the key does not stay in the address bar, history or referrers (the same technique WordPress uses). If the reset page is not usable the email falls back to WordPress's own link.
+4. The same page now shows **"Choose a new password"** (strength meter, confirmation, minimum length from the settings). Saving it calls WordPress's `reset_password()` (same hooks as wp-login.php, including the admin notification), ends **all** sessions of the account and sends the visitor to the login page with a confirmation. The reset page, like the registration page, is never stored by page caches or CDNs (`Cache-Control: no-store`, `DONOTCACHEPAGE`, LiteSpeed's no-cache call), on any visit.
+5. Invalid, expired, forged or reused links show a clear message and the request form, and so does a browser that did not keep the cookie; guessing keys is rate limited (10 per hour per IP by default).
 
 A successful login also invalidates outstanding reset links (WordPress behaviour).
 
