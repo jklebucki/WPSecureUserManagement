@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin 1.5.0\n"
+"Project-Id-Version: WP User Management Plugin 1.5.2\n"
 "POT-Creation-Date: 2026-10-17 12:08+0000\n"
 "PO-Revision-Date: 2026-10-17 12:08+0000\n"
 "Last-Translator: \n"
@@ -706,6 +706,15 @@ msgstr "Silne"
 #: includes/helpers.php:97
 msgid "Passwords match"
 msgstr "Hasła są zgodne"
+
+#: includes/helpers.php:117 includes/admin-turnstile.php:94
+#: includes/helpers.php:226
+msgid "Show password"
+msgstr "Pokaż hasło"
+
+#: includes/helpers.php:118 includes/admin-turnstile.php:95
+msgid "Hide password"
+msgstr "Ukryj hasło"
 
 #: includes/helpers.php:98
 msgid "Passwords do not match"

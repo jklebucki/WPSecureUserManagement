@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.2
+
+### Added
+- **Show/hide button (eye) on every password field**: login, registration, password reset, profile (current and new password, confirmation, account deletion) and the Turnstile secret key in the admin. The field goes back to hidden when the form is sent and when the deletion dialog closes, so the browser never stores a password as plain text. Password fields also switch off spell checking, which a browser can run on a remote service.
+
+### Fixed
+- **Nobody could log in through the plugin's form while Simple Cloudflare Turnstile protected the WordPress login** (visitors saw "Invalid username/email or password" with a correct password). Cause: `wp_signon()` runs that plugin's `authenticate` check, which reads the same `cf-turnstile-response` token the form had just verified. Cloudflare accepts a token once, so the second check failed, and it failed too when this plugin's Turnstile was off, because the form has no widget of the other plugin. The form now skips that check through the plugin's `cfturnstile_wp_login_checks` filter, for this form only; `wp-login.php` stays covered by it.
+- A refused login writes the real WordPress error code to the debug log, since the visitor always gets the generic message.
+- **Jetpack's leaked password check no longer ends on an empty login form.** When Jetpack Account Protection finds a leaked password it emails a code and sends the visitor to `wp-login.php?action=password-detection`, which this plugin redirected to the account page without the token. That action now stays with `wp-login.php`, but only while something handles it: for an unhandled action WordPress shows its own login form, which must stay replaced.
+
 ## 1.5.1
 
 ### Fixed

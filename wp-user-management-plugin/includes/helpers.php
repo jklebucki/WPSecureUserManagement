@@ -114,6 +114,8 @@ function wpum_enqueue_frontend_assets()
             'passwordDiff'  => __('Passwords do not match', 'wp-user-management-plugin'),
             'working'       => __('Please wait...', 'wp-user-management-plugin'),
             'saveError'     => __('An error occurred. Please try again.', 'wp-user-management-plugin'),
+            'showPassword'  => __('Show password', 'wp-user-management-plugin'),
+            'hidePassword'  => __('Hide password', 'wp-user-management-plugin'),
         ),
     ));
 }
@@ -178,6 +180,10 @@ function wpum_render_field($args)
     );
     if ('password' !== $a['type']) {
         $attrs['value'] = (string) $a['value'];
+    } else {
+        // The eye button turns this into a text field, and browsers can send text fields to a remote spell checker.
+        $attrs['spellcheck']     = 'false';
+        $attrs['autocapitalize'] = 'off';
     }
     if ('' !== $a['autocomplete']) {
         $attrs['autocomplete'] = $a['autocomplete'];
@@ -203,11 +209,27 @@ function wpum_render_field($args)
         echo ' <span class="wpum-req" aria-hidden="true">*</span>';
     }
     echo '</label>';
-    echo '<input' . $attr_html . '>'; // Attributes are escaped above.
+    if ('password' === $a['type']) {
+        echo '<div class="wpum-password"><input' . $attr_html . '>' . wpum_password_toggle_html($a['id']) . '</div>'; // Attributes are escaped above.
+    } else {
+        echo '<input' . $attr_html . '>'; // Attributes are escaped above.
+    }
     if ('' !== $a['help']) {
         echo '<p class="wpum-help">' . esc_html($a['help']) . '</p>';
     }
     echo '</div>';
+}
+
+// Eye button of a password field. It starts hidden and wpum-forms.js shows it, so there is no dead button without JavaScript.
+function wpum_password_toggle_html($field_id)
+{
+    $label = __('Show password', 'wp-user-management-plugin');
+
+    return '<button type="button" class="wpum-password__toggle" aria-controls="' . esc_attr($field_id) . '" aria-pressed="false"'
+        . ' aria-label="' . esc_attr($label) . '" title="' . esc_attr($label) . '" hidden>'
+        . '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+        . '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+        . '<path class="wpum-password__slash" d="M3 3l18 18"/></svg></button>';
 }
 
 // Render a single labelled <select>. $args['options'] is value => label.

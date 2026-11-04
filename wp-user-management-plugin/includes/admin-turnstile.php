@@ -91,6 +91,8 @@ function wpum_turnstile_admin_assets() {
             'testing'      => __('Checking...', 'wp-user-management-plugin'),
             'error'        => __('Request failed. Please try again.', 'wp-user-management-plugin'),
             'noSiteKey'    => __('Enter the site key first.', 'wp-user-management-plugin'),
+            'showPassword' => __('Show password', 'wp-user-management-plugin'),
+            'hidePassword' => __('Hide password', 'wp-user-management-plugin'),
             'previewError' => __('The widget could not be loaded. Check the site key and that this domain is allowed for the key.', 'wp-user-management-plugin'),
         ),
     ));
@@ -243,6 +245,12 @@ function wpum_turnstile_settings_page() {
                             <input type="password" id="wpum-ts-secret" name="wpum_turnstile[secret_key]" class="regular-text code"
                                    value="" autocomplete="new-password" spellcheck="false"
                                    placeholder="<?php echo $has_secret ? esc_attr__('Saved - leave empty to keep it', 'wp-user-management-plugin') : ''; ?>" <?php disabled($secret_const); ?>>
+                            <?php if (!$secret_const) : ?>
+                                <button type="button" id="wpum-ts-secret-toggle" class="button wpum-ts-toggle" aria-controls="wpum-ts-secret" aria-pressed="false"
+                                        aria-label="<?php esc_attr_e('Show password', 'wp-user-management-plugin'); ?>" title="<?php esc_attr_e('Show password', 'wp-user-management-plugin'); ?>">
+                                    <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+                                </button>
+                            <?php endif; ?>
                             <?php if ($secret_const) : ?>
                                 <p class="description"><?php esc_html_e('Defined in wp-config.php (WPUM_TURNSTILE_SECRET_KEY).', 'wp-user-management-plugin'); ?></p>
                             <?php elseif ($has_secret) : ?>

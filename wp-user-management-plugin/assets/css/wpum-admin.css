@@ -101,6 +101,10 @@
 }
 
 .wpum-admin .wpum-switch,
+.wpum-admin .wpum-ts-toggle .dashicons {
+    margin-top: 3px;
+}
+
 .wpum-admin .wpum-inline-check {
     display: inline-flex;
     align-items: center;

@@ -205,6 +205,79 @@
     box-shadow: 0 0 0 3px var(--wpum-accent-ring) !important;
 }
 
+/* Password field with the show/hide button */
+.wpum-ui .wpum-password {
+    position: relative;
+}
+
+.wpum-ui .wpum-password .wpum-input {
+    padding-right: 46px !important;
+}
+
+/* Edge has its own eye: one is enough. */
+.wpum-ui .wpum-password .wpum-input::-ms-reveal,
+.wpum-ui .wpum-password .wpum-input::-ms-clear {
+    display: none;
+}
+
+.wpum-ui .wpum-password__toggle {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 44px !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    border-radius: var(--wpum-radius-sm) !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    color: var(--wpum-muted) !important;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.wpum-ui .wpum-password__toggle[hidden] {
+    display: none !important;
+}
+
+.wpum-ui .wpum-password__toggle:hover {
+    background: transparent !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-password__toggle:focus-visible {
+    background: transparent !important;
+    box-shadow: 0 0 0 3px var(--wpum-accent-ring) !important;
+    color: var(--wpum-accent) !important;
+}
+
+.wpum-ui .wpum-password__toggle svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.wpum-ui .wpum-password__toggle .wpum-password__slash {
+    display: none;
+}
+
+.wpum-ui .wpum-password__toggle[aria-pressed="true"] .wpum-password__slash {
+    display: inline;
+}
+
 .wpum-ui .wpum-input[readonly] {
     background: #f3f4f6 !important;
     color: var(--wpum-muted) !important;

@@ -13,6 +13,23 @@
         $result.removeClass('is-ok is-bad').addClass(ok ? 'is-ok' : 'is-bad').text(text);
     }
 
+    function setSecretVisible(visible) {
+        var label = visible ? i18n.hidePassword : i18n.showPassword;
+
+        $('#wpum-ts-secret').attr('type', visible ? 'text' : 'password');
+        $('#wpum-ts-secret-toggle').attr({ 'aria-pressed': visible ? 'true' : 'false', 'aria-label': label, title: label })
+            .find('.dashicons').toggleClass('dashicons-visibility', !visible).toggleClass('dashicons-hidden', visible);
+    }
+
+    $('#wpum-ts-secret-toggle').on('click', function () {
+        setSecretVisible($(this).attr('aria-pressed') !== 'true');
+    });
+
+    // The browser could remember a text field.
+    $('#wpum-ts-secret').closest('form').on('submit', function () {
+        setSecretVisible(false);
+    });
+
     $('#wpum-ts-test').on('click', function () {
         $result.removeClass('is-ok is-bad').text(i18n.testing || '');
 

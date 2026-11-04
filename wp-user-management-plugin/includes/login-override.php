@@ -19,7 +19,8 @@ if (!defined('ABSPATH')) {
  * page, never logged out by a bare link) and the screens behind a password-reset link (rp / resetpass), which move to the
  * plugin's reset page together with the key.
  *
- * Left to WordPress on purpose: password-protected posts (postpass) and WordPress's internal confirmations.
+ * Left to WordPress on purpose: password-protected posts (postpass), WordPress's internal confirmations and, while Jetpack
+ * handles it, Jetpack's leaked password check (password-detection).
  */
 
 // Is the replacement switched on (the option, unless the emergency constant is set)?
@@ -359,9 +360,14 @@ function wpum_override_logout() {
 function wpum_override_wp_login() {
     $action = isset($_REQUEST['action']) && is_string($_REQUEST['action']) ? sanitize_key(wp_unslash($_REQUEST['action'])) : 'login';
 
-    $left_to_core = (array) apply_filters('wpum_wp_login_allowed_actions', array(
-        'postpass', 'confirmaction', 'confirm_admin_email', 'entered_recovery_mode',
-    ));
+    $allowed = array('postpass', 'confirmaction', 'confirm_admin_email', 'entered_recovery_mode');
+
+    // Jetpack's screen for a leaked password, only while Jetpack handles it: WordPress shows its login form for an unhandled action.
+    if (has_action('login_form_password-detection')) {
+        $allowed[] = 'password-detection';
+    }
+
+    $left_to_core = (array) apply_filters('wpum_wp_login_allowed_actions', $allowed);
     if (in_array($action, $left_to_core, true)) {
         return;
     }

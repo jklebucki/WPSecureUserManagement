@@ -1,6 +1,6 @@
 /**
  * WP User Management - shared front-end behaviour: password strength meter,
- * password match check, double-submit protection.
+ * password match check, show/hide password, double-submit protection.
  */
 (function ($) {
     'use strict';
@@ -63,9 +63,30 @@
         updateMatch($(this).closest('form'));
     });
 
+    function setPasswordVisible($button, visible) {
+        var label = visible ? i18n.hidePassword : i18n.showPassword;
+
+        $button.closest('.wpum-password').find('input').attr('type', visible ? 'text' : 'password');
+        $button.attr({ 'aria-pressed': visible ? 'true' : 'false', 'aria-label': label, title: label });
+    }
+
+    $('.wpum-password__toggle').prop('hidden', false);
+
+    $(document).on('click', '.wpum-password__toggle', function () {
+        setPasswordVisible($(this), $(this).attr('aria-pressed') !== 'true');
+    });
+
+    // Hide the passwords again: the browser could remember a text field, and a modal is left with its value in place.
+    $(document).on('wpum:hide-passwords', function (event, container) {
+        $(container).find('.wpum-password__toggle[aria-pressed="true"]').each(function () {
+            setPasswordVisible($(this), false);
+        });
+    });
+
     // Prevent double submits (the AJAX credentials form manages its own button).
     $(document).on('submit', '.wpum-ui form', function () {
         var $form = $(this);
+        $(document).trigger('wpum:hide-passwords', [this]);
         if ($form.is('#wpum-shooting-credentials-form')) {
             return;
         }

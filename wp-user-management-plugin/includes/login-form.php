@@ -91,6 +91,10 @@ function wpum_process_login()
         wpum_redirect_with_flash($return_url, 'login', 'error', 'login_failed', $old);
     }
 
+    // Simple Cloudflare Turnstile checks logins in "authenticate" too. It could only see the token verified above, which
+    // Cloudflare accepts once, or none at all, so it would refuse every login here: this form is protected by the code above.
+    add_filter('cfturnstile_wp_login_checks', '__return_true');
+
     $user = wp_signon(array(
         'user_login'    => $login,
         'user_password' => wp_slash($password), // the slashed form, exactly as wp-login.php passes it
@@ -98,6 +102,8 @@ function wpum_process_login()
     ));
 
     if (is_wp_error($user)) {
+        // The visitor always gets the generic message, so the real reason (often another plugin) is only visible here.
+        wpum_log('Logowanie odrzucone: ' . $user->get_error_code());
         wpum_rate_limit_hit('login', $ip . '|' . $login);
         wpum_rate_limit_hit('login_ip', $ip);
         wpum_redirect_with_flash($return_url, 'login', 'error', 'login_failed', $old);

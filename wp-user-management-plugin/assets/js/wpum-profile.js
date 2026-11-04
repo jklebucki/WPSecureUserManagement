@@ -50,6 +50,7 @@
     }
 
     function closeModal() {
+        $(document).trigger('wpum:hide-passwords', [$modal]);
         $modal.prop('hidden', true);
         $('body').removeClass('wpum-modal-open');
         if (lastFocus) { $(lastFocus).trigger('focus'); }
