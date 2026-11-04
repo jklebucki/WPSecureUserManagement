@@ -32,6 +32,30 @@ function wpum_profile_active_tab()
     return isset($map[$flash['form']]) ? $map[$flash['form']] : 'profile';
 }
 
+// Outline icon of an account tab.
+function wpum_profile_tab_icon($tab_id)
+{
+    $icons = array(
+        'profile'              => '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+        'user-data'            => '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.5-1.5 1.6-2 3-2s2.5.5 3 2M15 10h3M15 14h3"/>',
+        'change-password'      => '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+        'shooting-credentials' => '<path d="M12 3l8 3v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+        'delete-account'       => '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13M9 7V4h6v3"/>',
+        'logout'               => '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 8l-4 4 4 4M6 12h10"/>',
+    );
+
+    return isset($icons[$tab_id]) ? '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' . $icons[$tab_id] . '</svg>' : '';
+}
+
+// Initials for the account header: first and last name, or the start of the display name.
+function wpum_profile_initials($user)
+{
+    $first = (string) get_user_meta($user->ID, 'first_name', true);
+    $last  = (string) get_user_meta($user->ID, 'last_name', true);
+
+    return '' !== $first . $last ? mb_substr($first, 0, 1) . mb_substr($last, 0, 1) : mb_substr($user->display_name, 0, 2);
+}
+
 // Display profile edit form
 function wpum_display_profile_edit_form()
 {
@@ -45,6 +69,7 @@ function wpum_display_profile_edit_form()
     $meta_keys    = wpum_get_allowed_user_meta_keys();
     $active       = wpum_profile_active_tab();
     $min_length   = wpum_get_min_password_length();
+    $full_name    = trim(get_user_meta($current_user->ID, 'first_name', true) . ' ' . get_user_meta($current_user->ID, 'last_name', true));
 
     $tabs = array(
         'profile'              => __('Profile', 'wp-user-management-plugin'),
@@ -61,20 +86,32 @@ function wpum_display_profile_edit_form()
     ob_start(); ?>
     <div class="wpum-ui wpum-ui--profile">
         <div class="wpum-card wpum-profile">
+            <div class="wpum-profile__side">
+            <div class="wpum-profile__user">
+                <span class="wpum-avatar" aria-hidden="true"><?php echo esc_html(wpum_profile_initials($current_user)); ?></span>
+                <div class="wpum-profile__who">
+                    <span class="wpum-profile__name"><?php echo esc_html('' !== $full_name ? $full_name : $current_user->display_name); ?></span>
+                    <span class="wpum-profile__mail"><?php echo esc_html($current_user->user_email); ?></span>
+                </div>
+            </div>
             <div class="wpum-tabs" role="tablist" aria-label="<?php esc_attr_e('Account', 'wp-user-management-plugin'); ?>">
                 <?php foreach ($tabs as $tab_id => $tab_label) : ?>
                     <button type="button" role="tab" id="wpum-tab-<?php echo esc_attr($tab_id); ?>"
                             aria-controls="<?php echo esc_attr($tab_id); ?>" aria-selected="<?php echo $tab_id === $active ? 'true' : 'false'; ?>"
                             class="wpum-tab<?php echo $tab_id === $active ? ' is-active' : ''; ?><?php echo 'delete-account' === $tab_id ? ' wpum-tab--danger' : ''; ?>"
-                            data-tab="<?php echo esc_attr($tab_id); ?>"><?php echo esc_html($tab_label); ?></button>
+                            data-tab="<?php echo esc_attr($tab_id); ?>"><?php echo wpum_profile_tab_icon($tab_id); // Fixed markup from the function above. ?><span><?php echo esc_html($tab_label); ?></span></button>
                 <?php endforeach; ?>
             </div>
+            </div>
 
+            <div class="wpum-profile__main">
             <div id="profile" class="wpum-panel<?php echo 'profile' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="wpum-tab-profile">
+                <h2 class="wpum-panel__title"><?php echo esc_html($tabs['profile']); ?></h2>
                 <?php wpum_flash_render('profile'); ?>
                 <form id="wpum-profile-edit-form" method="post">
                     <?php
                     wpum_form_fields('profile');
+                    echo '<div class="wpum-grid">';
                     wpum_render_field(array(
                         'id'           => 'wpum-username',
                         'name'         => 'wpum_username',
@@ -108,6 +145,7 @@ function wpum_display_profile_edit_form()
                         'required'     => true,
                         'autocomplete' => 'family-name',
                     ));
+                    echo '</div><div class="wpum-grid">';
                     wpum_render_field(array(
                         'id'           => 'wpum-profile-current-password',
                         'name'         => 'wpum_current_password',
@@ -116,6 +154,7 @@ function wpum_display_profile_edit_form()
                         'autocomplete' => 'current-password',
                         'help'         => __('Required only when you change your email address.', 'wp-user-management-plugin'),
                     ));
+                    echo '</div>';
                     ?>
                     <div class="wpum-actions">
                         <button type="submit" class="wpum-btn wpum-btn--primary"><?php esc_html_e('Update Profile', 'wp-user-management-plugin'); ?></button>
@@ -125,9 +164,11 @@ function wpum_display_profile_edit_form()
 
             <?php if (!empty($meta_keys)) : ?>
                 <div id="user-data" class="wpum-panel<?php echo 'user-data' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="wpum-tab-user-data">
+                    <h2 class="wpum-panel__title"><?php echo esc_html($tabs['user-data']); ?></h2>
                     <?php wpum_flash_render('userdata'); ?>
                     <form id="wpum-user-data-form" method="post">
                         <?php wpum_form_fields('userdata'); ?>
+                        <div class="wpum-grid">
                         <?php foreach ($meta_keys as $meta_key) :
                             $meta_value = get_user_meta($current_user->ID, $meta_key, true);
                             wpum_render_field(array(
@@ -137,6 +178,7 @@ function wpum_display_profile_edit_form()
                                 'value' => is_scalar($meta_value) ? (string) $meta_value : '',
                             ));
                         endforeach; ?>
+                        </div>
                         <div class="wpum-actions">
                             <button type="submit" class="wpum-btn wpum-btn--primary"><?php esc_html_e('Save Data', 'wp-user-management-plugin'); ?></button>
                         </div>
@@ -145,8 +187,9 @@ function wpum_display_profile_edit_form()
             <?php endif; ?>
 
             <div id="change-password" class="wpum-panel<?php echo 'change-password' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="wpum-tab-change-password">
+                <h2 class="wpum-panel__title"><?php echo esc_html($tabs['change-password']); ?></h2>
                 <?php wpum_flash_render('password'); ?>
-                <form id="wpum-change-password-form" method="post">
+                <form id="wpum-change-password-form" class="wpum-narrow" method="post">
                     <?php
                     wpum_form_fields('password');
                     wpum_render_field(array(
@@ -184,6 +227,7 @@ function wpum_display_profile_edit_form()
             </div>
 
             <div id="shooting-credentials" class="wpum-panel" role="tabpanel" aria-labelledby="wpum-tab-shooting-credentials">
+                <h2 class="wpum-panel__title"><?php echo esc_html($tabs['shooting-credentials']); ?></h2>
                 <div id="wpum-messages" class="wpum-notice" role="status" hidden></div>
 
                 <form id="wpum-shooting-credentials-form" method="post" enctype="multipart/form-data">
@@ -204,6 +248,7 @@ function wpum_display_profile_edit_form()
                     ?>
                         <fieldset class="wpum-fieldset">
                             <legend><?php echo esc_html($label); ?></legend>
+                            <div class="wpum-grid">
                             <?php
                             wpum_render_field(array(
                                 'id'    => 'wpum_' . $type . '_number',
@@ -226,6 +271,7 @@ function wpum_display_profile_edit_form()
                                     </p>
                                 <?php endif; ?>
                             </div>
+                            </div>
                         </fieldset>
                     <?php endforeach; ?>
 
@@ -236,25 +282,28 @@ function wpum_display_profile_edit_form()
             </div>
 
             <div id="delete-account" class="wpum-panel<?php echo 'delete-account' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="wpum-tab-delete-account">
+                <h2 class="wpum-panel__title"><?php echo esc_html($tabs['delete-account']); ?></h2>
                 <?php wpum_flash_render('delete'); ?>
-                <h3 class="wpum-subtitle"><?php esc_html_e('Delete Account', 'wp-user-management-plugin'); ?></h3>
+                <div class="wpum-danger-zone">
                 <p><?php esc_html_e('Deleting your account is permanent. Your personal data and uploaded documents will be removed.', 'wp-user-management-plugin'); ?></p>
-                <div class="wpum-actions wpum-actions--center">
+                <div class="wpum-actions wpum-actions--plain">
                     <button type="button" id="wpum-delete-account-button" class="wpum-btn wpum-btn--danger"><?php esc_html_e('Delete Account', 'wp-user-management-plugin'); ?></button>
+                </div>
                 </div>
             </div>
 
             <div id="logout" class="wpum-panel<?php echo 'logout' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="wpum-tab-logout">
+                <h2 class="wpum-panel__title"><?php echo esc_html($tabs['logout']); ?></h2>
                 <?php wpum_flash_render('logout'); ?>
-                <h3 class="wpum-subtitle"><?php esc_html_e('Logout', 'wp-user-management-plugin'); ?></h3>
                 <p><?php esc_html_e('Click the button below to logout from your account.', 'wp-user-management-plugin'); ?></p>
                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                     <input type="hidden" name="action" value="wpum_logout">
                     <input type="hidden" name="wpum_logout_nonce" value="<?php echo esc_attr(wp_create_nonce('wpum_logout_nonce')); ?>">
-                    <div class="wpum-actions wpum-actions--center">
+                    <div class="wpum-actions wpum-actions--plain">
                         <button type="submit" class="wpum-btn wpum-btn--ghost"><?php esc_html_e('Logout', 'wp-user-management-plugin'); ?></button>
                     </div>
                 </form>
+            </div>
             </div>
         </div>
 

@@ -9,6 +9,15 @@
 
     /* Tabs ---------------------------------------------------------- */
     var $tabs = $('.wpum-tab');
+    var $strip = $('.wpum-tabs');
+
+    // On narrow pages the tabs scroll sideways: keep the open one in view without moving the page.
+    function revealActiveTab() {
+        var tab = $tabs.filter('.is-active')[0];
+        if (tab) {
+            $strip.scrollLeft(tab.offsetLeft - ($strip.innerWidth() - tab.offsetWidth) / 2);
+        }
+    }
 
     function activateTab(id) {
         $tabs.each(function () {
@@ -18,7 +27,10 @@
         $('.wpum-panel').each(function () {
             $(this).toggleClass('is-active', this.id === id);
         });
+        revealActiveTab();
     }
+
+    revealActiveTab();
 
     $tabs.on('click', function () {
         activateTab($(this).data('tab'));
@@ -27,8 +39,8 @@
     $tabs.on('keydown', function (event) {
         var index = $tabs.index(this);
         var next = null;
-        if (event.key === 'ArrowRight') { next = $tabs.eq((index + 1) % $tabs.length); }
-        if (event.key === 'ArrowLeft') { next = $tabs.eq((index - 1 + $tabs.length) % $tabs.length); }
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { next = $tabs.eq((index + 1) % $tabs.length); }
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { next = $tabs.eq((index - 1 + $tabs.length) % $tabs.length); }
         if (next) {
             event.preventDefault();
             next.trigger('focus').trigger('click');

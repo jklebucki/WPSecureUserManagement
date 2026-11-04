@@ -50,6 +50,7 @@ function wpum_display_registration_form()
             <?php wpum_form_fields('register'); ?>
 
             <?php
+            echo '<div class="wpum-grid">';
             wpum_render_field(array(
                 'id'           => 'wpum-username',
                 'name'         => 'wpum_username',
@@ -83,6 +84,7 @@ function wpum_display_registration_form()
                 'required'     => true,
                 'autocomplete' => 'family-name',
             ));
+            echo '</div>';
             wpum_render_field(array(
                 'id'           => 'wpum-password',
                 'name'         => 'wpum_password',

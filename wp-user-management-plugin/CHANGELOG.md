@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.3
+
+### Changed
+- **New account page layout.** The tabs no longer wrap: with enough room they are a side menu with icons and the account's name, on narrow pages a strip that scrolls sideways and keeps the open tab in view. Fields sit in two columns where they fit, here and on the registration form. The layout follows the room the page really has (container queries), because that depends on the theme's column and not on the screen.
+- On Astra's narrow container (about 700px on any screen) the account page may be wider than the column, up to 1040px, from 900px of screen width.
+- Tailwind-like look on every form: slate greys, indigo accent, white fields, smaller shadow. It is plain CSS, so nothing new is loaded. Colours stay overridable with the custom properties on `.wpum-ui`.
+- **The active theme can no longer restyle the forms.** Every declaration in the stylesheet is `!important`, and a low-specificity reset clears what themes set on `div`, `span`, headings, labels and buttons through broad selectors. The Turnstile widget is left out of the reset.
+
 ## 1.5.2
 
 ### Added

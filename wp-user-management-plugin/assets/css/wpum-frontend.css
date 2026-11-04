@@ -5,32 +5,35 @@
  * ".wpum-ui" and uses class selectors only.
  *
  * Why "!important": themes (and page builders) style bare elements such as input, button, label,
- * h2 or p with high-specificity selectors like ".entry-content input[type=text]". To keep these forms
- * looking the same on every theme, the visual properties themes usually override are marked
- * !important. Layout that is not theme-sensitive is left alone. Override the look by changing the
+ * h2 or p with high-specificity selectors like ".entry-content input[type=text]". These forms must
+ * look the same on every theme, so every declaration here is !important and the reset under "Base"
+ * clears what a theme sets on elements through broad selectors. Override the look by changing the
  * custom properties below, e.g. ".wpum-ui { --wpum-accent: #0f766e !important; }".
  */
 
 /* ---------- Design tokens ---------- */
 .wpum-ui {
-    --wpum-accent: #3b5bdb;
-    --wpum-accent-hover: #3249c4;
-    --wpum-accent-ring: rgba(59, 91, 219, 0.2);
-    --wpum-text: #1f2937;
-    --wpum-muted: #6b7280;
-    --wpum-border: #e5e7eb;
+    --wpum-accent: #4f46e5;
+    --wpum-accent-hover: #4338ca;
+    --wpum-accent-ring: rgba(99, 102, 241, 0.25);
+    --wpum-accent-soft: #eef2ff;
+    --wpum-text: #0f172a;
+    --wpum-muted: #64748b;
+    --wpum-border: #e2e8f0;
+    --wpum-border-strong: #cbd5e1;
     --wpum-surface: #ffffff;
-    --wpum-field: #f9fafb;
-    --wpum-danger: #d92d20;
-    --wpum-danger-hover: #b42318;
-    --wpum-danger-soft: #fef3f2;
-    --wpum-danger-line: #fecdca;
-    --wpum-success: #067647;
-    --wpum-success-soft: #ecfdf3;
-    --wpum-success-line: #abefc6;
-    --wpum-radius: 14px;
-    --wpum-radius-sm: 9px;
-    --wpum-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px rgba(16, 24, 40, 0.07);
+    --wpum-field: #ffffff;
+    --wpum-subtle: #f8fafc;
+    --wpum-danger: #dc2626;
+    --wpum-danger-hover: #b91c1c;
+    --wpum-danger-soft: #fef2f2;
+    --wpum-danger-line: #fecaca;
+    --wpum-success: #15803d;
+    --wpum-success-soft: #f0fdf4;
+    --wpum-success-line: #bbf7d0;
+    --wpum-radius: 16px;
+    --wpum-radius-sm: 8px;
+    --wpum-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
     --wpum-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -43,23 +46,57 @@
 }
 
 .wpum-ui {
-    display: block;
-    width: 100%;
-    margin: 0 auto 24px;
-    padding: 0;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 auto 24px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
     font-family: var(--wpum-font) !important;
     font-size: 15px !important;
     line-height: 1.5 !important;
     color: var(--wpum-text) !important;
-    text-align: left;
-    -webkit-font-smoothing: antialiased;
+    text-align: left !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+/* Reset: what a theme sets through broad selectors such as ".entry-content div" or "button". :where() keeps the specificity
+   at one class, so every class below still wins. The Turnstile widget is left out: Cloudflare sizes it with inline styles. */
+.wpum-ui :where(div, span, p, strong, h2, h3, label, legend, button, select):where(:not(.wpum-turnstile, .wpum-turnstile *)) {
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    letter-spacing: inherit !important;
+    text-align: inherit !important;
+    text-transform: none !important;
+    text-shadow: none !important;
+    color: inherit !important;
+}
+
+.wpum-ui :where(span):where(:not(.wpum-turnstile, .wpum-turnstile *)) {
+    display: inline !important;
+}
+
+.wpum-ui :where(button, select) {
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
 }
 
 .wpum-ui form,
 .wpum-ui fieldset {
     margin: 0 !important;
-    padding: 0;
-    border: 0;
+    padding: 0 !important;
+    border: 0 !important;
     background: none !important;
     box-shadow: none !important;
 }
@@ -86,7 +123,7 @@
 
 /* ---------- Card ---------- */
 .wpum-ui .wpum-card {
-    width: 100%;
+    width: 100% !important;
     margin: 0 auto !important;
     padding: 32px !important;
     background: var(--wpum-surface) !important;
@@ -97,15 +134,11 @@
 
 .wpum-ui--login .wpum-card,
 .wpum-ui--reset .wpum-card {
-    max-width: 460px;
+    max-width: 460px !important;
 }
 
 .wpum-ui--register .wpum-card {
-    max-width: 540px;
-}
-
-.wpum-ui--profile .wpum-card {
-    max-width: 780px;
+    max-width: 640px !important;
 }
 
 .wpum-ui .wpum-title {
@@ -135,7 +168,7 @@
 
 /* ---------- Fields ---------- */
 .wpum-ui .wpum-field {
-    display: block;
+    display: block !important;
     margin: 0 0 16px !important;
     padding: 0 !important;
     float: none !important;
@@ -173,7 +206,7 @@
     padding: 10px 14px !important;
     background: var(--wpum-field) !important;
     background-image: none !important;
-    border: 1px solid var(--wpum-border) !important;
+    border: 1px solid var(--wpum-border-strong) !important;
     border-radius: var(--wpum-radius-sm) !important;
     box-shadow: none !important;
     outline: 0 !important;
@@ -191,12 +224,12 @@
 }
 
 .wpum-ui .wpum-input::placeholder {
-    color: #9ca3af !important;
-    opacity: 1;
+    color: #94a3b8 !important;
+    opacity: 1 !important;
 }
 
 .wpum-ui .wpum-input:hover {
-    border-color: #d1d5db !important;
+    border-color: #94a3b8 !important;
 }
 
 .wpum-ui .wpum-input:focus {
@@ -207,7 +240,7 @@
 
 /* Password field with the show/hide button */
 .wpum-ui .wpum-password {
-    position: relative;
+    position: relative !important;
 }
 
 .wpum-ui .wpum-password .wpum-input {
@@ -217,16 +250,16 @@
 /* Edge has its own eye: one is enough. */
 .wpum-ui .wpum-password .wpum-input::-ms-reveal,
 .wpum-ui .wpum-password .wpum-input::-ms-clear {
-    display: none;
+    display: none !important;
 }
 
 .wpum-ui .wpum-password__toggle {
     position: absolute !important;
-    top: 0;
-    right: 0;
+    top: 0 !important;
+    right: 0 !important;
     display: flex !important;
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
     width: 44px !important;
     min-width: 0 !important;
     height: 44px !important;
@@ -240,7 +273,7 @@
     box-shadow: none !important;
     outline: 0 !important;
     color: var(--wpum-muted) !important;
-    cursor: pointer;
+    cursor: pointer !important;
     transition: color 0.15s ease;
 }
 
@@ -260,28 +293,28 @@
 }
 
 .wpum-ui .wpum-password__toggle svg {
-    display: block;
-    width: 20px;
-    height: 20px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    display: block !important;
+    width: 20px !important;
+    height: 20px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 1.8 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
 }
 
 .wpum-ui .wpum-password__toggle .wpum-password__slash {
-    display: none;
+    display: none !important;
 }
 
 .wpum-ui .wpum-password__toggle[aria-pressed="true"] .wpum-password__slash {
-    display: inline;
+    display: inline !important;
 }
 
 .wpum-ui .wpum-input[readonly] {
-    background: #f3f4f6 !important;
+    background: #f1f5f9 !important;
     color: var(--wpum-muted) !important;
-    cursor: default;
+    cursor: default !important;
 }
 
 /* Drop-down: the native arrow is removed with appearance:none, so draw our own. */
@@ -291,25 +324,25 @@
     background-repeat: no-repeat !important;
     background-position: right 14px center !important;
     background-size: 12px 8px !important;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .wpum-ui .wpum-input--file {
     padding: 8px 10px !important;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .wpum-ui .wpum-input--file::file-selector-button {
-    margin-right: 12px;
-    padding: 6px 12px;
-    background: var(--wpum-surface);
-    border: 1px solid var(--wpum-border);
-    border-radius: 7px;
-    font-family: var(--wpum-font);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--wpum-text);
-    cursor: pointer;
+    margin-right: 12px !important;
+    padding: 6px 12px !important;
+    background: var(--wpum-surface) !important;
+    border: 1px solid var(--wpum-border) !important;
+    border-radius: 7px !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--wpum-text) !important;
+    cursor: pointer !important;
 }
 
 .wpum-ui .wpum-help {
@@ -326,14 +359,14 @@
 
 .wpum-ui .wpum-check {
     display: flex !important;
-    align-items: center;
-    gap: 8px;
+    align-items: center !important;
+    gap: 8px !important;
     margin: 0 0 16px !important;
     padding: 0 !important;
     font-size: 14px !important;
     font-weight: 400 !important;
     color: var(--wpum-text) !important;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .wpum-ui .wpum-check input[type="checkbox"] {
@@ -344,16 +377,17 @@
     min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
-    accent-color: var(--wpum-accent);
+    accent-color: var(--wpum-accent) !important;
     box-shadow: none !important;
 }
 
 .wpum-ui .wpum-fieldset {
     margin: 0 0 18px !important;
-    padding: 16px 16px 2px !important;
+    padding: 14px 16px 0 !important;
+    background: var(--wpum-subtle) !important;
     border: 1px solid var(--wpum-border) !important;
-    border-radius: var(--wpum-radius-sm) !important;
-    min-width: 0;
+    border-radius: 12px !important;
+    min-width: 0 !important;
 }
 
 .wpum-ui .wpum-fieldset legend {
@@ -361,16 +395,16 @@
     font-size: 14px !important;
     font-weight: 650 !important;
     color: var(--wpum-text) !important;
-    width: auto;
+    width: auto !important;
 }
 
 /* ---------- Buttons ---------- */
 .wpum-ui .wpum-btn {
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: auto;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: auto !important;
     min-height: 44px !important;
     margin: 0 !important;
     padding: 10px 22px !important;
@@ -384,12 +418,12 @@
     font-weight: 600 !important;
     line-height: 1.2 !important;
     letter-spacing: 0 !important;
-    text-align: center;
+    text-align: center !important;
     text-decoration: none !important;
     text-shadow: none !important;
     text-transform: none !important;
     color: #fff !important;
-    cursor: pointer;
+    cursor: pointer !important;
     -webkit-appearance: none !important;
     appearance: none !important;
     transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
@@ -420,8 +454,8 @@
 
 .wpum-ui .wpum-btn--ghost:hover,
 .wpum-ui .wpum-btn--ghost:focus {
-    background: #f3f4f6 !important;
-    border-color: #d1d5db !important;
+    background: #f1f5f9 !important;
+    border-color: var(--wpum-border-strong) !important;
     color: var(--wpum-text) !important;
 }
 
@@ -436,35 +470,35 @@
 
 .wpum-ui .wpum-btn[disabled],
 .wpum-ui .wpum-btn.is-busy {
-    opacity: 0.55;
-    cursor: not-allowed;
-    pointer-events: none;
+    opacity: 0.55 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
 }
 
 .wpum-ui .wpum-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 8px;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 8px !important;
 }
 
 .wpum-ui .wpum-actions--center {
-    justify-content: center;
+    justify-content: center !important;
 }
 
 .wpum-ui .wpum-actions--split {
-    justify-content: space-between;
+    justify-content: space-between !important;
 }
 
 .wpum-ui .wpum-links {
     margin: 18px 0 0 !important;
     font-size: 14px !important;
-    text-align: center;
+    text-align: center !important;
     color: var(--wpum-muted) !important;
 }
 
 .wpum-ui .wpum-links a {
-    margin: 0 6px;
+    margin: 0 6px !important;
 }
 
 /* ---------- Notices ---------- */
@@ -499,12 +533,30 @@
     color: var(--wpum-success) !important;
 }
 
+/* ---------- Two columns where there is room ---------- */
+.wpum-ui--register,
+.wpum-ui--profile {
+    container-type: inline-size !important;
+}
+
+.wpum-ui .wpum-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    column-gap: 16px !important;
+}
+
+@container (min-width: 560px) {
+    .wpum-ui .wpum-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
 /* ---------- Password strength + match ---------- */
 .wpum-ui .wpum-strength {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 12px;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+    gap: 12px !important;
     margin: -6px 0 16px !important;
     padding: 0 !important;
     background: none !important;
@@ -512,110 +564,197 @@
 }
 
 .wpum-ui .wpum-strength__bar {
-    position: relative;
-    display: block;
-    height: 6px;
-    background: #eceff3;
-    border-radius: 999px;
-    overflow: hidden;
+    position: relative !important;
+    display: block !important;
+    height: 6px !important;
+    background: var(--wpum-border) !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
 }
 
 .wpum-ui .wpum-strength__bar::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    border-radius: inherit;
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 0 !important;
+    border-radius: inherit !important;
     transition: width 0.25s ease, background-color 0.25s ease;
 }
 
-.wpum-ui .wpum-strength[data-level="1"] .wpum-strength__bar::after { width: 25%; background: #f04438; }
-.wpum-ui .wpum-strength[data-level="2"] .wpum-strength__bar::after { width: 50%; background: #f79009; }
-.wpum-ui .wpum-strength[data-level="3"] .wpum-strength__bar::after { width: 75%; background: #12b76a; }
-.wpum-ui .wpum-strength[data-level="4"] .wpum-strength__bar::after { width: 100%; background: #12b76a; }
+.wpum-ui .wpum-strength[data-level="1"] .wpum-strength__bar::after { width: 25% !important; background: #f04438 !important; }
+.wpum-ui .wpum-strength[data-level="2"] .wpum-strength__bar::after { width: 50% !important; background: #f79009 !important; }
+.wpum-ui .wpum-strength[data-level="3"] .wpum-strength__bar::after { width: 75% !important; background: #12b76a !important; }
+.wpum-ui .wpum-strength[data-level="4"] .wpum-strength__bar::after { width: 100% !important; background: #12b76a !important; }
 
 .wpum-ui .wpum-strength__label {
-    min-width: 56px;
-    font-size: 13px;
-    font-weight: 600;
-    text-align: right;
-    color: var(--wpum-muted);
+    min-width: 56px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-align: right !important;
+    color: var(--wpum-muted) !important;
 }
 
-.wpum-ui .wpum-strength.weak .wpum-strength__label { color: #d92d20; }
-.wpum-ui .wpum-strength.medium .wpum-strength__label { color: #b54708; }
-.wpum-ui .wpum-strength.strong .wpum-strength__label { color: #067647; }
+.wpum-ui .wpum-strength.weak .wpum-strength__label { color: #d92d20 !important; }
+.wpum-ui .wpum-strength.medium .wpum-strength__label { color: #b54708 !important; }
+.wpum-ui .wpum-strength.strong .wpum-strength__label { color: #067647 !important; }
 
 .wpum-ui .wpum-match {
-    margin: -6px 0 14px;
-    font-size: 13px;
-    font-weight: 600;
+    margin: -6px 0 14px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
 }
 
 .wpum-ui .wpum-match:empty {
-    display: none;
+    display: none !important;
 }
 
-.wpum-ui .wpum-match.is-ok { color: var(--wpum-success); }
-.wpum-ui .wpum-match.is-bad { color: var(--wpum-danger); }
+.wpum-ui .wpum-match.is-ok { color: var(--wpum-success) !important; }
+.wpum-ui .wpum-match.is-bad { color: var(--wpum-danger) !important; }
 
 /* ---------- Turnstile ---------- */
 .wpum-ui .wpum-turnstile {
-    display: block;
-    width: 100%;
+    display: block !important;
+    width: 100% !important;
     margin: 0 0 16px !important;
 }
 
-/* ---------- Profile tabs ---------- */
+/* ---------- Account page ---------- */
+.wpum-ui.wpum-ui--profile .wpum-card {
+    max-width: 1040px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.wpum-ui .wpum-profile__side {
+    padding: 16px 16px 12px !important;
+    background: var(--wpum-subtle) !important;
+    border-bottom: 1px solid var(--wpum-border) !important;
+}
+
+.wpum-ui .wpum-profile__user {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+.wpum-ui .wpum-avatar {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: var(--wpum-accent) !important;
+    border-radius: 999px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    color: #fff !important;
+}
+
+.wpum-ui .wpum-profile__who {
+    min-width: 0 !important;
+}
+
+.wpum-ui .wpum-profile__name,
+.wpum-ui .wpum-profile__mail {
+    display: block !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.wpum-ui .wpum-profile__name {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-profile__mail {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    color: var(--wpum-muted) !important;
+}
+
+/* The tabs: a strip that scrolls sideways, and a side menu when the page has room (see below). */
 .wpum-ui .wpum-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 2px;
-    margin: -8px -8px 24px !important;
-    padding: 0 8px !important;
-    border-bottom: 1px solid var(--wpum-border);
+    position: relative !important;
+    display: flex !important;
+    gap: 4px !important;
+    margin: 0 -16px !important;
+    padding: 0 16px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+}
+
+.wpum-ui .wpum-tabs::-webkit-scrollbar {
+    display: none !important;
 }
 
 .wpum-ui .wpum-tab {
-    flex: 0 0 auto;
-    margin: 0 0 -1px !important;
-    padding: 12px 14px !important;
+    flex: 0 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 40px !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
     background: none !important;
     border: 0 !important;
-    border-bottom: 2px solid transparent !important;
-    border-radius: 0 !important;
+    border-radius: var(--wpum-radius-sm) !important;
     box-shadow: none !important;
     font-family: var(--wpum-font) !important;
     font-size: 14px !important;
-    font-weight: 600 !important;
-    line-height: 1.2 !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
     letter-spacing: 0 !important;
+    text-align: left !important;
     text-transform: none !important;
-    color: var(--wpum-muted) !important;
-    white-space: nowrap;
-    cursor: pointer;
+    color: #475569 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
     -webkit-appearance: none !important;
     appearance: none !important;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.wpum-ui .wpum-tab svg {
+    flex: 0 0 auto !important;
+    width: 18px !important;
+    height: 18px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 1.8 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
 }
 
 .wpum-ui .wpum-tab:hover,
 .wpum-ui .wpum-tab:focus {
-    background: none !important;
+    background: #e2e8f0 !important;
     color: var(--wpum-text) !important;
 }
 
 .wpum-ui .wpum-tab.is-active {
-    border-bottom-color: var(--wpum-accent) !important;
-    color: var(--wpum-accent) !important;
+    background: var(--wpum-accent-soft) !important;
+    color: var(--wpum-accent-hover) !important;
+}
+
+.wpum-ui .wpum-tab--danger {
+    color: var(--wpum-danger) !important;
 }
 
 .wpum-ui .wpum-tab--danger:hover,
+.wpum-ui .wpum-tab--danger:focus,
 .wpum-ui .wpum-tab--danger.is-active {
-    color: var(--wpum-danger) !important;
-    border-bottom-color: var(--wpum-danger) !important;
+    background: var(--wpum-danger-soft) !important;
+    color: var(--wpum-danger-hover) !important;
 }
 
 .wpum-ui .wpum-tab:focus-visible {
@@ -623,32 +762,135 @@
     outline-offset: -2px !important;
 }
 
+.wpum-ui .wpum-profile__main {
+    min-width: 0 !important;
+    padding: 20px 16px 24px !important;
+}
+
 .wpum-ui .wpum-panel {
-    display: none;
+    display: none !important;
 }
 
 .wpum-ui .wpum-panel.is-active {
-    display: block;
+    display: block !important;
+}
+
+.wpum-ui .wpum-panel__title {
+    margin: 0 0 20px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-family: var(--wpum-font) !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    color: var(--wpum-text) !important;
+}
+
+.wpum-ui .wpum-panel .wpum-actions {
+    margin-top: 4px !important;
+    padding-top: 16px !important;
+    border-top: 1px solid var(--wpum-border) !important;
+}
+
+.wpum-ui .wpum-panel .wpum-actions--plain {
+    justify-content: flex-start !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: 0 !important;
+}
+
+.wpum-ui .wpum-narrow {
+    max-width: 460px !important;
+}
+
+.wpum-ui .wpum-danger-zone {
+    padding: 16px !important;
+    background: var(--wpum-danger-soft) !important;
+    border: 1px solid var(--wpum-danger-line) !important;
+    border-radius: 12px !important;
+}
+
+/* The side menu. A container query, because the room depends on the theme's column and not on the screen. */
+@container (min-width: 800px) {
+    .wpum-ui .wpum-profile {
+        display: grid !important;
+        grid-template-columns: 248px minmax(0, 1fr) !important;
+    }
+
+    .wpum-ui .wpum-profile__side {
+        padding: 24px 16px !important;
+        border-right: 1px solid var(--wpum-border) !important;
+        border-bottom: 0 !important;
+    }
+
+    .wpum-ui .wpum-profile__user {
+        margin-bottom: 20px !important;
+        padding: 0 8px !important;
+    }
+
+    .wpum-ui .wpum-tabs {
+        flex-direction: column !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    .wpum-ui .wpum-tab {
+        display: flex !important;
+        width: 100% !important;
+        white-space: normal !important;
+    }
+
+    .wpum-ui .wpum-tab--danger {
+        position: relative !important;
+        margin-top: 17px !important;
+    }
+
+    .wpum-ui .wpum-tab--danger::before {
+        content: "" !important;
+        position: absolute !important;
+        top: -11px !important;
+        right: 8px !important;
+        left: 8px !important;
+        height: 1px !important;
+        background: var(--wpum-border) !important;
+    }
+
+    .wpum-ui .wpum-profile__main {
+        padding: 32px !important;
+    }
+}
+
+/* Astra's narrow container leaves about 700px on any screen: the account page may be wider than that centred column. */
+@media (min-width: 900px) {
+    .ast-narrow-container.ast-no-sidebar .wpum-ui.wpum-ui--profile {
+        --wpum-wide: min(1040px, calc(100vw - 48px));
+        width: var(--wpum-wide) !important;
+        max-width: none !important;
+        margin-left: calc((100% - var(--wpum-wide)) / 2) !important;
+    }
 }
 
 /* ---------- Modal (account deletion) ---------- */
 .wpum-ui.wpum-modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 999999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    margin: 0;
-    padding: 16px;
-    background: rgba(17, 24, 39, 0.5);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-    overflow-y: auto;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    background: rgba(17, 24, 39, 0.5) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+    backdrop-filter: blur(2px) !important;
+    overflow-y: auto !important;
 }
 
 .wpum-ui.wpum-modal[hidden] {
@@ -656,9 +898,9 @@
 }
 
 .wpum-ui .wpum-modal__dialog {
-    position: relative;
-    width: 100%;
-    max-width: 440px;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 440px !important;
     padding: 28px !important;
     background: var(--wpum-surface) !important;
     border-radius: var(--wpum-radius) !important;
@@ -666,9 +908,9 @@
 }
 
 .wpum-ui .wpum-modal__close {
-    position: absolute;
-    top: 10px;
-    right: 12px;
+    position: absolute !important;
+    top: 10px !important;
+    right: 12px !important;
     width: 32px !important;
     height: 32px !important;
     min-height: 0 !important;
@@ -681,20 +923,28 @@
     font-size: 24px !important;
     line-height: 1 !important;
     color: var(--wpum-muted) !important;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .wpum-ui .wpum-modal__close:hover {
-    background: #f3f4f6 !important;
+    background: #f1f5f9 !important;
     color: var(--wpum-text) !important;
 }
 
 body.wpum-modal-open {
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 /* ---------- Small screens ---------- */
 @media (max-width: 600px) {
+    /* Astra adds its own side padding on phones: the forms use that room. */
+    .ast-no-sidebar .wpum-ui:not(.wpum-modal) {
+        --wpum-wide: calc(100vw - 24px);
+        width: var(--wpum-wide) !important;
+        max-width: none !important;
+        margin-left: calc((100% - var(--wpum-wide)) / 2) !important;
+    }
+
     .wpum-ui .wpum-card {
         padding: 22px 18px !important;
         border-radius: 12px !important;
@@ -705,7 +955,7 @@ body.wpum-modal-open {
     }
 
     .wpum-ui .wpum-actions {
-        flex-direction: column-reverse;
+        flex-direction: column-reverse !important;
     }
 
     .wpum-ui .wpum-actions .wpum-btn {
@@ -713,19 +963,7 @@ body.wpum-modal-open {
     }
 
     .wpum-ui .wpum-actions--center {
-        flex-direction: column;
-    }
-
-    /* On phones the tabs scroll sideways instead of wrapping. */
-    .wpum-ui .wpum-tabs {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none;
-    }
-
-    .wpum-ui .wpum-tabs::-webkit-scrollbar {
-        display: none;
+        flex-direction: column !important;
     }
 }
 
