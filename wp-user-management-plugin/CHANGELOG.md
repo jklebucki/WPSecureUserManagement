@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.5
+
+### Added
+- **Club Number can be shown as a column of the admin user list** (Configuration -> list columns). The search covers it even when it is not among the configured user data.
+
 ## 1.5.4
 
 ### Fixed

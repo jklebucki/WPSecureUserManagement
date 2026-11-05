@@ -68,6 +68,7 @@ function wpum_admin_user_fields() {
         'user_email'      => __('Email', 'wp-user-management-plugin'),
         'first_name'      => __('First Name', 'wp-user-management-plugin'),
         'last_name'       => __('Last Name', 'wp-user-management-plugin'),
+        'club_number'     => __('Club Number', 'wp-user-management-plugin'),
         'user_registered' => __('Registered', 'wp-user-management-plugin'),
     );
 }
@@ -139,7 +140,7 @@ function wpum_admin_list_notices() {
 function wpum_admin_search_user_ids($search) {
     global $wpdb;
 
-    $meta_keys    = array_merge(array('first_name', 'last_name', 'nickname'), wpum_get_allowed_user_meta_keys());
+    $meta_keys    = array_unique(array_merge(array('first_name', 'last_name', 'nickname', 'club_number'), wpum_get_allowed_user_meta_keys()));
     $meta_list    = implode(', ', array_fill(0, count($meta_keys), '%s'));
     $credentials  = wpum_ensure_credentials_table() ? $wpdb->prefix . 'wpum_shooting_credentials' : '';
     $capabilities = $wpdb->get_blog_prefix() . 'capabilities';
