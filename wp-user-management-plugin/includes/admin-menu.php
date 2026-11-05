@@ -132,6 +132,62 @@ function wpum_admin_list_notices() {
     }
 }
 
+/**
+ * IDs of the users who match every word of the search; each word may be in a different field. Searched: account fields, names,
+ * the configured user data, credential numbers and roles. Not the whole usermeta table: it also holds session tokens and the like.
+ */
+function wpum_admin_search_user_ids($search) {
+    global $wpdb;
+
+    $meta_keys    = array_merge(array('first_name', 'last_name', 'nickname'), wpum_get_allowed_user_meta_keys());
+    $meta_list    = implode(', ', array_fill(0, count($meta_keys), '%s'));
+    $credentials  = wpum_ensure_credentials_table() ? $wpdb->prefix . 'wpum_shooting_credentials' : '';
+    $capabilities = $wpdb->get_blog_prefix() . 'capabilities';
+    $ids          = array();
+    $first_word   = true;
+
+    foreach (preg_split('/\s+/u', $search, -1, PREG_SPLIT_NO_EMPTY) as $word) {
+        $like = '%' . $wpdb->esc_like($word) . '%';
+
+        $queries = array(
+            $wpdb->prepare(
+                "SELECT ID FROM {$wpdb->users} WHERE ID = %d OR user_login LIKE %s OR user_email LIKE %s OR user_nicename LIKE %s
+                 OR display_name LIKE %s OR user_url LIKE %s OR user_registered LIKE %s",
+                ctype_digit($word) ? (int) $word : 0, $like, $like, $like, $like, $like, $like
+            ),
+            $wpdb->prepare(
+                "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key IN ($meta_list) AND meta_value LIKE %s",
+                array_merge($meta_keys, array($like))
+            ),
+        );
+
+        if ('' !== $credentials) {
+            $queries[] = $wpdb->prepare("SELECT user_id FROM $credentials WHERE credential_number LIKE %s", $like);
+        }
+
+        // Roles by their translated name, as the list shows them, or by their key.
+        foreach (wp_roles()->roles as $role_key => $role) {
+            if (false !== stripos(translate_user_role($role['name']), $word) || false !== stripos($role_key, $word)) {
+                $queries[] = $wpdb->prepare(
+                    "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = %s AND meta_value LIKE %s",
+                    $capabilities,
+                    '%' . $wpdb->esc_like('"' . $role_key . '"') . '%'
+                );
+            }
+        }
+
+        $found      = array_map('intval', $wpdb->get_col(implode(' UNION ', $queries)));
+        $ids        = $first_word ? $found : array_values(array_intersect($ids, $found));
+        $first_word = false;
+
+        if (empty($ids)) {
+            break;
+        }
+    }
+
+    return $ids;
+}
+
 // Display the user list (paginated, with bulk delete)
 function wp_user_management_user_list() {
     if (!current_user_can('manage_options')) {
@@ -150,8 +206,8 @@ function wp_user_management_user_list() {
         'count_total' => true,
     );
     if ('' !== $search) {
-        $args['search']         = '*' . $search . '*';
-        $args['search_columns'] = array('ID', 'user_login', 'user_email');
+        $matching        = wpum_admin_search_user_ids($search);
+        $args['include'] = $matching ? $matching : array(0); // An empty "include" would mean no limit at all.
     }
 
     $query       = new WP_User_Query($args);

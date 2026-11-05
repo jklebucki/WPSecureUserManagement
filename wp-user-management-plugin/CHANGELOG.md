@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.4
+
+### Fixed
+- **The search on the admin user list only looked at the ID, username and email**, so names shown in the list found nobody. It now searches the account fields (ID, username, email, display name, nicename, website, registration date), first and last name, nickname, the configured user data, credential numbers and roles. Every word has to match, each in any field, so "jan kowalski" works. Session tokens and other internal user meta stay out of the search.
+
 ## 1.5.3
 
 ### Changed

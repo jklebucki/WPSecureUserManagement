@@ -7,7 +7,7 @@ User registration, login, password reset and profile editing for WordPress throu
 - Registration with **email confirmation**: the visitor picks a preferred language and receives a branded HTML email (with a plain-text part) in that language; the account is created only when the link is opened.
 - Login (username or email), password reset and a tabbed profile page (profile, user data, password, shooting credentials, delete account).
 - Admin menu **User Management**:
-  - **User List** - paginated, searchable list with roles, credentials and **bulk deletion** of accounts (confirmation dialog, optional content reassignment).
+  - **User List** - paginated list with roles, a search across all shown fields, credentials and **bulk deletion** of accounts (confirmation dialog, optional content reassignment).
   - **Configuration** - list columns, profile metadata, minimum password length, page slugs, **days to keep an unconfirmed registration** (default 2) and a maintenance card that deletes leftover backup tables of old plugin versions.
   - **Turnstile** - Cloudflare Turnstile settings (keys, protected forms, appearance, key test).
 - Cloudflare Turnstile on the plugin forms and, optionally, on the native `wp-login.php` forms.
