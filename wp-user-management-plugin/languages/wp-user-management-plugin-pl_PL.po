@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Management Plugin 1.5.2\n"
+"Project-Id-Version: WP User Management Plugin 1.6.0\n"
 "POT-Creation-Date: 2026-10-17 12:08+0000\n"
 "PO-Revision-Date: 2026-10-17 12:08+0000\n"
 "Last-Translator: \n"
@@ -1388,3 +1388,27 @@ msgstr "Resetowanie hasła WordPress (wp-login.php)"
 #: wp-user-management-plugin.php:122
 msgid "Could not create the required database tables. Check database permissions and the error log."
 msgstr "Nie udało się utworzyć wymaganych tabel w bazie danych. Sprawdź uprawnienia bazy danych i logi błędów."
+
+#: includes/turnstile-integrations.php:19
+msgid "Comments"
+msgstr "Komentarze"
+
+#: includes/admin-turnstile.php:293
+msgid "Forms of other plugins"
+msgstr "Formularze innych wtyczek"
+
+#: includes/admin-turnstile.php:293
+msgid "(not active on this site)"
+msgstr "(nieaktywne na tej stronie)"
+
+#: includes/admin-turnstile.php:293
+msgid "Simple Cloudflare Turnstile protects this form now. The protection selected here starts by itself when you switch the form off in that plugin."
+msgstr "Ten formularz chroni teraz Simple Cloudflare Turnstile. Wybrana tutaj ochrona włączy się sama, gdy wyłączysz ten formularz w tamtej wtyczce."
+
+#: includes/admin-turnstile.php:293
+msgid "Skip the check for logged-in users"
+msgstr "Pomijaj sprawdzanie dla zalogowanych użytkowników"
+
+#: includes/admin-turnstile.php:293
+msgid "Only the form systems listed here can be protected: each one needs its own check on the server."
+msgstr "Chronić można tylko wymienione tutaj systemy formularzy: każdy wymaga własnego sprawdzania na serwerze."

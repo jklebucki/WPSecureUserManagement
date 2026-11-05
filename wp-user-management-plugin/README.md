@@ -10,7 +10,7 @@ User registration, login, password reset and profile editing for WordPress throu
   - **User List** - paginated list with roles, a search across all shown fields, credentials and **bulk deletion** of accounts (confirmation dialog, optional content reassignment).
   - **Configuration** - list columns, profile metadata, minimum password length, page slugs, **days to keep an unconfirmed registration** (default 2) and a maintenance card that deletes leftover backup tables of old plugin versions.
   - **Turnstile** - Cloudflare Turnstile settings (keys, protected forms, appearance, key test).
-- Cloudflare Turnstile on the plugin forms and, optionally, on the native `wp-login.php` forms.
+- Cloudflare Turnstile on the plugin forms and, optionally, on the native `wp-login.php` forms, comments and WPForms.
 - Security: nonces and capability checks everywhere, generic login/reset messages (no user enumeration), configurable rate limiting, current password required for email/password changes and account deletion.
 - **xmlrpc.php is blocked** (checkbox, on by default): on Apache the plugin writes a verified, marked block into `.htaccess`, everywhere else WordPress itself refuses XML-RPC.
 - **wp-login.php is replaced** by the plugin's pages (login, registration, lost password, **setting a new password**) and **logout** goes straight to the front page, with a checkbox in *Configuration*, on by default.

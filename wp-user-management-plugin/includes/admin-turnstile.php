@@ -54,6 +54,13 @@ function wpum_turnstile_sanitize_options($input) {
         $out['form_' . $form_key] = !empty($input['form_' . $form_key]) ? 1 : 0;
     }
 
+    foreach (wpum_turnstile_integrations() as $form_key => $integration) {
+        // A form system that is switched off has no checkbox to send: the choice waits for its return.
+        $source                   = $integration['available'] ? $input : (is_array($old) ? $old : array());
+        $out['form_' . $form_key] = !empty($source['form_' . $form_key]) ? 1 : 0;
+    }
+    $out['skip_logged_in'] = !empty($input['skip_logged_in']) ? 1 : 0;
+
     $choices = array(
         'theme'      => array('auto', 'light', 'dark'),
         'size'       => array('flexible', 'normal', 'compact'),
@@ -288,6 +295,29 @@ function wpum_turnstile_settings_page() {
                 </div>
                 <p class="description"><?php esc_html_e('The wp-login.php options above only matter while wp-login.php is not disabled under Configuration.', 'wp-user-management-plugin'); ?></p>
                 <p class="description"><?php esc_html_e('Tip: run "Test keys" before enabling the wp-login.php forms. If you ever get locked out, add define( \'WPUM_TURNSTILE_DISABLE\', true ); to wp-config.php.', 'wp-user-management-plugin'); ?></p>
+            </div>
+
+            <div class="wpum-card">
+                <div class="wpum-card__head"><h2><?php esc_html_e('Forms of other plugins', 'wp-user-management-plugin'); ?></h2></div>
+                <div class="wpum-checks">
+                    <?php foreach (wpum_turnstile_integrations() as $form_key => $integration) : ?>
+                        <label class="wpum-inline-check">
+                            <input type="checkbox" name="wpum_turnstile[form_<?php echo esc_attr($form_key); ?>]" value="1" <?php checked(!empty($o['form_' . $form_key])); ?> <?php disabled(!$integration['available']); ?>>
+                            <?php echo esc_html($integration['label']); ?>
+                            <?php if (!$integration['available']) : ?>
+                                <em><?php esc_html_e('(not active on this site)', 'wp-user-management-plugin'); ?></em>
+                            <?php endif; ?>
+                        </label>
+                        <?php if (wpum_turnstile_other_plugin_protects($form_key)) : ?>
+                            <p class="description"><?php esc_html_e('Simple Cloudflare Turnstile protects this form now. The protection selected here starts by itself when you switch the form off in that plugin.', 'wp-user-management-plugin'); ?></p>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    <label class="wpum-inline-check">
+                        <input type="checkbox" name="wpum_turnstile[skip_logged_in]" value="1" <?php checked(!empty($o['skip_logged_in'])); ?>>
+                        <?php esc_html_e('Skip the check for logged-in users', 'wp-user-management-plugin'); ?>
+                    </label>
+                </div>
+                <p class="description"><?php esc_html_e('Only the form systems listed here can be protected: each one needs its own check on the server.', 'wp-user-management-plugin'); ?></p>
             </div>
 
             <div class="wpum-card">

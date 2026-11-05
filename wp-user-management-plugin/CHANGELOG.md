@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+### Added
+- **Turnstile on the forms of other plugins: comments and WPForms** (Turnstile -> Forms of other plugins, off by default). The widget is shown and the token is checked on the server. After a refused AJAX attempt in WPForms the widget gets a new token.
+- **"Skip the check for logged-in users"** for these forms (on by default).
+- While Simple Cloudflare Turnstile protects one of these forms, the integration waits, so the two plugins never check one token. It takes over by itself when the form is switched off in that plugin, which leaves no moment without protection.
+
 ## 1.5.5
 
 ### Added

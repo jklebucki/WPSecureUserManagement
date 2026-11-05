@@ -38,6 +38,10 @@ function wpum_turnstile_defaults() {
         'form_wp_login'     => 0,
         'form_wp_register'  => 0,
         'form_wp_lostpassword' => 0,
+        // Forms of other plugins are opt-in as well.
+        'form_comments'     => 0,
+        'form_wpforms'      => 0,
+        'skip_logged_in'    => 1,
         'theme'             => 'auto',
         'size'              => 'flexible',
         'appearance'        => 'always',
